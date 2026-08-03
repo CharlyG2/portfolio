@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Reveal from "./Reveal";
+import { PendingPattern, AnalysisPattern } from "./CaseThumbPlaceholder";
 
 const cases = [
   {
@@ -78,10 +79,10 @@ export default function CaseIndex() {
                         className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                         sizes="112px"
                       />
+                    ) : c.live ? (
+                      <AnalysisPattern />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center font-mono text-[10px] text-mutedLight">
-                        próximamente
-                      </div>
+                      <PendingPattern />
                     )}
                   </div>
 

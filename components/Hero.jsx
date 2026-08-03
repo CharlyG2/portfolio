@@ -38,8 +38,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          Diseño productos digitales que la gente entiende — apoyado en
-          datos, no en gusto.
+          Diseño para que las personas entiendan lo que están usando.
         </motion.h1>
 
         <motion.p
@@ -49,9 +48,10 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           Charly Gourves — Product Designer especializado en Design
-          Systems. Hoy lidero el de BICE VIDA y los flujos de contratación
-          de seguros de salud y viaje, pero el enfoque —research, sistemas,
-          decisiones con datos— aplica a cualquier producto digital.
+          Systems. Hoy trabajo en BICE VIDA, liderando el sistema de la
+          compañía y los flujos de contratación de seguros de salud y
+          viaje — pero el enfoque de fondo (investigar, simplificar,
+          decidir con datos) aplica a cualquier producto digital.
         </motion.p>
 
         <motion.div
