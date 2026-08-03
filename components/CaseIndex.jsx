@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Reveal from "./Reveal";
 
 const cases = [
@@ -9,6 +10,7 @@ const cases = [
     title: "El Design System de BICE VIDA",
     text: "Cómo se construyó, con qué metodología, y qué pasó cuando los desarrolladores empezaron a usarlo de verdad.",
     stat: "89 componentes en producción",
+    thumb: "/images/csi-landing.png",
     live: true,
   },
   {
@@ -18,6 +20,7 @@ const cases = [
     title: "Unificar dos seguros de viaje en una landing",
     text: "Viajero Protegido y Viajero Frecuente, cotizados y comparados en una sola experiencia en vez de dos landings separadas.",
     stat: "+16% visitas · +2% contratación",
+    thumb: "/images/viaje-landing-unificada.png",
     live: true,
   },
   {
@@ -27,6 +30,7 @@ const cases = [
     title: "Reducir el funnel de contratación CSI",
     text: "De 10 a 8 pasos, apoyado en Ley de Hick y Ley de Miller. Publicación pendiente de material final.",
     stat: "análisis con datos reales de mayo 2026",
+    thumb: null,
     live: false,
   },
   {
@@ -36,6 +40,7 @@ const cases = [
     title: "Renovación transparente de planes",
     text: "Comunicar un alza de cobertura a clientes de alto siniestro sin esconder nada. Publicación pendiente de material final.",
     stat: "3 ramas de decisión mapeadas",
+    thumb: null,
     live: false,
   },
 ];
@@ -56,15 +61,32 @@ export default function CaseIndex() {
               <Reveal key={c.slug} delay={i * 0.06}>
                 <Wrapper
                   {...wrapperProps}
-                  className={`group flex flex-col md:flex-row md:items-center gap-4 md:gap-10 py-8 ${
+                  className={`group flex flex-col md:flex-row md:items-center gap-5 md:gap-8 py-8 ${
                     c.live ? "cursor-pointer" : "cursor-default opacity-70"
                   }`}
                 >
-                  <span className="font-mono text-sm text-mutedLight w-10 shrink-0">
+                  <span className="font-mono text-sm text-mutedLight w-8 shrink-0">
                     {c.tag}
                   </span>
+
+                  <div className="relative w-full md:w-28 h-20 rounded-lg overflow-hidden border border-line bg-ink2 shrink-0">
+                    {c.thumb ? (
+                      <Image
+                        src={c.thumb}
+                        alt=""
+                        fill
+                        className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                        sizes="112px"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center font-mono text-[10px] text-mutedLight">
+                        próximamente
+                      </div>
+                    )}
+                  </div>
+
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-1">
+                    <div className="flex items-center gap-3 mb-1 flex-wrap">
                       <h3
                         className={`font-display text-xl md:text-2xl text-paper ${
                           c.live ? "group-hover:text-signalSoft transition-colors" : ""
@@ -72,7 +94,13 @@ export default function CaseIndex() {
                       >
                         {c.title}
                       </h3>
-                      <span className="font-mono text-[10px] uppercase tracking-widest px-2 py-1 rounded-full border border-line text-muted">
+                      <span
+                        className={`font-mono text-[10px] uppercase tracking-widest px-2 py-1 rounded-full border ${
+                          c.live
+                            ? "border-amber/40 text-amber"
+                            : "border-line text-muted"
+                        }`}
+                      >
                         {c.status}
                       </span>
                     </div>

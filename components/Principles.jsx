@@ -20,7 +20,7 @@ const principles = [
 
 export default function Principles() {
   return (
-    <section className="py-24 md:py-32 border-t border-line">
+    <section className="py-24 md:py-32 border-t border-line bg-ink2/40">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <Reveal>
           <p className="eyebrow text-signalSoft mb-4">cómo pienso</p>
@@ -28,7 +28,11 @@ export default function Principles() {
         <div className="grid md:grid-cols-3 gap-10 md:gap-8 mt-8">
           {principles.map((p, i) => (
             <Reveal key={p.tag} delay={i * 0.08}>
-              <div className="font-mono text-xs text-mutedLight mb-4">
+              <div
+                className={`font-mono text-xs mb-4 ${
+                  i === 1 ? "text-amber" : "text-mutedLight"
+                }`}
+              >
                 &lt;{p.tag}&gt;
               </div>
               <h3 className="font-display text-xl text-paper mb-3">

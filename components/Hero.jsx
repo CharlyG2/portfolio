@@ -6,7 +6,23 @@ import SystemGraph from "./SystemGraph";
 export default function Hero() {
   return (
     <section className="relative pt-40 pb-24 md:pt-48 md:pb-32 overflow-hidden">
-      <div className="max-w-content mx-auto px-6 md:px-10">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-40 -right-20 w-[600px] h-[600px] rounded-full opacity-20 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, #3D5AFE 0%, transparent 70%)",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 -left-32 w-[400px] h-[400px] rounded-full opacity-10 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, #FFB020 0%, transparent 70%)",
+        }}
+      />
+      <div className="max-w-content mx-auto px-6 md:px-10 relative">
         <motion.p
           className="eyebrow text-signalSoft mb-6"
           initial={{ opacity: 0 }}
@@ -22,8 +38,8 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          Diseño los átomos para que el negocio pueda construir rápido y sin
-          romper nada.
+          Diseño productos de seguros que la gente entiende — y los
+          sistemas que los sostienen.
         </motion.h1>
 
         <motion.p
