@@ -26,12 +26,12 @@ const cases = [
   {
     slug: "funnel-csi",
     tag: "03",
-    status: "en construcción",
+    status: "caso completo",
     title: "Reducir el funnel de contratación CSI",
-    text: "De 10 a 8 pasos, apoyado en Ley de Hick y Ley de Miller. Publicación pendiente de material final.",
-    stat: "análisis con datos reales de mayo 2026",
+    text: "De 10 a 8 pasos, apoyado en Ley de Hick y Ley de Miller, con datos reales de abandono.",
+    stat: "-12% abandono · +2% contratación",
     thumb: null,
-    live: false,
+    live: true,
   },
   {
     slug: "renovacion-imtt-207",
