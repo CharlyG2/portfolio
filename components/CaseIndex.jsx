@@ -12,8 +12,17 @@ const cases = [
     live: true,
   },
   {
-    slug: "funnel-csi",
+    slug: "landing-viajes",
     tag: "02",
+    status: "caso completo",
+    title: "Unificar dos seguros de viaje en una landing",
+    text: "Viajero Protegido y Viajero Frecuente, cotizados y comparados en una sola experiencia en vez de dos landings separadas.",
+    stat: "2 productos unificados",
+    live: true,
+  },
+  {
+    slug: "funnel-csi",
+    tag: "03",
     status: "en construcción",
     title: "Reducir el funnel de contratación CSI",
     text: "De 10 a 8 pasos, apoyado en Ley de Hick y Ley de Miller. Publicación pendiente de material final.",
@@ -22,7 +31,7 @@ const cases = [
   },
   {
     slug: "renovacion-imtt-207",
-    tag: "03",
+    tag: "04",
     status: "en construcción",
     title: "Renovación transparente de planes",
     text: "Comunicar un alza de cobertura a clientes de alto siniestro sin esconder nada. Publicación pendiente de material final.",

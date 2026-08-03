@@ -1,5 +1,6 @@
 import CaseLayout, { CaseHeader, CaseSection } from "@/components/CaseLayout";
 import TextfieldDemo from "@/components/TextfieldDemo";
+import Screenshot from "@/components/Screenshot";
 
 export const metadata = {
   title: "El Design System de BICE VIDA — Charly Gourves",
@@ -95,6 +96,29 @@ export default function DesignSystemCase() {
           Prueba los estados — este componente reproduce las reglas reales
           definidas en la documentación del sistema.
         </p>
+      </CaseSection>
+
+      <CaseSection tag="en producto" title="El mismo sistema, dos productos distintos">
+        <p>
+          La prueba de que un Design System funciona no es la librería de
+          Figma — es que dos productos con lógicas de negocio distintas
+          (salud y viaje) puedan compartir botones, cards y tipografía sin
+          que un usuario note la diferencia entre equipos.
+        </p>
+        <Screenshot
+          src="/images/csi-landing.png"
+          alt="Landing del Seguro Complementario de Salud con comparador de 4 planes"
+          caption="Landing CSI — comparador de planes construido con los componentes del sistema"
+          width={1200}
+          height={2400}
+        />
+        <Screenshot
+          src="/images/viaje-landing-unificada.png"
+          alt="Landing de seguro de viaje unificando Viajero Protegido y Viajero Frecuente"
+          caption="Landing de seguro de viaje — mismos átomos, producto y lógica de negocio distintos"
+          width={900}
+          height={2200}
+        />
       </CaseSection>
 
       <CaseSection tag="adopción" title="De la librería a producción real">
