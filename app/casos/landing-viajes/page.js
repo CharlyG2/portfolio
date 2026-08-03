@@ -14,7 +14,8 @@ export default function ViajesCase() {
         tldr="BICE VIDA vendía Viajero Protegido (cobertura por viaje puntual) y Viajero Frecuente (cobertura anual) como productos separados. Rediseñé la landing para que el usuario compare ambos lado a lado desde una sola cotización, en vez de tener que saber de antemano cuál producto buscar."
         stats={[
           { n: "2", l: "productos unificados en una sola landing" },
-          { n: "1", l: "cotizador compartido para ambos" },
+          { n: "+16%", l: "más visitantes a la landing" },
+          { n: "+2%", l: "en tasa de contratación" },
         ]}
       />
 
@@ -66,14 +67,18 @@ export default function ViajesCase() {
         />
       </CaseSection>
 
-      <CaseSection tag="pendiente" title="Lo que falta para cerrar este caso">
-        <p className="text-mutedLight">
-          Esta sección queda abierta a propósito: para completar el caso con
-          el nivel de detalle del brief (restricciones, iteraciones
-          descartadas, validación con usuarios, métrica de impacto) falta
-          confirmar contigo el proceso previo a este resultado — qué
-          alternativas se probaron antes de llegar a esta versión y si hay
-          algún dato de conversión o feedback de usuario que podamos citar.
+      <CaseSection tag="impacto" title="Más visitas, más contratación">
+        <p>
+          Tras el lanzamiento de la landing unificada, el tráfico aumentó un
+          16% y la tasa de contratación un 2%. El feedback cualitativo
+          también fue positivo — los usuarios entendieron la comparación sin
+          necesitar ayuda adicional para elegir entre los dos productos.
+        </p>
+        <p className="text-mutedLight text-sm">
+          El proceso pasó por varias iteraciones antes de llegar a esta
+          versión, pero no quedaron documentadas — por eso este caso se
+          centra en el resultado final y su impacto medido, no en el
+          proceso de descarte de alternativas.
         </p>
       </CaseSection>
     </CaseLayout>

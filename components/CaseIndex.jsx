@@ -17,7 +17,7 @@ const cases = [
     status: "caso completo",
     title: "Unificar dos seguros de viaje en una landing",
     text: "Viajero Protegido y Viajero Frecuente, cotizados y comparados en una sola experiencia en vez de dos landings separadas.",
-    stat: "2 productos unificados",
+    stat: "+16% visitas · +2% contratación",
     live: true,
   },
   {
