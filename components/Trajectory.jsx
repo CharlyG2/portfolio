@@ -15,13 +15,15 @@ export default function Trajectory() {
         <Reveal>
           <p className="eyebrow text-signalSoft mb-4">trayectoria</p>
           <h2 className="font-display text-2xl md:text-3xl text-paper leading-snug">
-            Empecé en diseño gráfico. Terminé pensando en sistemas.
+            De construir interfaces a construir el sistema completo.
           </h2>
           <p className="text-sm text-muted mt-4 leading-relaxed max-w-sm">
             Diseño Gráfico Publicitario, certificación Scrum y formación
-            continua en UX/UI (IxDF). El camino no fue lineal — y eso es
-            justamente lo que me hace más cuidadoso con la gente que recién
-            entra a producto desde otras disciplinas.
+            continua en UX/UI (IxDF). Ese recorrido me enseñó a mirar más
+            allá de la pantalla — cómo se comporta un usuario, qué mueve una
+            decisión de negocio, qué hace que un equipo adopte una
+            herramienta. Hoy aplico eso liderando sistemas y flujos
+            completos, no solo pantallas sueltas.
           </p>
         </Reveal>
 

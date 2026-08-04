@@ -11,8 +11,8 @@ const principles = [
   {
     tag: "ml",
     icon: IconData,
-    title: "Decidir con evidencia, no con intuición",
-    text: "Card sorting, analíticas de funnel, tests de usabilidad. Si una decisión no se puede justificar con evidencia, la trato como una hipótesis a validar.",
+    title: "Apoyar cada decisión en evidencia",
+    text: "Card sorting, analíticas de funnel, tests de usabilidad. Cuando una decisión no tiene evidencia detrás, la trato como una hipótesis a validar, no como algo definitivo.",
   },
   {
     tag: "or",
