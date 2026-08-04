@@ -3,7 +3,7 @@
 Next.js 14 + Tailwind + Framer Motion. Escrito para que lo abras en Cursor,
 lo revises y lo publiques en Vercel sin fricción.
 
-## Cómo abrirlo en Cursor
+## Cómo abrirlo en Cursor 
 
 1. Descomprime esta carpeta.
 2. Ábrela en Cursor (`Archivo → Abrir carpeta`).
