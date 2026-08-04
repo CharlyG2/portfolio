@@ -1,4 +1,5 @@
 import CaseLayout, { CaseHeader, CaseSection } from "@/components/CaseLayout";
+import FunnelDiagram from "@/components/FunnelDiagram";
 
 export const metadata = {
   title: "Reducir el funnel de contratación CSI — Charly Gourves",
@@ -72,6 +73,7 @@ export default function FunnelCase() {
           personales, y se reubicó el ingreso de dirección más cerca del
           pago, donde el usuario ya está comprometido con la compra.
         </p>
+        <FunnelDiagram />
       </CaseSection>
 
       <CaseSection tag="impacto" title="Medido un mes después de implementado">
@@ -83,13 +85,12 @@ export default function FunnelCase() {
         </p>
       </CaseSection>
 
-      <CaseSection tag="aprendizajes" title="El dato manda, no el orden lógico del negocio">
+      <CaseSection tag="aprendizajes" title="Priorizar por dónde ocurre la caída real">
         <p>
           El orden de los 10 pasos originales tenía sentido desde la lógica
-          interna del proceso de contratación, no desde el comportamiento
-          real del usuario. Priorizar por dónde ocurre la caída real —no por
-          dónde "debería" ocurrir según el proceso— fue lo que hizo que el
-          cambio funcionara.
+          interna del proceso de contratación. Mirar la analítica real del
+          funnel —y no solo la lógica del proceso— fue lo que permitió
+          encontrar dónde valía la pena simplificar primero.
         </p>
       </CaseSection>
     </CaseLayout>
