@@ -1,15 +1,17 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Reveal from "./Reveal";
-import { PendingPattern, AnalysisPattern } from "./CaseThumbPlaceholder";
 
 const cases = [
   {
     slug: "design-system",
     tag: "01",
-    status: "caso completo",
+    status: "completo",
     title: "El Design System de BICE VIDA",
-    text: "Cómo se construyó, con qué metodología, y qué pasó cuando los desarrolladores empezaron a usarlo de verdad.",
     stat: "89 componentes en producción",
     thumb: "/images/csi-landing.png",
     live: true,
@@ -17,9 +19,8 @@ const cases = [
   {
     slug: "landing-viajes",
     tag: "02",
-    status: "caso completo",
+    status: "completo",
     title: "Unificar dos seguros de viaje en una landing",
-    text: "Viajero Protegido y Viajero Frecuente, cotizados y comparados en una sola experiencia.",
     stat: "+16% visitas · +2% contratación",
     thumb: "/images/viaje-landing-unificada.png",
     live: true,
@@ -27,9 +28,8 @@ const cases = [
   {
     slug: "funnel-csi",
     tag: "03",
-    status: "caso completo",
+    status: "completo",
     title: "Reducir el funnel de contratación CSI",
-    text: "De 10 a 8 pasos, apoyado en Ley de Hick y Ley de Miller, con datos reales de abandono.",
     stat: "-12% abandono · +2% contratación",
     thumb: null,
     live: true,
@@ -39,7 +39,6 @@ const cases = [
     tag: "04",
     status: "en construcción",
     title: "Renovación transparente de planes",
-    text: "Comunicar un alza de cobertura a clientes de alto siniestro sin esconder nada.",
     stat: "3 ramas de decisión mapeadas",
     thumb: null,
     live: false,
@@ -47,72 +46,100 @@ const cases = [
 ];
 
 export default function CaseIndex() {
+  const [hovered, setHovered] = useState(null);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+
   return (
-    <section id="casos" className="py-24 md:py-32 border-t border-line">
+    <section
+      id="casos"
+      className="py-24 md:py-32 border-t border-line relative"
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+      }}
+    >
       <div className="max-w-content mx-auto px-6 md:px-10">
         <Reveal>
           <p className="eyebrow text-signalSoft mb-4">casos de estudio</p>
         </Reveal>
 
-        <div className="grid sm:grid-cols-2 gap-6 mt-8">
+        <div className="mt-6">
           {cases.map((c, i) => {
             const Wrapper = c.live ? Link : "div";
             const wrapperProps = c.live ? { href: `/casos/${c.slug}` } : {};
             return (
-              <Reveal key={c.slug} delay={i * 0.06}>
+              <Reveal key={c.slug} delay={i * 0.05}>
                 <Wrapper
                   {...wrapperProps}
-                  className={`group block rounded-2xl border border-line overflow-hidden bg-ink2/40 h-full ${
-                    c.live
-                      ? "cursor-pointer hover:border-signal/40 transition-colors"
-                      : "cursor-default opacity-70"
+                  onMouseEnter={() => c.thumb && setHovered(c.slug)}
+                  onMouseLeave={() => setHovered(null)}
+                  className={`group flex items-baseline gap-4 md:gap-8 py-6 md:py-8 border-b border-line ${
+                    c.live ? "cursor-pointer" : "cursor-default"
                   }`}
                 >
-                  <div className="relative w-full aspect-[16/10] bg-ink2 overflow-hidden">
-                    {c.thumb ? (
-                      <Image
-                        src={c.thumb}
-                        alt=""
-                        fill
-                        className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
-                        sizes="(max-width: 640px) 100vw, 560px"
-                      />
-                    ) : c.live ? (
-                      <AnalysisPattern />
-                    ) : (
-                      <PendingPattern />
-                    )}
-                    <span className="absolute top-4 left-4 font-mono text-xs text-mutedLight bg-ink/80 backdrop-blur px-2 py-1 rounded">
-                      {c.tag}
-                    </span>
+                  <span className="font-mono text-xs md:text-sm text-mutedLight w-8 shrink-0">
+                    {c.tag}
+                  </span>
+                  <h3
+                    className={`font-display text-2xl sm:text-4xl md:text-5xl leading-none transition-colors ${
+                      c.live
+                        ? "text-paper group-hover:text-signalSoft"
+                        : "text-mutedLight"
+                    }`}
+                  >
+                    {c.title}
+                  </h3>
+                  <span className="ml-auto hidden sm:flex flex-col items-end shrink-0 text-right">
                     <span
-                      className={`absolute top-4 right-4 font-mono text-[10px] uppercase tracking-widest px-2 py-1 rounded-full border backdrop-blur ${
-                        c.live
-                          ? "border-amber/40 text-amber bg-ink/70"
-                          : "border-line text-muted bg-ink/70"
+                      className={`font-mono text-[10px] uppercase tracking-widest ${
+                        c.live ? "text-amber" : "text-mutedLight"
                       }`}
                     >
                       {c.status}
                     </span>
-                  </div>
+                    <span className="font-mono text-xs text-mutedLight mt-1">
+                      {c.stat}
+                    </span>
+                  </span>
 
-                  <div className="p-6">
-                    <h3
-                      className={`font-display text-xl text-paper mb-2 ${
-                        c.live ? "group-hover:text-signalSoft transition-colors" : ""
-                      }`}
-                    >
-                      {c.title}
-                    </h3>
-                    <p className="text-sm text-muted mb-4">{c.text}</p>
-                    <p className="font-mono text-xs text-mutedLight">{c.stat}</p>
-                  </div>
+                  {/* mobile-only inline thumbnail, since cursor-follow doesn't apply on touch */}
+                  {c.thumb && (
+                    <div className="sm:hidden w-16 h-12 rounded-md overflow-hidden border border-line shrink-0 relative">
+                      <Image src={c.thumb} alt="" fill className="object-cover object-top" sizes="64px" />
+                    </div>
+                  )}
                 </Wrapper>
               </Reveal>
             );
           })}
         </div>
       </div>
+
+      {/* floating cursor preview, desktop only */}
+      <AnimatePresence>
+        {hovered &&
+          cases
+            .filter((c) => c.slug === hovered && c.thumb)
+            .map((c) => (
+              <motion.div
+                key={c.slug}
+                className="hidden sm:block pointer-events-none absolute z-20 w-[260px] aspect-[16/10] rounded-lg overflow-hidden border border-line shadow-2xl"
+                style={{ left: pos.x + 24, top: pos.y - 90 }}
+                initial={{ opacity: 0, scale: 0.85, rotate: -3 }}
+                animate={{ opacity: 1, scale: 1, rotate: -3 }}
+                exit={{ opacity: 0, scale: 0.85 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              >
+                <Image
+                  src={c.thumb}
+                  alt=""
+                  fill
+                  className="object-cover object-top"
+                  sizes="260px"
+                />
+              </motion.div>
+            ))}
+      </AnimatePresence>
     </section>
   );
 }

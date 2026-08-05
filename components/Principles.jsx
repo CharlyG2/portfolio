@@ -37,7 +37,7 @@ export default function Principles() {
                 <Icon />
                 <div
                   className={`font-mono text-xs mt-3 mb-3 ${
-                    i === 1 ? "text-amber" : "text-mutedLight"
+                    i === 0 ? "text-signalSoft" : i === 1 ? "text-amber" : "text-mint"
                   }`}
                 >
                   &lt;{p.tag}&gt;

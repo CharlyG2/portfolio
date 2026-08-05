@@ -33,12 +33,14 @@ export default function Hero() {
           </motion.p>
 
           <motion.h1
-            className="font-display text-4xl sm:text-5xl md:text-[3.4rem] font-medium leading-[1.05] max-w-xl"
+            className="font-display text-5xl sm:text-6xl md:text-7xl font-medium leading-[0.98] max-w-xl"
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Diseño para que las personas entiendan lo que están usando.
+            Diseño para que{" "}
+            <span className="text-signalSoft">las personas</span> entiendan{" "}
+            <span className="text-amber">lo que están usando</span>.
           </motion.h1>
 
           <motion.p
