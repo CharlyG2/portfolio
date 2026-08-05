@@ -1,7 +1,15 @@
 export default function Footer() {
   return (
-    <footer className="py-24 md:py-32 border-t border-line">
-      <div className="max-w-content mx-auto px-6 md:px-10">
+    <footer className="py-24 md:py-32 border-t border-line dot-grid relative">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(600px circle at 20% 0%, rgba(11,14,20,0.9), transparent 70%)",
+        }}
+      />
+      <div className="max-w-content mx-auto px-6 md:px-10 relative">
         <p className="font-display text-3xl md:text-5xl text-paper max-w-2xl leading-tight">
           ¿Construimos el próximo sistema juntos?
         </p>
