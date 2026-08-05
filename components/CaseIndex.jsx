@@ -35,8 +35,17 @@ const cases = [
     live: true,
   },
   {
-    slug: "renovacion-imtt-207",
+    slug: "beliv",
     tag: "04",
+    status: "completo",
+    title: "Beliv: una app completa en un sprint de 3 días",
+    stat: "8+ pantallas · equipo liderado",
+    thumb: "/images/beliv-home.png",
+    live: true,
+  },
+  {
+    slug: "renovacion-imtt-207",
+    tag: "05",
     status: "en construcción",
     title: "Renovación transparente de planes",
     stat: "3 ramas de decisión mapeadas",
