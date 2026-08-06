@@ -16,7 +16,7 @@ export function CaseHeader({ eyebrow, title, tldr, stats }) {
         <p className="eyebrow text-signalSoft mt-8 mb-4">
           <span className="tag-bracket">{eyebrow}</span>
         </p>
-        <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-paper max-w-3xl leading-tight">
+        <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-ink max-w-3xl leading-tight">
           {title}
         </h1>
         <p className="mt-6 text-lg text-muted max-w-2xl leading-relaxed">
@@ -26,7 +26,7 @@ export function CaseHeader({ eyebrow, title, tldr, stats }) {
           <div className="mt-10 flex flex-wrap gap-x-10 gap-y-4">
             {stats.map((s) => (
               <div key={s.l}>
-                <div className="stat-number text-2xl text-paper">{s.n}</div>
+                <div className="stat-number text-2xl text-ink">{s.n}</div>
                 <div className="text-xs text-muted max-w-[160px] mt-1">
                   {s.l}
                 </div>
@@ -47,7 +47,7 @@ export function CaseSection({ tag, title, children }) {
           <span className="font-mono text-xs text-mutedLight">
             &lt;{tag}&gt;
           </span>
-          <h2 className="font-display text-xl md:text-2xl text-paper mt-2">
+          <h2 className="font-display text-xl md:text-2xl text-ink mt-2">
             {title}
           </h2>
         </div>
@@ -61,7 +61,7 @@ export function CaseSection({ tag, title, children }) {
 
 export default function CaseLayout({ children }) {
   return (
-    <main className="bg-ink min-h-screen">
+    <main className="bg-paper min-h-screen">
       <Nav />
       {children}
       <Footer />

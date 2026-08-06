@@ -1,31 +1,33 @@
 "use client";
 
 import { motion } from "framer-motion";
-import SystemGraph from "./SystemGraph";
+import HeroCollage from "./HeroCollage";
+import Blob from "./Blob";
 
 const headlineParts = [
   { text: "Diseño para que" },
-  { text: "las personas", color: "text-signalSoft" },
+  { text: "las personas", color: "text-signal" },
   { text: "entiendan" },
-  { text: "lo que están usando.", color: "text-amber" },
+  { text: "lo que están usando.", color: "text-rose" },
 ];
 
 export default function Hero() {
   return (
     <section className="relative pt-36 pb-20 md:pt-44 md:pb-28 overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-40 -right-20 w-[600px] h-[600px] rounded-full opacity-20 blur-3xl"
-        style={{
-          background: "radial-gradient(circle, #3D5AFE 0%, transparent 70%)",
-        }}
+      <Blob
+        color="#3D5AFE"
+        opacity={0.12}
+        className="pointer-events-none absolute -top-24 -right-24 w-[480px] h-[480px] blur-2xl"
       />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 -left-32 w-[400px] h-[400px] rounded-full opacity-10 blur-3xl"
-        style={{
-          background: "radial-gradient(circle, #FFB020 0%, transparent 70%)",
-        }}
+      <Blob
+        color="#FFB020"
+        opacity={0.14}
+        className="pointer-events-none absolute top-1/2 -left-24 w-[320px] h-[320px] blur-2xl"
+      />
+      <Blob
+        color="#0EA5A0"
+        opacity={0.12}
+        className="pointer-events-none absolute bottom-0 right-1/4 w-[280px] h-[280px] blur-2xl"
       />
 
       {/* oversized background watermark, signature typographic gesture */}
@@ -36,30 +38,31 @@ export default function Hero() {
         <span
           className="font-display font-medium text-[22vw] leading-none whitespace-nowrap"
           style={{
-            WebkitTextStroke: "1px rgba(255,255,255,0.06)",
+            WebkitTextStroke: "1px rgba(11,14,20,0.06)",
             color: "transparent",
           }}
         >
-          SISTEMA
+          PRODUCTO
         </span>
       </div>
 
-      <div className="max-w-content mx-auto px-6 md:px-10 relative grid lg:grid-cols-[1.15fr_0.95fr] gap-14 items-center">
+      <div className="max-w-content mx-auto px-6 md:px-10 relative grid lg:grid-cols-[1.1fr_1fr] gap-14 items-center">
         <div>
           <motion.p
-            className="eyebrow text-signalSoft mb-6"
+            className="eyebrow inline-flex items-center gap-2 text-signal mb-6 border border-signal/30 rounded-full px-3 py-1.5 bg-signal/5"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="tag-bracket">product design · design systems</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-signal" />
+            product designer
           </motion.p>
 
-          <h1 className="font-display text-5xl sm:text-6xl md:text-7xl font-medium leading-[0.98] max-w-xl">
+          <h1 className="font-display text-5xl sm:text-6xl md:text-7xl font-medium leading-[0.98] max-w-xl text-ink">
             {headlineParts.map((part, i) => (
               <span key={i} className="inline-block overflow-hidden align-bottom mr-3">
                 <motion.span
-                  className={`inline-block ${part.color || "text-paper"}`}
+                  className={`inline-block ${part.color || ""}`}
                   initial={{ y: "110%" }}
                   animate={{ y: "0%" }}
                   transition={{
@@ -80,9 +83,9 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            Product Designer especializado en Design Systems — investigación,
-            sistemas y decisiones con datos aplicados a productos digitales
-            complejos.
+            Seguros, bienestar, viajes — productos distintos, mismo enfoque:
+            investigar, simplificar y decidir con datos. Especializado en
+            Design Systems, sin quedarme solo ahí.
           </motion.p>
 
           <motion.div
@@ -92,18 +95,12 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.7 }}
           >
             {[
-              { n: "118", l: "componentes diseñados", accent: false },
-              { n: "89", l: "en producción", accent: false },
-              { n: "100%", l: "consenso en research", accent: true },
+              { n: "4", l: "productos reales diseñados", color: "text-mint" },
+              { n: "89", l: "componentes en producción", color: "text-ink" },
+              { n: "-12%", l: "abandono en el mejor caso", color: "text-rose" },
             ].map((s, i) => (
               <div key={s.l} className={i > 0 ? "pl-8 border-l border-line" : ""}>
-                <div
-                  className={`stat-number text-3xl ${
-                    s.accent ? "text-amber" : "text-paper"
-                  }`}
-                >
-                  {s.n}
-                </div>
+                <div className={`stat-number text-3xl ${s.color}`}>{s.n}</div>
                 <div className="text-xs text-muted max-w-[120px] mt-1">
                   {s.l}
                 </div>
@@ -112,14 +109,7 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="dot-grid rounded-2xl border border-line bg-ink2/60 p-8 md:p-10 flex items-center justify-center relative z-10"
-        >
-          <SystemGraph />
-        </motion.div>
+        <HeroCollage />
       </div>
     </section>
   );

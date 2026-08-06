@@ -1,6 +1,7 @@
 import CaseLayout, { CaseHeader, CaseSection } from "@/components/CaseLayout";
 import TextfieldDemo from "@/components/TextfieldDemo";
 import Screenshot from "@/components/Screenshot";
+import SystemGraph from "@/components/SystemGraph";
 
 export const metadata = {
   title: "El Design System de BICE VIDA — Charly Gourves",
@@ -56,6 +57,9 @@ export default function DesignSystemCase() {
           para que un componente entre a discovery, y qué se necesita para
           que salga a producción (delivery).
         </p>
+        <div className="not-prose rounded-2xl border border-line bg-paperSoft dot-grid p-6 md:p-8 flex justify-center my-6">
+          <SystemGraph />
+        </div>
         <div className="grid sm:grid-cols-2 gap-4 not-prose">
           <div className="rounded-xl border border-line p-5">
             <p className="font-mono text-xs text-signalSoft mb-3">

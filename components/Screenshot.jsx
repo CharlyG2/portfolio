@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Screenshot({ src, alt, caption, width = 1400, height = 900 }) {
   return (
     <figure className="not-prose my-6">
-      <div className="rounded-xl overflow-hidden border border-line bg-ink2">
+      <div className="rounded-xl overflow-hidden border border-line bg-paperSoft">
         <Image
           src={src}
           alt={alt}

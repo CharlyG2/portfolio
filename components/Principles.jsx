@@ -1,22 +1,25 @@
+"use client";
+
+import { motion } from "framer-motion";
 import Reveal from "./Reveal";
 import { IconAtom, IconData, IconEye } from "./PrincipleIcon";
 
 const principles = [
   {
-    tag: "at",
     icon: IconAtom,
-    title: "Empezar por lo más pequeño",
-    text: "Un botón mal definido se rompe en cien pantallas distintas. Prefiero resolver bien la unidad mínima antes de escalar a flujos completos.",
+    bg: "bg-signal",
+    title: "Simplificar antes de escalar",
+    text: "Un flujo mal resuelto se rompe en cien pantallas distintas. Prefiero resolver bien lo simple antes de construir algo grande encima.",
   },
   {
-    tag: "ml",
     icon: IconData,
+    bg: "bg-amber",
     title: "Apoyar cada decisión en evidencia",
-    text: "Card sorting, analíticas de funnel, tests de usabilidad. Cuando una decisión no tiene evidencia detrás, la trato como una hipótesis a validar, no como algo definitivo.",
+    text: "Card sorting, analíticas de funnel, tests de usabilidad. Cuando una decisión no tiene evidencia detrás, la trato como una hipótesis a validar.",
   },
   {
-    tag: "or",
     icon: IconEye,
+    bg: "bg-rose",
     title: "Que la persona entienda lo que está viendo",
     text: "En seguros, la letra chica destruye confianza. Prefiero una pantalla que explique un cambio con claridad a una que lo esconda bien diseñado.",
   },
@@ -24,28 +27,29 @@ const principles = [
 
 export default function Principles() {
   return (
-    <section className="py-24 md:py-32 border-t border-line bg-ink2/40">
+    <section className="py-24 md:py-32 border-t border-line">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <Reveal>
-          <p className="eyebrow text-signalSoft mb-4">cómo pienso</p>
+          <p className="eyebrow text-signal mb-4">cómo pienso</p>
         </Reveal>
-        <div className="grid md:grid-cols-3 gap-10 md:gap-8 mt-8">
+        <div className="grid md:grid-cols-3 gap-6 mt-8">
           {principles.map((p, i) => {
             const Icon = p.icon;
             return (
-              <Reveal key={p.tag} delay={i * 0.08}>
-                <Icon />
-                <div
-                  className={`font-mono text-xs mt-3 mb-3 ${
-                    i === 0 ? "text-signalSoft" : i === 1 ? "text-amber" : "text-mint"
-                  }`}
+              <Reveal key={p.title} delay={i * 0.08}>
+                <motion.div
+                  className={`${p.bg} rounded-2xl p-7 h-full text-white`}
+                  whileHover={{ rotate: i % 2 === 0 ? -1.5 : 1.5, scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
-                  &lt;{p.tag}&gt;
-                </div>
-                <h3 className="font-display text-xl text-paper mb-3">
-                  {p.title}
-                </h3>
-                <p className="text-sm text-muted leading-relaxed">{p.text}</p>
+                  <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center mb-6">
+                    <Icon />
+                  </div>
+                  <h3 className="font-display text-xl mb-3">{p.title}</h3>
+                  <p className="text-sm text-white/85 leading-relaxed">
+                    {p.text}
+                  </p>
+                </motion.div>
               </Reveal>
             );
           })}

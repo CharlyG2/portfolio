@@ -24,7 +24,7 @@ export default function TextfieldDemo() {
   const [active, setActive] = useState("default");
 
   return (
-    <div className="rounded-2xl border border-line bg-ink2 p-6 md:p-8">
+    <div className="rounded-2xl border border-line bg-paperSoft p-6 md:p-8">
       <div className="flex flex-wrap gap-2 mb-8">
         {states.map((s) => (
           <button
@@ -33,7 +33,7 @@ export default function TextfieldDemo() {
             className={`font-mono text-[11px] uppercase tracking-widest px-3 py-1.5 rounded-full border transition-colors ${
               active === s
                 ? "border-signal text-signalSoft bg-signal/10"
-                : "border-line text-muted hover:text-paper"
+                : "border-line text-muted hover:text-ink"
             }`}
           >
             {s}
@@ -48,7 +48,7 @@ export default function TextfieldDemo() {
           disabled={active === "disabled"}
           placeholder="Juan Pérez"
           defaultValue={active === "success" ? "Juan Pérez" : ""}
-          className={`w-full bg-ink border rounded-lg px-4 py-3 text-sm text-paper placeholder:text-mutedLight outline-none transition-colors ${stateStyles[active]}`}
+          className={`w-full bg-white border rounded-lg px-4 py-3 text-sm text-ink placeholder:text-mutedLight outline-none transition-colors ${stateStyles[active]}`}
         />
         <span
           className={`text-xs mt-2 block ${

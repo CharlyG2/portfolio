@@ -14,7 +14,7 @@ export default function Trajectory() {
       <div className="max-w-content mx-auto px-6 md:px-10 grid md:grid-cols-[1fr_1.4fr] gap-12">
         <Reveal>
           <p className="eyebrow text-signalSoft mb-4">trayectoria</p>
-          <h2 className="font-display text-2xl md:text-3xl text-paper leading-snug">
+          <h2 className="font-display text-2xl md:text-3xl text-ink leading-snug">
             De construir interfaces a construir el sistema completo.
           </h2>
           <p className="text-sm text-muted mt-4 leading-relaxed max-w-sm">
@@ -37,7 +37,7 @@ export default function Trajectory() {
                 <span className="font-mono text-xs text-mutedLight w-32 shrink-0">
                   {r.period}
                 </span>
-                <span className="text-sm text-paper flex-1">{r.role}</span>
+                <span className="text-sm text-ink flex-1">{r.role}</span>
                 <span className="text-sm text-muted">{r.place}</span>
               </div>
             ))}

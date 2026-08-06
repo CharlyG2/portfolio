@@ -30,7 +30,7 @@ function Step({ label, tone = "default" }) {
   };
   return (
     <div
-      className={`shrink-0 w-[110px] h-[64px] rounded-lg border ${toneClasses[tone]} bg-ink flex items-center justify-center text-center text-[10px] px-2 font-mono leading-tight`}
+      className={`shrink-0 w-[110px] h-[64px] rounded-lg border ${toneClasses[tone]} bg-white flex items-center justify-center text-center text-[10px] px-2 font-mono leading-tight`}
     >
       {label}
     </div>
@@ -39,7 +39,7 @@ function Step({ label, tone = "default" }) {
 
 export default function FunnelDiagram() {
   return (
-    <div className="rounded-2xl border border-line bg-ink2 p-6 md:p-8 overflow-x-auto">
+    <div className="rounded-2xl border border-line bg-paperSoft p-6 md:p-8 overflow-x-auto">
       <p className="font-mono text-[10px] uppercase tracking-widest text-mutedLight mb-4">
         antes — 10 pasos
       </p>

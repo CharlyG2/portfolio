@@ -4,7 +4,7 @@ export default function MobileGallery({ images }) {
   return (
     <div className="not-prose grid grid-cols-2 sm:grid-cols-4 gap-3 my-6">
       {images.map((img) => (
-        <figure key={img.src} className="rounded-xl overflow-hidden border border-line bg-ink2">
+        <figure key={img.src} className="rounded-xl overflow-hidden border border-line bg-paperSoft">
           <div className="relative w-full aspect-[9/19.5]">
             <Image
               src={img.src}
