@@ -6,48 +6,48 @@ const steps = [
   {
     n: "01",
     color: "#3D5AFE",
-    title: "Entender",
-    text: "Antes de abrir Figma, entiendo el problema. Sin eso, cualquier solución es un tiro al aire.",
+    title: "Cuestiono todo",
+    text: "No diseño antes de entender el problema de verdad — ni aunque la fecha de entrega esté encima.",
   },
   {
     n: "02",
     color: "#0EA5A0",
-    title: "Enmarcar",
-    text: "Conecto lo que necesita el usuario con lo que necesita el negocio — ahí vive la decisión real.",
+    title: "Busco la fricción",
+    text: "Ahí es donde se rompe la experiencia de verdad, no en lo que se ve bonito o feo.",
   },
   {
     n: "03",
     color: "#FFB020",
-    title: "Explorar",
-    text: "Pruebo varias soluciones. No me caso con la primera idea, aunque me guste.",
+    title: "Diseño con restricciones",
+    text: "El producto real tiene negocio, tecnología y plazos — diseñar sin eso es diseñar en el vacío.",
   },
   {
     n: "04",
     color: "#F43F5E",
-    title: "Validar",
-    text: "Testeo con datos, research o feedback real antes de dar algo por bueno.",
+    title: "Pruebo antes de defender",
+    text: "Si los datos contradicen mi idea favorita, gana el dato — mi ego puede esperar.",
   },
   {
     n: "05",
     color: "#FD9047",
-    title: "Construir",
-    text: "Trabajo codo a codo con developers para que el diseño se vuelva producto de verdad.",
+    title: "Construyo con quien lo sostiene",
+    text: "Si el equipo de desarrollo no lo puede mantener después, no importa qué tan bien se vea.",
   },
   {
     n: "06",
     color: "#3D5AFE",
-    title: "Mejorar",
-    text: "Mido, aprendo, itero. Ningún lanzamiento es el final.",
+    title: "Nada es definitivo",
+    text: "Mido, aprendo, cambio. El lanzamiento es el punto de partida, no la meta.",
   },
 ];
 
 export default function HowIThink() {
   return (
-    <section id="como-pienso" className="bg-ink py-24 md:py-32 border-t border-white/10">
+    <section id="como-pienso" className="bg-paperSoft py-24 md:py-32 border-t border-line">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <Reveal>
-          <p className="eyebrow text-white/60 mb-4">cómo pienso</p>
-          <h2 className="font-display text-2xl md:text-3xl text-white max-w-lg mb-12">
+          <p className="eyebrow text-rust mb-4">cómo pienso</p>
+          <h2 className="font-display text-2xl md:text-3xl text-ink max-w-lg mb-12">
             Seis pasos, siempre en el mismo orden.
           </h2>
         </Reveal>
@@ -59,7 +59,7 @@ export default function HowIThink() {
                 className="rounded-2xl border p-6 h-full"
                 style={{
                   borderColor: `${s.color}40`,
-                  background: `${s.color}12`,
+                  background: "#FFFFFF",
                 }}
               >
                 <span
@@ -68,10 +68,10 @@ export default function HowIThink() {
                 >
                   {s.n}
                 </span>
-                <h3 className="font-display text-xl text-white mt-3 mb-2">
+                <h3 className="font-display text-xl text-ink mt-3 mb-2">
                   {s.title}
                 </h3>
-                <p className="text-sm text-white/75 leading-relaxed">
+                <p className="text-sm text-muted leading-relaxed">
                   {s.text}
                 </p>
               </div>

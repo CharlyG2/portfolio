@@ -10,7 +10,7 @@ const words = [
 export default function Marquee() {
   const track = [...words, ...words, ...words];
   return (
-    <div className="relative bg-ink py-5 overflow-hidden">
+    <div className="relative bg-paper border-y border-line py-5 overflow-hidden">
       <div className="flex whitespace-nowrap animate-marquee">
         {track.map((w, i) => (
           <span
@@ -20,7 +20,7 @@ export default function Marquee() {
             <span
               className={
                 i % 4 === 0
-                  ? "text-signalSoft"
+                  ? "text-signal"
                   : i % 4 === 1
                   ? "text-amber"
                   : i % 4 === 2
@@ -30,7 +30,7 @@ export default function Marquee() {
             >
               {w}
             </span>
-            <span className="text-white/30 text-sm">/</span>
+            <span className="text-mutedLight text-sm">/</span>
           </span>
         ))}
       </div>

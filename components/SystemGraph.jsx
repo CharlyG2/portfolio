@@ -75,7 +75,7 @@ export default function SystemGraph() {
               cx={t.cx}
               cy={t.cy}
               r={t.r}
-              fill={i === tiers.length - 1 ? "#3D5AFE" : "#12161F"}
+              fill={i === tiers.length - 1 ? "#3D5AFE" : "#FFFFFF"}
               stroke="#3D5AFE"
               strokeWidth="1.5"
               initial={{ scale: 0, opacity: 0 }}

@@ -15,7 +15,6 @@ export default function Hero() {
   const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [18, -18]), springCfg);
   const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-18, 18]), springCfg);
 
-  // "Charly" sits closer to the viewer (more parallax), "Gourves" sits further back
   const charlyX = useSpring(useTransform(mx, [-0.5, 0.5], [-26, 26]), springCfg);
   const charlyY = useSpring(useTransform(my, [-0.5, 0.5], [-16, 16]), springCfg);
   const gourvesX = useSpring(useTransform(mx, [-0.5, 0.5], [14, -14]), springCfg);
@@ -37,13 +36,13 @@ export default function Hero() {
 
   return (
     <section
-      className="relative bg-ink text-white min-h-screen flex flex-col items-center justify-center text-center overflow-hidden"
+      className="relative bg-paper text-ink min-h-screen flex flex-col items-center justify-center text-center overflow-hidden"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full opacity-[0.18] blur-3xl"
+        className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full opacity-[0.16] blur-3xl"
         style={{
           background:
             "radial-gradient(circle, #FD9047 0%, #AC5142 45%, transparent 75%)",
@@ -51,7 +50,7 @@ export default function Hero() {
       />
 
       <motion.p
-        className="relative eyebrow text-white/50 mb-12 md:mb-16"
+        className="relative eyebrow text-rust mb-12 md:mb-16"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -70,11 +69,10 @@ export default function Hero() {
         onMouseEnter={() => setHoverGourves(true)}
         onMouseLeave={() => setHoverGourves(false)}
       >
-        {/* drifting shadow copy underneath, reinforces depth */}
         <div
           aria-hidden="true"
           className="absolute inset-0 font-impact leading-[0.8] whitespace-nowrap select-none pointer-events-none"
-          style={{ fontSize: "clamp(4rem, 18vw, 16rem)", color: "rgba(0,0,0,0.35)", filter: "blur(2px)" }}
+          style={{ fontSize: "clamp(4rem, 18vw, 16rem)", color: "rgba(43,36,29,0.15)", filter: "blur(2px)" }}
         >
           <motion.div style={{ x: shadowX, y: shadowY }}>Charly</motion.div>
           <motion.div style={{ x: shadowX, y: shadowY }}>Gourves</motion.div>
@@ -91,15 +89,15 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
-          <span style={{ color: "#FD9047" }}>Charly</span>
+          <span style={{ color: "#AC5142" }}>Charly</span>
         </motion.span>
 
         <motion.span
           className="block font-impact leading-[0.8] whitespace-nowrap transition-colors duration-500"
           style={{
             fontSize: "clamp(4rem, 18vw, 16rem)",
-            WebkitTextStroke: "2px #FD9047",
-            color: hoverGourves ? "#FD9047" : "transparent",
+            WebkitTextStroke: "2px #AC5142",
+            color: hoverGourves ? "#AC5142" : "transparent",
             x: shouldReduceMotion ? 0 : gourvesX,
             y: shouldReduceMotion ? 0 : gourvesY,
           }}
@@ -109,10 +107,20 @@ export default function Hero() {
         >
           Gourves
         </motion.span>
+
+        {/* casual, handwritten personal aside — the "currently cooking" touch */}
+        <motion.p
+          className="absolute -bottom-2 md:bottom-2 right-[8%] font-hand text-2xl md:text-3xl text-rust rotate-[-4deg]"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
+        >
+          hola! 👋
+        </motion.p>
       </motion.div>
 
       <motion.p
-        className="relative font-display text-xl md:text-2xl text-white mt-24 md:mt-28"
+        className="relative font-display text-xl md:text-2xl text-ink mt-24 md:mt-28"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.45 }}
@@ -121,10 +129,19 @@ export default function Hero() {
       </motion.p>
 
       <motion.p
-        className="relative max-w-2xl text-lg md:text-xl leading-relaxed text-white/70 mt-8 px-6"
+        className="relative font-display text-2xl md:text-3xl text-rust mt-4 max-w-2xl px-6"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+      >
+        Convierto procesos de negocio en productos que la gente entiende.
+      </motion.p>
+
+      <motion.p
+        className="relative max-w-2xl text-lg md:text-xl leading-relaxed text-muted mt-8 px-6"
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.55 }}
+        transition={{ duration: 0.7, delay: 0.6 }}
       >
         Investigo, simplifico y construyo sistemas que escalan. El proceso es
         siempre el mismo: entender antes de diseñar, decidir con datos, dejar
@@ -132,10 +149,10 @@ export default function Hero() {
       </motion.p>
 
       <motion.div
-        className="relative mt-14 flex flex-col items-center gap-2 text-white/40"
+        className="relative mt-14 flex flex-col items-center gap-2 text-mutedLight"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.8 }}
+        transition={{ duration: 0.6, delay: 0.85 }}
       >
         <motion.div
           animate={{ y: [0, 6, 0] }}

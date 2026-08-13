@@ -1,10 +1,20 @@
+import Image from "next/image";
 import Reveal from "./Reveal";
 
 export default function About() {
   return (
     <section id="sobre-mi" className="py-24 md:py-32 border-t border-line">
-      <div className="max-w-content mx-auto px-6 md:px-10 grid md:grid-cols-[0.7fr_1fr] gap-12">
+      <div className="max-w-content mx-auto px-6 md:px-10 grid md:grid-cols-[0.55fr_1fr] gap-12">
         <Reveal>
+          <div className="relative w-40 h-52 md:w-48 md:h-64 rounded-2xl overflow-hidden border-4 border-white shadow-xl rotate-[-2deg] mb-6">
+            <Image
+              src="/images/charly-photo.jpeg"
+              alt="Charly Gourves"
+              fill
+              className="object-cover"
+              sizes="200px"
+            />
+          </div>
           <p className="eyebrow text-rust mb-4">sobre mí</p>
           <h2 className="font-display text-2xl md:text-3xl text-ink leading-snug">
             No siempre quise ser Product Designer.
