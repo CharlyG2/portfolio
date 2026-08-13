@@ -3,10 +3,10 @@ import Image from "next/image";
 import Reveal from "./Reveal";
 
 const colorMap = {
-  signal: { bg: "bg-signal", border: "border-signal/30", text: "text-signal", tag: "bg-signal/10 text-signal" },
-  mint: { bg: "bg-mint", border: "border-mint/30", text: "text-mint", tag: "bg-mint/10 text-mint" },
-  amber: { bg: "bg-amber", border: "border-amber/30", text: "text-amber", tag: "bg-amber/10 text-amber" },
-  rose: { bg: "bg-rose", border: "border-rose/30", text: "text-rose", tag: "bg-rose/10 text-rose" },
+  signal: { bg: "bg-signal", bannerText: "text-white/90", border: "border-signal/30", text: "text-signal", tag: "bg-signal/10 text-signal" },
+  mint: { bg: "bg-mint", bannerText: "text-white/90", border: "border-mint/30", text: "text-mint", tag: "bg-mint/10 text-mint" },
+  amber: { bg: "bg-amber", bannerText: "text-ink/85", border: "border-amber/30", text: "text-amber", tag: "bg-amber/10 text-amber" },
+  rose: { bg: "bg-rose", bannerText: "text-white/90", border: "border-rose/30", text: "text-rose", tag: "bg-rose/10 text-rose" },
 };
 
 const cases = [
@@ -17,7 +17,7 @@ const cases = [
     category: "Design System",
     title: "El Design System de BICE VIDA",
     description: "Metodología atómica propuesta y liderada de punta a punta, con reglas de entrada y salida definidas junto al equipo de desarrollo.",
-    impact: "89 componentes en producción entre app y web, con pipeline de adopción activo.",
+    impactStat: "89", impactLabel: "componentes en producción (app + web)",
     tags: ["Design System", "Liderazgo de equipo", "Figma · Storybook"],
     thumb: "/images/csi-landing.png",
     live: true,
@@ -29,7 +29,7 @@ const cases = [
     category: "Seguro de Viaje",
     title: "Unificar dos seguros de viaje en una landing",
     description: "Viajero Protegido y Viajero Frecuente, cotizados y comparados lado a lado en una sola experiencia en vez de dos landings separadas.",
-    impact: "+16% de visitas y +2% de contratación en el primer mes.",
+    impactStat: "+16%", impactLabel: "visitas · +2% contratación",
     tags: ["Landing", "Research", "Conversión"],
     thumb: "/images/viaje-landing-unificada.png",
     live: true,
@@ -41,7 +41,7 @@ const cases = [
     category: "Seguro de Salud",
     title: "Reducir el funnel de contratación CSI",
     description: "De 10 a 8 pasos, priorizando con datos reales de abandono y dos leyes de UX (Hick y Miller) como criterio de decisión.",
-    impact: "-12% de abandono y +2% de contratación en el primer mes.",
+    impactStat: "-12%", impactLabel: "abandono · +2% contratación",
     tags: ["Funnel", "UX Laws", "Datos"],
     thumb: null,
     live: true,
@@ -53,7 +53,7 @@ const cases = [
     category: "App de Bienestar",
     title: "Beliv: una app completa en un sprint de 3 días",
     description: "Lideré el equipo de diseño en un design sprint de 3 días, de la idea a las pantallas completas de onboarding, home, salud, social y gamificación.",
-    impact: "8+ pantallas de producto, bajo restricción real de tiempo y costo.",
+    impactStat: "8+", impactLabel: "pantallas diseñadas en un sprint de 3 días",
     tags: ["Mobile App", "Design Sprint", "Liderazgo"],
     thumb: "/images/beliv-home.png",
     live: true,
@@ -65,7 +65,7 @@ const cases = [
     category: "Portafolio",
     title: "Este mismo portafolio, como caso de estudio",
     description: "Dirigí cada decisión de diseño e iteré con Claude para la implementación, usando Cursor y GitHub Desktop para el flujo de publicación.",
-    impact: "5 secciones rediseñadas por feedback real, sistema de diseño propio con tokens y componentes.",
+    impactStat: "6", impactLabel: "casos de estudio, un solo sistema de diseño",
     tags: ["Proceso", "Design System", "Claude · Cursor · GitHub"],
     thumb: null,
     live: true,
@@ -77,7 +77,7 @@ const cases = [
     category: "Seguro de Salud",
     title: "Renovación transparente de planes",
     description: "Comunicar un alza de cobertura a clientes de alto siniestro sin esconder nada — tres ramas de decisión: aceptar, rechazar o no hacer nada.",
-    impact: "[AGREGAR MÉTRICA — caso en construcción]",
+    impactStat: null, impactLabel: "[AGREGAR MÉTRICA] — caso en construcción",
     tags: ["Flujo complejo", "Ética de producto"],
     thumb: null,
     live: false,
@@ -125,7 +125,7 @@ export default function CaseIndex() {
                         </div>
                       </div>
                     ) : null}
-                    <span className="relative z-10 p-6 font-display text-white/90 text-lg max-w-[55%]">
+                    <span className={`relative z-10 p-6 font-display ${colors.bannerText} text-lg max-w-[55%]`}>
                       {c.category}
                     </span>
                   </div>
@@ -141,14 +141,24 @@ export default function CaseIndex() {
                       {c.description}
                     </p>
 
-                    <div className={`rounded-lg border ${colors.border} px-4 py-3 mb-4`}>
-                      <p className={`font-mono text-[10px] uppercase tracking-widest ${colors.text} mb-1`}>
-                        Impacto
-                      </p>
-                      <p className="text-sm text-ink">{c.impact}</p>
+                    <div className="mt-auto flex items-baseline gap-3 mb-5 pt-4 border-t border-line">
+                      {c.impactStat ? (
+                        <>
+                          <span className={`font-mono text-3xl font-medium ${colors.text}`}>
+                            {c.impactStat}
+                          </span>
+                          <span className="text-xs text-muted leading-snug">
+                            {c.impactLabel}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-xs text-mutedLight italic">
+                          {c.impactLabel}
+                        </span>
+                      )}
                     </div>
 
-                    <div className="mt-auto flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2">
                       {c.tags.map((t) => (
                         <span
                           key={t}

@@ -10,7 +10,7 @@ const words = [
 export default function Marquee() {
   const track = [...words, ...words, ...words];
   return (
-    <div className="relative bg-ink py-5 overflow-hidden -rotate-1 scale-105">
+    <div className="relative bg-ink py-5 overflow-hidden">
       <div className="flex whitespace-nowrap animate-marquee">
         {track.map((w, i) => (
           <span
