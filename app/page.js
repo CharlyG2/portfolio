@@ -1,9 +1,11 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
+import HowIThink from "@/components/HowIThink";
 import Marquee from "@/components/Marquee";
-import Principles from "@/components/Principles";
 import CaseIndex from "@/components/CaseIndex";
+import About from "@/components/About";
 import Trajectory from "@/components/Trajectory";
+import Resume from "@/components/Resume";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -11,10 +13,12 @@ export default function Home() {
     <main className="bg-paper min-h-screen">
       <Nav />
       <Hero />
+      <HowIThink />
       <Marquee />
-      <Principles />
       <CaseIndex />
+      <About />
       <Trajectory />
+      <Resume />
       <Footer />
     </main>
   );

@@ -10,7 +10,7 @@ export default function Footer() {
       />
       <div className="max-w-content mx-auto px-6 md:px-10 relative">
         <p className="font-display text-3xl md:text-5xl text-white max-w-2xl leading-tight">
-          ¿Construimos el próximo producto juntos?
+          ¿Tienes un problema que valga la pena resolver?
         </p>
         <div className="mt-10 flex flex-wrap gap-x-4 gap-y-4 font-mono text-sm">
           <MagneticLink

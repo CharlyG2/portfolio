@@ -1,116 +1,150 @@
 "use client";
 
-import { motion } from "framer-motion";
-import HeroCollage from "./HeroCollage";
-import Blob from "./Blob";
-
-const headlineParts = [
-  { text: "Diseño para que" },
-  { text: "las personas", color: "text-signal" },
-  { text: "entiendan" },
-  { text: "lo que están usando.", color: "text-rose" },
-];
+import { useRef, useState } from "react";
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 
 export default function Hero() {
-  return (
-    <section className="relative pt-36 pb-20 md:pt-44 md:pb-28 overflow-hidden">
-      <Blob
-        color="#3D5AFE"
-        opacity={0.12}
-        className="pointer-events-none absolute -top-24 -right-24 w-[480px] h-[480px] blur-2xl"
-      />
-      <Blob
-        color="#FFB020"
-        opacity={0.14}
-        className="pointer-events-none absolute top-1/2 -left-24 w-[320px] h-[320px] blur-2xl"
-      />
-      <Blob
-        color="#0EA5A0"
-        opacity={0.12}
-        className="pointer-events-none absolute bottom-0 right-1/4 w-[280px] h-[280px] blur-2xl"
-      />
+  const ref = useRef(null);
+  const [hoverGourves, setHoverGourves] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
-      {/* oversized background watermark, signature typographic gesture */}
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const springCfg = { stiffness: 120, damping: 18 };
+
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [18, -18]), springCfg);
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-18, 18]), springCfg);
+
+  // "Charly" sits closer to the viewer (more parallax), "Gourves" sits further back
+  const charlyX = useSpring(useTransform(mx, [-0.5, 0.5], [-26, 26]), springCfg);
+  const charlyY = useSpring(useTransform(my, [-0.5, 0.5], [-16, 16]), springCfg);
+  const gourvesX = useSpring(useTransform(mx, [-0.5, 0.5], [14, -14]), springCfg);
+  const gourvesY = useSpring(useTransform(my, [-0.5, 0.5], [8, -8]), springCfg);
+
+  const shadowX = useSpring(useTransform(mx, [-0.5, 0.5], [22, -22]), springCfg);
+  const shadowY = useSpring(useTransform(my, [-0.5, 0.5], [22, -22]), springCfg);
+
+  const handleMouseMove = (e) => {
+    if (shouldReduceMotion) return;
+    const rect = ref.current.getBoundingClientRect();
+    mx.set((e.clientX - rect.left) / rect.width - 0.5);
+    my.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+  const handleMouseLeave = () => {
+    mx.set(0);
+    my.set(0);
+  };
+
+  return (
+    <section
+      className="relative bg-ink text-white min-h-screen flex flex-col items-center justify-center text-center overflow-hidden"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
       <div
         aria-hidden="true"
-        className="pointer-events-none select-none absolute -bottom-16 left-0 right-0 text-center overflow-hidden"
+        className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full opacity-[0.18] blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, #FD9047 0%, #AC5142 45%, transparent 75%)",
+        }}
+      />
+
+      <motion.p
+        className="relative eyebrow text-white/50 mb-12 md:mb-16"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
       >
-        <span
-          className="font-display font-medium text-[22vw] leading-none whitespace-nowrap"
-          style={{
-            WebkitTextStroke: "1px rgba(11,14,20,0.06)",
-            color: "transparent",
-          }}
+        Product Design · UX · Design Systems
+      </motion.p>
+
+      <motion.div
+        ref={ref}
+        className="relative overflow-visible w-full cursor-default"
+        style={{
+          rotateX: shouldReduceMotion ? 0 : rotateX,
+          rotateY: shouldReduceMotion ? 0 : rotateY,
+          transformPerspective: 500,
+        }}
+        onMouseEnter={() => setHoverGourves(true)}
+        onMouseLeave={() => setHoverGourves(false)}
+      >
+        {/* drifting shadow copy underneath, reinforces depth */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 font-impact leading-[0.8] whitespace-nowrap select-none pointer-events-none"
+          style={{ fontSize: "clamp(4rem, 18vw, 16rem)", color: "rgba(0,0,0,0.35)", filter: "blur(2px)" }}
         >
-          PRODUCTO
-        </span>
-      </div>
-
-      <div className="max-w-content mx-auto px-6 md:px-10 relative grid lg:grid-cols-[1.1fr_1fr] gap-14 items-center">
-        <div>
-          <motion.p
-            className="eyebrow inline-flex items-center gap-2 text-signal mb-6 border border-signal/30 rounded-full px-3 py-1.5 bg-signal/5"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-signal" />
-            product designer
-          </motion.p>
-
-          <h1 className="font-display text-5xl sm:text-6xl md:text-7xl font-medium leading-[0.98] max-w-xl text-ink">
-            {headlineParts.map((part, i) => (
-              <span key={i} className="inline-block overflow-hidden align-bottom mr-3">
-                <motion.span
-                  className={`inline-block ${part.color || ""}`}
-                  initial={{ y: "110%" }}
-                  animate={{ y: "0%" }}
-                  transition={{
-                    duration: 0.7,
-                    delay: 0.15 + i * 0.12,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                >
-                  {part.text}
-                </motion.span>
-              </span>
-            ))}
-          </h1>
-
-          <motion.p
-            className="mt-6 text-lg text-muted max-w-lg"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-          >
-            Seguros, bienestar, viajes — productos distintos, mismo enfoque:
-            investigar, simplificar y decidir con datos. Especializado en
-            Design Systems, sin quedarme solo ahí.
-          </motion.p>
-
-          <motion.div
-            className="mt-10 flex flex-wrap gap-x-8 gap-y-5"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
-          >
-            {[
-              { n: "4", l: "productos reales diseñados", color: "text-mint" },
-              { n: "89", l: "componentes en producción", color: "text-ink" },
-              { n: "-12%", l: "abandono en el mejor caso", color: "text-rose" },
-            ].map((s, i) => (
-              <div key={s.l} className={i > 0 ? "pl-8 border-l border-line" : ""}>
-                <div className={`stat-number text-3xl ${s.color}`}>{s.n}</div>
-                <div className="text-xs text-muted max-w-[120px] mt-1">
-                  {s.l}
-                </div>
-              </div>
-            ))}
-          </motion.div>
+          <motion.div style={{ x: shadowX, y: shadowY }}>Charly</motion.div>
+          <motion.div style={{ x: shadowX, y: shadowY }}>Gourves</motion.div>
         </div>
 
-        <HeroCollage />
-      </div>
+        <motion.span
+          className="block font-impact leading-[0.8] whitespace-nowrap"
+          style={{
+            fontSize: "clamp(4rem, 18vw, 16rem)",
+            x: shouldReduceMotion ? 0 : charlyX,
+            y: shouldReduceMotion ? 0 : charlyY,
+          }}
+          initial={{ opacity: 0, y: "110%" }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span style={{ color: "#FD9047" }}>Charly</span>
+        </motion.span>
+
+        <motion.span
+          className="block font-impact leading-[0.8] whitespace-nowrap transition-colors duration-500"
+          style={{
+            fontSize: "clamp(4rem, 18vw, 16rem)",
+            WebkitTextStroke: "2px #FD9047",
+            color: hoverGourves ? "#FD9047" : "transparent",
+            x: shouldReduceMotion ? 0 : gourvesX,
+            y: shouldReduceMotion ? 0 : gourvesY,
+          }}
+          initial={{ opacity: 0, y: "110%" }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+        >
+          Gourves
+        </motion.span>
+      </motion.div>
+
+      <motion.p
+        className="relative font-display text-xl md:text-2xl text-white mt-24 md:mt-28"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.45 }}
+      >
+        Product Designer
+      </motion.p>
+
+      <motion.p
+        className="relative max-w-2xl text-lg md:text-xl leading-relaxed text-white/70 mt-8 px-6"
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.55 }}
+      >
+        Investigo, simplifico y construyo sistemas que escalan. El proceso es
+        siempre el mismo: entender antes de diseñar, decidir con datos, dejar
+        algo que el equipo pueda mantener.
+      </motion.p>
+
+      <motion.div
+        className="relative mt-14 flex flex-col items-center gap-2 text-white/40"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.8 }}
+      >
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          ↓
+        </motion.div>
+        <span className="eyebrow">scroll</span>
+      </motion.div>
     </section>
   );
 }

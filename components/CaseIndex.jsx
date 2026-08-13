@@ -1,172 +1,170 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Reveal from "./Reveal";
 
 const colorMap = {
-  signal: { text: "text-signalSoft", groupHover: "group-hover:text-signalSoft", dot: "bg-signal", border: "border-signal/50", tint: "hover:bg-signal/5" },
-  mint: { text: "text-mint", groupHover: "group-hover:text-mint", dot: "bg-mint", border: "border-mint/50", tint: "hover:bg-mint/5" },
-  amber: { text: "text-amber", groupHover: "group-hover:text-amber", dot: "bg-amber", border: "border-amber/50", tint: "hover:bg-amber/5" },
-  rose: { text: "text-rose", groupHover: "group-hover:text-rose", dot: "bg-rose", border: "border-rose/50", tint: "hover:bg-rose/5" },
+  signal: { bg: "bg-signal", border: "border-signal/30", text: "text-signal", tag: "bg-signal/10 text-signal" },
+  mint: { bg: "bg-mint", border: "border-mint/30", text: "text-mint", tag: "bg-mint/10 text-mint" },
+  amber: { bg: "bg-amber", border: "border-amber/30", text: "text-amber", tag: "bg-amber/10 text-amber" },
+  rose: { bg: "bg-rose", border: "border-rose/30", text: "text-rose", tag: "bg-rose/10 text-rose" },
 };
 
 const cases = [
   {
     slug: "design-system",
-    tag: "01",
     color: "signal",
-    status: "completo",
+    client: "BICE VIDA",
+    category: "Design System",
     title: "El Design System de BICE VIDA",
-    stat: "89 componentes en producción",
+    description: "Metodología atómica propuesta y liderada de punta a punta, con reglas de entrada y salida definidas junto al equipo de desarrollo.",
+    impact: "89 componentes en producción entre app y web, con pipeline de adopción activo.",
+    tags: ["Design System", "Liderazgo de equipo", "Figma · Storybook"],
     thumb: "/images/csi-landing.png",
     live: true,
   },
   {
     slug: "landing-viajes",
-    tag: "02",
     color: "mint",
-    status: "completo",
+    client: "BICE VIDA",
+    category: "Seguro de Viaje",
     title: "Unificar dos seguros de viaje en una landing",
-    stat: "+16% visitas · +2% contratación",
+    description: "Viajero Protegido y Viajero Frecuente, cotizados y comparados lado a lado en una sola experiencia en vez de dos landings separadas.",
+    impact: "+16% de visitas y +2% de contratación en el primer mes.",
+    tags: ["Landing", "Research", "Conversión"],
     thumb: "/images/viaje-landing-unificada.png",
     live: true,
   },
   {
     slug: "funnel-csi",
-    tag: "03",
     color: "amber",
-    status: "completo",
+    client: "BICE VIDA",
+    category: "Seguro de Salud",
     title: "Reducir el funnel de contratación CSI",
-    stat: "-12% abandono · +2% contratación",
+    description: "De 10 a 8 pasos, priorizando con datos reales de abandono y dos leyes de UX (Hick y Miller) como criterio de decisión.",
+    impact: "-12% de abandono y +2% de contratación en el primer mes.",
+    tags: ["Funnel", "UX Laws", "Datos"],
     thumb: null,
     live: true,
   },
   {
     slug: "beliv",
-    tag: "04",
     color: "rose",
-    status: "completo",
+    client: "BICE VIDA",
+    category: "App de Bienestar",
     title: "Beliv: una app completa en un sprint de 3 días",
-    stat: "8+ pantallas · equipo liderado",
+    description: "Lideré el equipo de diseño en un design sprint de 3 días, de la idea a las pantallas completas de onboarding, home, salud, social y gamificación.",
+    impact: "8+ pantallas de producto, bajo restricción real de tiempo y costo.",
+    tags: ["Mobile App", "Design Sprint", "Liderazgo"],
     thumb: "/images/beliv-home.png",
     live: true,
   },
   {
+    slug: "este-portafolio",
+    color: "amber",
+    client: "Proyecto personal",
+    category: "Portafolio",
+    title: "Este mismo portafolio, como caso de estudio",
+    description: "Dirigí cada decisión de diseño e iteré con Claude para la implementación, usando Cursor y GitHub Desktop para el flujo de publicación.",
+    impact: "5 secciones rediseñadas por feedback real, sistema de diseño propio con tokens y componentes.",
+    tags: ["Proceso", "Design System", "Claude · Cursor · GitHub"],
+    thumb: null,
+    live: true,
+  },
+  {
     slug: "renovacion-imtt-207",
-    tag: "05",
     color: "signal",
-    status: "en construcción",
+    client: "BICE VIDA",
+    category: "Seguro de Salud",
     title: "Renovación transparente de planes",
-    stat: "3 ramas de decisión mapeadas",
+    description: "Comunicar un alza de cobertura a clientes de alto siniestro sin esconder nada — tres ramas de decisión: aceptar, rechazar o no hacer nada.",
+    impact: "[AGREGAR MÉTRICA — caso en construcción]",
+    tags: ["Flujo complejo", "Ética de producto"],
     thumb: null,
     live: false,
   },
 ];
 
 export default function CaseIndex() {
-  const [hovered, setHovered] = useState(null);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-
   return (
-    <section
-      id="casos"
-      className="py-24 md:py-32 border-t border-line relative"
-      onMouseMove={(e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-      }}
-    >
+    <section id="casos" className="py-24 md:py-32 border-t border-line">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <Reveal>
-          <p className="eyebrow text-signalSoft mb-4">casos de estudio</p>
+          <p className="eyebrow text-rust mb-4">trabajo</p>
+          <h2 className="font-display text-2xl md:text-3xl text-ink max-w-xl">
+            Cinco proyectos reales, sin métricas inventadas.
+          </h2>
         </Reveal>
 
-        <div className="mt-6">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8 mt-12">
           {cases.map((c, i) => {
+            const colors = colorMap[c.color];
             const Wrapper = c.live ? Link : "div";
             const wrapperProps = c.live ? { href: `/casos/${c.slug}` } : {};
-            const colors = colorMap[c.color];
             return (
-              <Reveal key={c.slug} delay={i * 0.05}>
+              <Reveal key={c.slug} delay={i * 0.06}>
                 <Wrapper
                   {...wrapperProps}
-                  onMouseEnter={() => c.thumb && setHovered(c.slug)}
-                  onMouseLeave={() => setHovered(null)}
-                  className={`group flex items-baseline gap-4 md:gap-8 py-6 md:py-8 px-3 -mx-3 rounded-lg border-b border-line transition-colors ${
-                    c.live ? `cursor-pointer ${colors.tint}` : "cursor-default"
+                  className={`group block rounded-2xl border ${
+                    c.live ? "border-line hover:" + colors.border : "border-line opacity-60"
+                  } overflow-hidden transition-colors h-full flex flex-col ${
+                    c.live ? "cursor-pointer" : "cursor-default"
                   }`}
                 >
-                  <span
-                    className={`w-2 h-2 rounded-full shrink-0 ${
-                      c.live ? colors.dot : "bg-mutedLight"
-                    }`}
-                  />
-                  <span className="font-mono text-xs md:text-sm text-mutedLight w-6 shrink-0">
-                    {c.tag}
-                  </span>
-                  <h3
-                    className={`font-display text-2xl sm:text-4xl md:text-5xl leading-none transition-colors ${
-                      c.live
-                        ? `text-ink ${colors.groupHover}`
-                        : "text-mutedLight"
-                    }`}
-                  >
-                    {c.title}
-                  </h3>
-                  <span className="ml-auto hidden sm:flex flex-col items-end shrink-0 text-right">
-                    <span
-                      className={`font-mono text-[10px] uppercase tracking-widest ${
-                        c.live ? colors.text : "text-mutedLight"
-                      }`}
-                    >
-                      {c.status}
+                  {/* branded banner */}
+                  <div className={`relative aspect-[16/10] ${colors.bg} flex items-end overflow-hidden`}>
+                    {c.thumb ? (
+                      <div className="absolute right-6 bottom-[-10%] w-[42%] rounded-t-xl overflow-hidden border-4 border-white/90 shadow-2xl group-hover:-translate-y-1 transition-transform">
+                        <div className="relative w-full aspect-[9/17]">
+                          <Image
+                            src={c.thumb}
+                            alt=""
+                            fill
+                            className="object-cover object-top"
+                            sizes="240px"
+                          />
+                        </div>
+                      </div>
+                    ) : null}
+                    <span className="relative z-10 p-6 font-display text-white/90 text-lg max-w-[55%]">
+                      {c.category}
                     </span>
-                    <span className="font-mono text-xs text-mutedLight mt-1">
-                      {c.stat}
-                    </span>
-                  </span>
+                  </div>
 
-                  {/* mobile-only inline thumbnail, since cursor-follow doesn't apply on touch */}
-                  {c.thumb && (
-                    <div className="sm:hidden w-16 h-12 rounded-md overflow-hidden border border-line shrink-0 relative">
-                      <Image src={c.thumb} alt="" fill className="object-cover object-top" sizes="64px" />
+                  <div className="p-6 flex flex-col flex-1">
+                    <p className="text-xs text-mutedLight font-mono mb-2">
+                      {c.client} · {c.category}
+                    </p>
+                    <h3 className="font-display text-xl text-ink mb-2">
+                      {c.title}
+                    </h3>
+                    <p className="text-sm text-muted leading-relaxed mb-4">
+                      {c.description}
+                    </p>
+
+                    <div className={`rounded-lg border ${colors.border} px-4 py-3 mb-4`}>
+                      <p className={`font-mono text-[10px] uppercase tracking-widest ${colors.text} mb-1`}>
+                        Impacto
+                      </p>
+                      <p className="text-sm text-ink">{c.impact}</p>
                     </div>
-                  )}
+
+                    <div className="mt-auto flex flex-wrap gap-2">
+                      {c.tags.map((t) => (
+                        <span
+                          key={t}
+                          className={`text-[11px] font-mono px-2.5 py-1 rounded-full ${colors.tag}`}
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </Wrapper>
               </Reveal>
             );
           })}
         </div>
       </div>
-
-      {/* floating cursor preview, desktop only */}
-      <AnimatePresence>
-        {hovered &&
-          cases
-            .filter((c) => c.slug === hovered && c.thumb)
-            .map((c) => (
-              <motion.div
-                key={c.slug}
-                className={`hidden sm:block pointer-events-none absolute z-20 w-[260px] aspect-[16/10] rounded-lg overflow-hidden border-2 shadow-2xl ${colorMap[c.color].border}`}
-                style={{ left: pos.x + 24, top: pos.y - 90 }}
-                initial={{ opacity: 0, scale: 0.85, rotate: -3 }}
-                animate={{ opacity: 1, scale: 1, rotate: -3 }}
-                exit={{ opacity: 0, scale: 0.85 }}
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              >
-                <Image
-                  src={c.thumb}
-                  alt=""
-                  fill
-                  className="object-cover object-top"
-                  sizes="260px"
-                />
-              </motion.div>
-            ))}
-      </AnimatePresence>
     </section>
   );
 }

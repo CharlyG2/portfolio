@@ -63,13 +63,3 @@ body {
   outline: 2px solid #3D5AFE;
   outline-offset: 3px;
 }
-
-@media (pointer: fine) {
-  body {
-    cursor: none;
-  }
-  a,
-  button {
-    cursor: none;
-  }
-}
