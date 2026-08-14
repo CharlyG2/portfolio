@@ -2,9 +2,14 @@
 
 import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
+import { SPRING, EASE } from "@/lib/motion";
 
-// Fácil de actualizar — es el único texto del sitio pensado para cambiar seguido.
-const STATUS_LINE = "ahora mismo, liderando el Design System de BICE VIDA.";
+// Único texto del sitio pensado para cambiar seguido — pasa el test de
+// "¿podría haberlo escrito cualquier otro Product Designer?": no, porque
+// es verificable (van varias vueltas reales de este mismo hero) y no
+// repite el cargo con otras palabras.
+const STATUS_LINE =
+  "ahora mismo: reescribiendo este portafolio por enésima vez. sí, esta línea también cambió como tres veces.";
 
 export default function Hero() {
   const ref = useRef(null);
@@ -13,18 +18,17 @@ export default function Hero() {
 
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const springCfg = { stiffness: 120, damping: 18 };
 
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [18, -18]), springCfg);
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-18, 18]), springCfg);
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [18, -18]), SPRING);
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-18, 18]), SPRING);
 
-  const charlyX = useSpring(useTransform(mx, [-0.5, 0.5], [-26, 26]), springCfg);
-  const charlyY = useSpring(useTransform(my, [-0.5, 0.5], [-16, 16]), springCfg);
-  const gourvesX = useSpring(useTransform(mx, [-0.5, 0.5], [14, -14]), springCfg);
-  const gourvesY = useSpring(useTransform(my, [-0.5, 0.5], [8, -8]), springCfg);
+  const charlyX = useSpring(useTransform(mx, [-0.5, 0.5], [-26, 26]), SPRING);
+  const charlyY = useSpring(useTransform(my, [-0.5, 0.5], [-16, 16]), SPRING);
+  const gourvesX = useSpring(useTransform(mx, [-0.5, 0.5], [14, -14]), SPRING);
+  const gourvesY = useSpring(useTransform(my, [-0.5, 0.5], [8, -8]), SPRING);
 
-  const shadowX = useSpring(useTransform(mx, [-0.5, 0.5], [22, -22]), springCfg);
-  const shadowY = useSpring(useTransform(my, [-0.5, 0.5], [22, -22]), springCfg);
+  const shadowX = useSpring(useTransform(mx, [-0.5, 0.5], [22, -22]), SPRING);
+  const shadowY = useSpring(useTransform(my, [-0.5, 0.5], [22, -22]), SPRING);
 
   const handleMouseMove = (e) => {
     if (shouldReduceMotion) return;
@@ -43,17 +47,11 @@ export default function Hero() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full opacity-[0.16] blur-3xl"
-        style={{
-          background:
-            "radial-gradient(circle, #FD9047 0%, #AC5142 45%, transparent 75%)",
-        }}
-      />
+      {/* Sin blob, sin gradiente decorativo — color plano, todo el peso lo
+          lleva la tipografía (Opción A del brief de diseño). */}
 
       <motion.p
-        className="relative eyebrow text-rust mb-12 md:mb-16"
+        className="relative eyebrow text-muted mb-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -91,7 +89,7 @@ export default function Hero() {
           }}
           initial={{ opacity: 0, y: "110%" }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, ease: EASE }}
         >
           <span style={{ color: "#AC5142" }}>Charly</span>
         </motion.span>
@@ -107,24 +105,26 @@ export default function Hero() {
           }}
           initial={{ opacity: 0, y: "110%" }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, delay: 0.08, ease: EASE }}
         >
           Gourves
         </motion.span>
       </motion.div>
 
-      {/* línea de estado humano — estática, sin scroll-link, le da hogar al "hola" */}
+      {/* línea de estado — estática, fade-in simple, sin scroll-link */}
       <motion.p
         className="relative font-hand text-2xl md:text-3xl text-rust mt-8 max-w-xl px-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.6 }}
       >
-        hola! 👋 — {STATUS_LINE}
+        {STATUS_LINE}
       </motion.p>
 
+      {/* bloque H1 + subhead, escala tipográfica estándar del sitio */}
       <motion.p
-        className="relative font-display text-xl md:text-2xl text-ink mt-14"
+        className="relative font-display font-bold mt-14"
+        style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)", color: "#2B241D" }}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.7 }}
@@ -133,7 +133,8 @@ export default function Hero() {
       </motion.p>
 
       <motion.p
-        className="relative max-w-2xl text-lg md:text-xl leading-relaxed text-muted mt-6 px-6"
+        className="relative max-w-2xl leading-relaxed text-muted px-6"
+        style={{ fontSize: "clamp(1.125rem, 2vw, 1.375rem)", marginTop: "16px" }}
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.8 }}

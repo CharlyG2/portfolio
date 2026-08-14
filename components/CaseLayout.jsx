@@ -9,17 +9,23 @@ export function CaseHeader({ eyebrow, title, tldr, stats }) {
       <div className="max-w-content mx-auto px-6 md:px-10">
         <Link
           href="/#casos"
-          className="font-mono text-xs text-muted hover:text-signalSoft transition-colors"
+          className="font-mono text-xs text-muted hover:text-rust transition-colors"
         >
           ← volver a casos
         </Link>
-        <p className="eyebrow text-signalSoft mt-8 mb-4">
+        <p className="eyebrow text-muted mt-8 mb-6" style={{ fontSize: "14px" }}>
           <span className="tag-bracket">{eyebrow}</span>
         </p>
-        <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-ink max-w-3xl leading-tight">
+        <h1
+          className="font-display font-bold text-ink max-w-3xl leading-tight"
+          style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}
+        >
           {title}
         </h1>
-        <p className="mt-6 text-lg text-muted max-w-2xl leading-relaxed">
+        <p
+          className="text-muted max-w-2xl leading-relaxed"
+          style={{ fontSize: "clamp(1.125rem, 2vw, 1.375rem)", marginTop: "16px" }}
+        >
           {tldr}
         </p>
         {stats && (

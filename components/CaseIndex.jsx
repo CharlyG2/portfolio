@@ -1,6 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import Reveal from "./Reveal";
+import { EASE } from "@/lib/motion";
 
 const colorMap = {
   signal: { bg: "bg-signal", border: "border-signal/30", text: "text-signal", groupHover: "group-hover:text-signal", tag: "bg-signal/10 text-signal" },
@@ -19,7 +24,7 @@ const cases = [
     impactStat: "89", impactLabel: "componentes en producción",
     tags: ["Design System", "Liderazgo de equipo", "Figma · Storybook"],
     thumb: "/images/csi-landing.png",
-    live: true,
+    proof: "component-states",
   },
   {
     slug: "landing-viajes",
@@ -31,7 +36,6 @@ const cases = [
     secondaryStat: "+2% contratación",
     tags: ["Landing", "Research", "Conversión"],
     thumb: "/images/viaje-landing-unificada.png",
-    live: true,
   },
   {
     slug: "funnel-csi",
@@ -43,7 +47,7 @@ const cases = [
     secondaryStat: "+2% contratación",
     tags: ["Funnel", "UX Laws", "Datos"],
     thumb: null,
-    live: true,
+    proof: "steps",
   },
   {
     slug: "beliv",
@@ -54,7 +58,6 @@ const cases = [
     impactStat: "8+", impactLabel: "pantallas en 3 días",
     tags: ["Mobile App", "Design Sprint", "Liderazgo"],
     thumb: "/images/beliv-home.png",
-    live: true,
   },
 ];
 
@@ -65,7 +68,51 @@ const bonusCase = {
   description: "Con Claude, Cursor y GitHub Desktop, sin escribir una línea de código desde cero.",
 };
 
+// Prueba real #1: los pasos del funnel, tachándose en vivo — no un tooltip,
+// el resultado del caso ocurriendo frente a tus ojos.
+function StepsProof({ hovered }) {
+  return (
+    <p className="font-mono text-xs mt-1.5" aria-live="polite">
+      <span className={hovered ? "line-through text-mutedLight" : "text-muted"}>
+        10 pasos
+      </span>
+      {hovered && <span className="text-amber ml-1.5">→ 8 pasos</span>}
+    </p>
+  );
+}
+
+// Prueba real #2: un botón real ciclando default → hover → disabled — el
+// mismo tipo de estado que documenta el Design System, no una ilustración.
+function ComponentStatesProof({ hovered }) {
+  const states = ["default", "hover", "disabled"];
+
+  return (
+    <div className="mt-2 flex items-center gap-1.5" aria-hidden="true">
+      {states.map((s, idx) => (
+        <motion.span
+          key={s}
+          className="font-mono text-[10px] px-2 py-1 rounded border"
+          animate={
+            hovered
+              ? {
+                  borderColor: idx === 0 ? "#3D5AFE" : "rgba(43,36,29,0.14)",
+                  backgroundColor: idx === 0 ? "#3D5AFE" : "transparent",
+                  color: idx === 0 ? "#FFFFFF" : "#9C9082",
+                }
+              : { borderColor: "rgba(43,36,29,0.14)", backgroundColor: "transparent", color: "#9C9082" }
+          }
+          transition={{ duration: 0.4, delay: hovered ? idx * 0.35 : 0, ease: EASE, repeat: hovered ? Infinity : 0, repeatDelay: 0.7, repeatType: "loop" }}
+        >
+          {s}
+        </motion.span>
+      ))}
+    </div>
+  );
+}
+
 export default function CaseIndex() {
+  const [hoveredSlug, setHoveredSlug] = useState(null);
+
   return (
     <section id="casos" className="py-24 md:py-32 border-t border-line">
       <div className="max-w-content mx-auto px-6 md:px-10">
@@ -80,10 +127,13 @@ export default function CaseIndex() {
         <div className="mt-12 divide-y divide-line border-y border-line">
           {cases.map((c, i) => {
             const colors = colorMap[c.color];
+            const hovered = hoveredSlug === c.slug;
             return (
               <Reveal key={c.slug} delay={i * 0.05}>
                 <Link
                   href={`/casos/${c.slug}`}
+                  onMouseEnter={() => setHoveredSlug(c.slug)}
+                  onMouseLeave={() => setHoveredSlug(null)}
                   className="group grid md:grid-cols-[1fr_auto] items-center gap-6 py-8 md:py-10 cursor-pointer"
                 >
                   <div>
@@ -137,6 +187,10 @@ export default function CaseIndex() {
                         <p className="text-[11px] text-mutedLight mt-0.5 max-w-[160px]">
                           {c.secondaryStat}
                         </p>
+                      )}
+                      {c.proof === "steps" && <StepsProof hovered={hovered} />}
+                      {c.proof === "component-states" && (
+                        <ComponentStatesProof hovered={hovered} />
                       )}
                     </div>
                   </div>

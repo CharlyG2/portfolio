@@ -2,13 +2,8 @@ import MagneticLink from "./MagneticLink";
 
 export default function Footer() {
   return (
-    <footer className="py-24 md:py-32 bg-paperSoft border-t border-line relative overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-20 left-1/4 w-[300px] h-[300px] rounded-full opacity-20 blur-3xl"
-        style={{ background: "radial-gradient(circle, #FD9047 0%, transparent 70%)" }}
-      />
-      <div className="max-w-content mx-auto px-6 md:px-10 relative">
+    <footer className="py-24 md:py-32 bg-paperSoft border-t border-line">
+      <div className="max-w-content mx-auto px-6 md:px-10">
         <p className="font-display text-3xl md:text-5xl text-ink max-w-2xl leading-tight">
           ¿Tienes un problema que valga la pena resolver?
         </p>
