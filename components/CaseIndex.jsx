@@ -15,7 +15,7 @@ const cases = [
     color: "signal",
     role: "Product Designer · BICE VIDA · Chile",
     industries: "Insurtech · Design Systems",
-    title: "El Design System de BICE VIDA",
+    title: "89 componentes, un solo lenguaje: el Design System de BICE VIDA",
     impactStat: "89", impactLabel: "componentes en producción",
     tags: ["Design System", "Liderazgo de equipo", "Figma · Storybook"],
     thumb: "/images/csi-landing.png",
@@ -27,7 +27,8 @@ const cases = [
     role: "Product Designer · BICE VIDA · Chile",
     industries: "Insurtech · Travel",
     title: "Unificar dos seguros de viaje en una landing",
-    impactStat: "+16%", impactLabel: "visitas · +2% contratación",
+    impactStat: "+16%", impactLabel: "visitas",
+    secondaryStat: "+2% contratación",
     tags: ["Landing", "Research", "Conversión"],
     thumb: "/images/viaje-landing-unificada.png",
     live: true,
@@ -38,7 +39,8 @@ const cases = [
     role: "Product Designer · BICE VIDA · Chile",
     industries: "Insurtech · Health",
     title: "Reducir el funnel de contratación CSI",
-    impactStat: "-12%", impactLabel: "abandono · +2% contratación",
+    impactStat: "-12%", impactLabel: "abandono",
+    secondaryStat: "+2% contratación",
     tags: ["Funnel", "UX Laws", "Datos"],
     thumb: null,
     live: true,
@@ -54,29 +56,14 @@ const cases = [
     thumb: "/images/beliv-home.png",
     live: true,
   },
-  {
-    slug: "este-portafolio",
-    color: "amber",
-    role: "Product Designer · Proyecto personal · Chile",
-    industries: "Design System · Proceso",
-    title: "Este mismo portafolio, como caso de estudio",
-    impactStat: "6", impactLabel: "casos, un solo sistema de diseño",
-    tags: ["Proceso", "Design System", "Claude · Cursor · GitHub"],
-    thumb: null,
-    live: true,
-  },
-  {
-    slug: "renovacion-imtt-207",
-    color: "signal",
-    role: "Product Designer · BICE VIDA · Chile",
-    industries: "Insurtech · Health",
-    title: "Renovación transparente de planes",
-    impactStat: null, impactLabel: "[AGREGAR MÉTRICA] — en construcción",
-    tags: ["Flujo complejo", "Ética de producto"],
-    thumb: null,
-    live: false,
-  },
 ];
+
+const bonusCase = {
+  slug: "este-portafolio",
+  color: "amber",
+  title: "Bonus: así se construyó este sitio",
+  description: "Con Claude, Cursor y GitHub Desktop, sin escribir una línea de código desde cero.",
+};
 
 export default function CaseIndex() {
   return (
@@ -85,31 +72,26 @@ export default function CaseIndex() {
         <Reveal>
           <p className="eyebrow text-rust mb-4">trabajo</p>
           <h2 className="font-display text-2xl md:text-3xl text-ink max-w-xl">
-            Seis proyectos reales, sin métricas inventadas.
+            Cuatro proyectos, cuatro decisiones de negocio detrás de cada
+            pantalla.
           </h2>
         </Reveal>
 
         <div className="mt-12 divide-y divide-line border-y border-line">
           {cases.map((c, i) => {
             const colors = colorMap[c.color];
-            const Wrapper = c.live ? Link : "div";
-            const wrapperProps = c.live ? { href: `/casos/${c.slug}` } : {};
             return (
               <Reveal key={c.slug} delay={i * 0.05}>
-                <Wrapper
-                  {...wrapperProps}
-                  className={`group grid md:grid-cols-[1fr_auto] items-center gap-6 py-8 md:py-10 ${
-                    c.live ? "cursor-pointer" : "cursor-default opacity-60"
-                  }`}
+                <Link
+                  href={`/casos/${c.slug}`}
+                  className="group grid md:grid-cols-[1fr_auto] items-center gap-6 py-8 md:py-10 cursor-pointer"
                 >
                   <div>
                     <p className="font-mono text-xs text-mutedLight mb-2">
                       {c.role} <span className="mx-1">|</span> {c.industries}
                     </p>
                     <h3
-                      className={`font-display text-2xl md:text-3xl text-ink mb-4 transition-colors ${
-                        c.live ? colors.groupHover : ""
-                      }`}
+                      className={`font-display text-2xl md:text-3xl text-ink mb-4 transition-colors ${colors.groupHover}`}
                     >
                       {c.title}
                     </h3>
@@ -124,11 +106,9 @@ export default function CaseIndex() {
                         </span>
                       ))}
                     </div>
-                    {c.live && (
-                      <span className={`inline-block mt-3 font-mono text-xs ${colors.text}`}>
-                        Ver caso →
-                      </span>
-                    )}
+                    <span className={`inline-block mt-3 font-mono text-xs ${colors.text}`}>
+                      Ver caso →
+                    </span>
                   </div>
 
                   <div className="flex items-center gap-6 justify-self-start md:justify-self-end">
@@ -144,30 +124,43 @@ export default function CaseIndex() {
                       </div>
                     )}
                     <div className="text-left md:text-right shrink-0">
-                      {c.impactStat ? (
-                        <div
-                          className="font-impact"
-                          style={{ fontSize: "clamp(2.2rem, 5vw, 3.2rem)" }}
-                        >
-                          <span className={colors.text}>{c.impactStat}</span>
-                        </div>
-                      ) : (
-                        <div className="font-mono text-xs text-mutedLight italic max-w-[160px]">
-                          {c.impactLabel}
-                        </div>
-                      )}
-                      {c.impactStat && (
-                        <p className="text-xs text-muted mt-1 max-w-[160px]">
-                          {c.impactLabel}
+                      <div
+                        className="font-impact"
+                        style={{ fontSize: "clamp(2.2rem, 5vw, 3.2rem)" }}
+                      >
+                        <span className={colors.text}>{c.impactStat}</span>
+                      </div>
+                      <p className="text-xs text-muted mt-1 max-w-[160px]">
+                        {c.impactLabel}
+                      </p>
+                      {c.secondaryStat && (
+                        <p className="text-[11px] text-mutedLight mt-0.5 max-w-[160px]">
+                          {c.secondaryStat}
                         </p>
                       )}
                     </div>
                   </div>
-                </Wrapper>
+                </Link>
               </Reveal>
             );
           })}
         </div>
+
+        {/* bonus card — separada del grid principal, peso visual menor a propósito */}
+        <Reveal delay={0.3}>
+          <Link
+            href={`/casos/${bonusCase.slug}`}
+            className="mt-8 flex items-center gap-4 rounded-xl border border-line px-5 py-4 hover:border-amber/40 transition-colors group max-w-xl"
+          >
+            <span className="font-mono text-[10px] uppercase tracking-widest text-amber shrink-0">
+              Bonus
+            </span>
+            <span className="text-sm text-muted group-hover:text-ink transition-colors">
+              {bonusCase.title.replace("Bonus: ", "")} — {bonusCase.description}
+            </span>
+            <span className="ml-auto font-mono text-xs text-amber shrink-0">→</span>
+          </Link>
+        </Reveal>
       </div>
     </section>
   );

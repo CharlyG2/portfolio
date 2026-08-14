@@ -1,10 +1,9 @@
 const words = [
   "PRODUCT DESIGN",
   "DESIGN SYSTEMS",
-  "RESEARCH",
-  "DATOS",
-  "SISTEMAS",
-  "NEGOCIO",
+  "UX RESEARCH",
+  "UX WRITING",
+  "ESTRATEGIA DE NEGOCIO",
 ];
 
 export default function Marquee() {

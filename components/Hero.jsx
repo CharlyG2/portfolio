@@ -3,6 +3,9 @@
 import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 
+// Fácil de actualizar — es el único texto del sitio pensado para cambiar seguido.
+const STATUS_LINE = "ahora mismo, liderando el Design System de BICE VIDA.";
+
 export default function Hero() {
   const ref = useRef(null);
   const [hoverGourves, setHoverGourves] = useState(false);
@@ -58,6 +61,7 @@ export default function Hero() {
         Product Design · UX · Design Systems
       </motion.p>
 
+      {/* nombre — único elemento con parallax 3D, jerarquía clara: esto se mueve, el resto se lee */}
       <motion.div
         ref={ref}
         className="relative overflow-visible w-full cursor-default"
@@ -107,52 +111,42 @@ export default function Hero() {
         >
           Gourves
         </motion.span>
-
-        {/* casual, handwritten personal aside — the "currently cooking" touch */}
-        <motion.p
-          className="absolute -bottom-2 md:bottom-2 right-[8%] font-hand text-2xl md:text-3xl text-rust rotate-[-4deg]"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
-        >
-          hola! 👋
-        </motion.p>
       </motion.div>
 
+      {/* línea de estado humano — estática, sin scroll-link, le da hogar al "hola" */}
       <motion.p
-        className="relative font-display text-xl md:text-2xl text-ink mt-24 md:mt-28"
+        className="relative font-hand text-2xl md:text-3xl text-rust mt-8 max-w-xl px-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.6 }}
+      >
+        hola! 👋 — {STATUS_LINE}
+      </motion.p>
+
+      <motion.p
+        className="relative font-display text-xl md:text-2xl text-ink mt-14"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.45 }}
+        transition={{ duration: 0.6, delay: 0.7 }}
       >
         Product Designer
       </motion.p>
 
       <motion.p
-        className="relative font-display text-2xl md:text-3xl text-rust mt-4 max-w-2xl px-6"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.5 }}
-      >
-        Convierto procesos de negocio en productos que la gente entiende.
-      </motion.p>
-
-      <motion.p
-        className="relative max-w-2xl text-lg md:text-xl leading-relaxed text-muted mt-8 px-6"
+        className="relative max-w-2xl text-lg md:text-xl leading-relaxed text-muted mt-6 px-6"
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.6 }}
+        transition={{ duration: 0.7, delay: 0.8 }}
       >
-        Investigo, simplifico y construyo sistemas que escalan. El proceso es
-        siempre el mismo: entender antes de diseñar, decidir con datos, dejar
-        algo que el equipo pueda mantener.
+        Convierto procesos de negocio en productos que la gente entiende.
+        Investigo, simplifico y construyo sistemas que escalan.
       </motion.p>
 
       <motion.div
         className="relative mt-14 flex flex-col items-center gap-2 text-mutedLight"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.85 }}
+        transition={{ duration: 0.6, delay: 1 }}
       >
         <motion.div
           animate={{ y: [0, 6, 0] }}

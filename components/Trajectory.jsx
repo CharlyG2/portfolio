@@ -65,6 +65,10 @@ export default function Trajectory() {
             decisión de negocio, qué hace que un equipo adopte una
             herramienta.
           </p>
+          <p className="text-sm md:text-base text-rust mt-4 leading-relaxed max-w-xl font-display">
+            Cada rol sumó una pieza distinta: visual, luego interfaz, luego
+            investigación — hasta llegar a sistemas completos.
+          </p>
         </Reveal>
 
         <div ref={ref} className="relative mt-16 md:mt-20 pl-8 md:pl-12">
