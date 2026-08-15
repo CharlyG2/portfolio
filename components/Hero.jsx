@@ -5,11 +5,11 @@ import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } fro
 import { SPRING, EASE } from "@/lib/motion";
 
 // Único texto del sitio pensado para cambiar seguido — pasa el test de
-// "¿podría haberlo escrito cualquier otro Product Designer?": no, porque
-// es verificable (van varias vueltas reales de este mismo hero) y no
-// repite el cargo con otras palabras.
+// "¿podría haberlo escrito cualquier otro Product Designer?": es
+// verificable (van varias vueltas reales de este hero) y reemplaza al
+// eyebrow genérico — un solo elemento de contexto, no dos apilados.
 const STATUS_LINE =
-  "ahora mismo: reescribiendo este portafolio por enésima vez. sí, esta línea también cambió como tres veces.";
+  "Product Design · UX · Design Systems — ahora mismo, reescribiendo este portafolio por enésima vez.";
 
 export default function Hero() {
   const ref = useRef(null);
@@ -42,24 +42,27 @@ export default function Hero() {
   };
 
   return (
+    // pt-24 = 96px de seguridad bajo el nav fijo (64px) — el contenido
+    // nunca queda tapado, sea cual sea el alto de viewport.
     <section
-      className="relative bg-paper text-ink min-h-screen flex flex-col items-center justify-center text-center overflow-hidden"
+      className="relative bg-paper text-ink min-h-screen flex flex-col items-center justify-center text-center overflow-hidden pt-24 pb-16"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       {/* Sin blob, sin gradiente decorativo — color plano, todo el peso lo
-          lleva la tipografía (Opción A del brief de diseño). */}
+          lleva la tipografía. */}
 
+      {/* contexto — único elemento de esta jerarquía, sin negrita, bajo peso visual */}
       <motion.p
-        className="relative eyebrow text-muted mb-6"
+        className="relative font-mono text-xs md:text-sm text-mutedLight max-w-lg"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        Product Design · UX · Design Systems
+        {STATUS_LINE}
       </motion.p>
 
-      {/* nombre — único elemento con parallax 3D, jerarquía clara: esto se mueve, el resto se lee */}
+      {/* nombre — firma visual, único elemento con parallax 3D */}
       <motion.div
         ref={ref}
         className="relative overflow-visible w-full cursor-default"
@@ -67,6 +70,7 @@ export default function Hero() {
           rotateX: shouldReduceMotion ? 0 : rotateX,
           rotateY: shouldReduceMotion ? 0 : rotateY,
           transformPerspective: 500,
+          marginTop: "64px",
         }}
         onMouseEnter={() => setHoverGourves(true)}
         onMouseLeave={() => setHoverGourves(false)}
@@ -111,43 +115,36 @@ export default function Hero() {
         </motion.span>
       </motion.div>
 
-      {/* línea de estado — estática, fade-in simple, sin scroll-link */}
+      {/* headline — el ÚNICO elemento con la animación de entrada marcada
+          (fade + leve subida), el momento de movimiento con intención */}
       <motion.p
-        className="relative font-hand text-2xl md:text-3xl text-rust mt-8 max-w-xl px-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.6 }}
-      >
-        {STATUS_LINE}
-      </motion.p>
-
-      {/* bloque H1 + subhead, escala tipográfica estándar del sitio */}
-      <motion.p
-        className="relative font-display font-bold mt-14"
-        style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)", color: "#2B241D" }}
-        initial={{ opacity: 0, y: 10 }}
+        className="relative font-display font-bold"
+        style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)", color: "#2B241D", marginTop: "64px" }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.7 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       >
         Product Designer
       </motion.p>
 
+      {/* subhead — mismo peso bajo que el contexto, sin negrita */}
       <motion.p
         className="relative max-w-2xl leading-relaxed text-muted px-6"
         style={{ fontSize: "clamp(1.125rem, 2vw, 1.375rem)", marginTop: "16px" }}
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.8 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
       >
         Convierto procesos de negocio en productos que la gente entiende.
         Investigo, simplifico y construyo sistemas que escalan.
       </motion.p>
 
       <motion.div
-        className="relative mt-14 flex flex-col items-center gap-2 text-mutedLight"
+        className="relative flex flex-col items-center gap-2 text-mutedLight"
+        style={{ marginTop: "64px" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 1 }}
+        transition={{ duration: 0.5 }}
       >
         <motion.div
           animate={{ y: [0, 6, 0] }}
