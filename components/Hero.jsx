@@ -3,13 +3,12 @@
 import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 import { SPRING, EASE } from "@/lib/motion";
+import CyclingWords from "./CyclingWords";
 
-// Único texto del sitio pensado para cambiar seguido — pasa el test de
-// "¿podría haberlo escrito cualquier otro Product Designer?": es
-// verificable (van varias vueltas reales de este hero) y reemplaza al
-// eyebrow genérico — un solo elemento de contexto, no dos apilados.
+// Único texto pensado para cambiar seguido — vive chico y de bajo
+// contraste, al final del stack, no compitiendo con nada.
 const STATUS_LINE =
-  "Product Design · UX · Design Systems — ahora mismo, reescribiendo este portafolio por enésima vez.";
+  "ahora mismo: reescribiendo este portafolio por enésima vez.";
 
 export default function Hero() {
   const ref = useRef(null);
@@ -42,27 +41,16 @@ export default function Hero() {
   };
 
   return (
-    // pt-24 = 96px de seguridad bajo el nav fijo (64px) — el contenido
-    // nunca queda tapado, sea cual sea el alto de viewport.
+    // TODO el contenido vive en este único contenedor flex — nada con
+    // position: absolute salvo la sombra decorativa del nombre (aria-hidden,
+    // nunca texto). pt-24 = colchón fijo bajo el nav; verificado que nada
+    // queda cortado en la carga inicial, sin scroll.
     <section
       className="relative bg-paper text-ink min-h-screen flex flex-col items-center justify-center text-center overflow-hidden pt-24 pb-16"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Sin blob, sin gradiente decorativo — color plano, todo el peso lo
-          lleva la tipografía. */}
-
-      {/* contexto — único elemento de esta jerarquía, sin negrita, bajo peso visual */}
-      <motion.p
-        className="relative font-mono text-xs md:text-sm text-mutedLight max-w-lg"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        {STATUS_LINE}
-      </motion.p>
-
-      {/* nombre — firma visual, único elemento con parallax 3D */}
+      {/* 1 — nombre, el elemento más grande, firma visual con parallax */}
       <motion.div
         ref={ref}
         className="relative overflow-visible w-full cursor-default"
@@ -70,7 +58,6 @@ export default function Hero() {
           rotateX: shouldReduceMotion ? 0 : rotateX,
           rotateY: shouldReduceMotion ? 0 : rotateY,
           transformPerspective: 500,
-          marginTop: "64px",
         }}
         onMouseEnter={() => setHoverGourves(true)}
         onMouseLeave={() => setHoverGourves(false)}
@@ -78,7 +65,7 @@ export default function Hero() {
         <div
           aria-hidden="true"
           className="absolute inset-0 font-impact leading-[0.8] whitespace-nowrap select-none pointer-events-none"
-          style={{ fontSize: "clamp(4rem, 18vw, 16rem)", color: "rgba(43,36,29,0.15)", filter: "blur(2px)" }}
+          style={{ fontSize: "clamp(4rem, 18vw, 16rem)", color: "rgba(34,29,24,0.15)", filter: "blur(2px)" }}
         >
           <motion.div style={{ x: shadowX, y: shadowY }}>Charly</motion.div>
           <motion.div style={{ x: shadowX, y: shadowY }}>Gourves</motion.div>
@@ -115,36 +102,44 @@ export default function Hero() {
         </motion.span>
       </motion.div>
 
-      {/* headline — el ÚNICO elemento con la animación de entrada marcada
-          (fade + leve subida), el momento de movimiento con intención */}
-      <motion.p
-        className="relative font-display font-bold"
-        style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)", color: "#2B241D", marginTop: "64px" }}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      {/* 2 — disciplinas, cicla una palabra a la vez, tamaño H2 */}
+      <motion.div
+        style={{ marginTop: "48px" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
       >
-        Product Designer
-      </motion.p>
+        <CyclingWords />
+      </motion.div>
 
-      {/* subhead — mismo peso bajo que el contexto, sin negrita */}
+      {/* 3 — una sola frase de posicionamiento, tamaño subhead */}
       <motion.p
         className="relative max-w-2xl leading-relaxed text-muted px-6"
-        style={{ fontSize: "clamp(1.125rem, 2vw, 1.375rem)", marginTop: "16px" }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
+        style={{ fontSize: "clamp(1.125rem, 2vw, 1.375rem)", marginTop: "24px" }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
       >
         Convierto procesos de negocio en productos que la gente entiende.
-        Investigo, simplifico y construyo sistemas que escalan.
       </motion.p>
 
-      <motion.div
-        className="relative flex flex-col items-center gap-2 text-mutedLight"
-        style={{ marginTop: "64px" }}
+      {/* 4 — ubicación + estado, el más chico y silencioso de todos */}
+      <motion.p
+        className="relative font-mono text-xs text-mutedLight mt-8 max-w-md px-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.5, delay: 0.9 }}
+      >
+        Santiago, Chile — {STATUS_LINE}
+      </motion.p>
+
+      {/* scroll cue, sin cambios */}
+      <motion.div
+        className="relative flex flex-col items-center gap-2 text-mutedLight"
+        style={{ marginTop: "48px" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 1 }}
       >
         <motion.div
           animate={{ y: [0, 6, 0] }}
