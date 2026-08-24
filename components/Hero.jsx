@@ -5,11 +5,6 @@ import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } fro
 import { SPRING, EASE } from "@/lib/motion";
 import CyclingWords from "./CyclingWords";
 
-// Único texto pensado para cambiar seguido — vive chico y de bajo
-// contraste, al final del stack, no compitiendo con nada.
-const STATUS_LINE =
-  "ahora mismo: reescribiendo este portafolio por enésima vez.";
-
 export default function Hero() {
   const ref = useRef(null);
   const [hoverGourves, setHoverGourves] = useState(false);
@@ -41,16 +36,32 @@ export default function Hero() {
   };
 
   return (
-    // TODO el contenido vive en este único contenedor flex — nada con
-    // position: absolute salvo la sombra decorativa del nombre (aria-hidden,
-    // nunca texto). pt-24 = colchón fijo bajo el nav; verificado que nada
-    // queda cortado en la carga inicial, sin scroll.
     <section
       className="relative bg-paper text-ink min-h-screen flex flex-col items-center justify-center text-center overflow-hidden pt-24 pb-16"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* 1 — nombre, el elemento más grande, firma visual con parallax */}
+      {/* grano sutil sobre el fondo — opacidad 4%, le da profundidad táctil
+          sin ensuciar el plano de color. Reemplaza al "vacío total" de antes. */}
+      <svg
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 w-full h-full opacity-[0.045] mix-blend-multiply"
+      >
+        <filter id="heroGrain">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#heroGrain)" />
+      </svg>
+
+      <motion.div
+        style={{ marginBottom: "48px" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <CyclingWords />
+      </motion.div>
+
       <motion.div
         ref={ref}
         className="relative overflow-visible w-full cursor-default"
@@ -62,10 +73,11 @@ export default function Hero() {
         onMouseEnter={() => setHoverGourves(true)}
         onMouseLeave={() => setHoverGourves(false)}
       >
+        {/* sombra fantasma detrás del nombre — profundidad sin animación */}
         <div
           aria-hidden="true"
           className="absolute inset-0 font-impact leading-[0.8] whitespace-nowrap select-none pointer-events-none"
-          style={{ fontSize: "clamp(4rem, 18vw, 16rem)", color: "rgba(34,29,24,0.15)", filter: "blur(2px)" }}
+          style={{ fontSize: "clamp(4rem, 18vw, 16rem)", color: "rgba(34,29,24,0.16)", filter: "blur(2px)" }}
         >
           <motion.div style={{ x: shadowX, y: shadowY }}>Charly</motion.div>
           <motion.div style={{ x: shadowX, y: shadowY }}>Gourves</motion.div>
@@ -85,12 +97,15 @@ export default function Hero() {
           <span style={{ color: "#AC5142" }}>Charly</span>
         </motion.span>
 
+        {/* Gourves — contorno con más peso: de 2px a 2.6px y color más
+            saturado/oscuro (espresso en vez de rust puro) para que nunca
+            se sienta "perdido" contra el crema, sea cual sea la pantalla */}
         <motion.span
           className="block font-impact leading-[0.8] whitespace-nowrap transition-colors duration-500"
           style={{
             fontSize: "clamp(4rem, 18vw, 16rem)",
-            WebkitTextStroke: "2px #AC5142",
-            color: hoverGourves ? "#AC5142" : "transparent",
+            WebkitTextStroke: "2.6px #7A2F22",
+            color: hoverGourves ? "#7A2F22" : "transparent",
             x: shouldReduceMotion ? 0 : gourvesX,
             y: shouldReduceMotion ? 0 : gourvesY,
           }}
@@ -102,44 +117,33 @@ export default function Hero() {
         </motion.span>
       </motion.div>
 
-      {/* 2 — disciplinas, cicla una palabra a la vez, tamaño H2 */}
-      <motion.div
-        style={{ marginTop: "48px" }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-      >
-        <CyclingWords />
-      </motion.div>
-
-      {/* 3 — una sola frase de posicionamiento, tamaño subhead */}
       <motion.p
-        className="relative max-w-2xl leading-relaxed text-muted px-6"
-        style={{ fontSize: "clamp(1.125rem, 2vw, 1.375rem)", marginTop: "24px" }}
-        initial={{ opacity: 0, y: 20 }}
+        className="relative font-display text-xl md:text-2xl text-ink mt-16 md:mt-20"
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.6, delay: 0.45 }}
       >
         Convierto procesos de negocio en productos que la gente entiende.
       </motion.p>
 
-      {/* 4 — ubicación + estado, el más chico y silencioso de todos */}
-      <motion.p
-        className="relative font-mono text-xs text-mutedLight mt-8 max-w-md px-6"
+      <motion.a
+        href="#nada-es-definitivo"
+        className="relative inline-flex items-center gap-2 font-mono text-xs mt-8 px-3 py-1.5 rounded-full border hover:border-rust/50 transition-colors"
+        style={{ background: "#FFFDF8", borderColor: "#E4DBC8", color: "#6B6259" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.9 }}
+        transition={{ duration: 0.5, delay: 0.6 }}
       >
-        Santiago, Chile — {STATUS_LINE}
-      </motion.p>
+        <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "#3D5A56" }} />
+        Santiago, Chile — sigo iterando este portafolio (
+        <span className="text-rust">nada es definitivo →</span>)
+      </motion.a>
 
-      {/* scroll cue, sin cambios */}
       <motion.div
-        className="relative flex flex-col items-center gap-2 text-mutedLight"
-        style={{ marginTop: "48px" }}
+        className="relative mt-14 flex flex-col items-center gap-2 text-muted"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 1 }}
+        transition={{ duration: 0.6, delay: 0.8 }}
       >
         <motion.div
           animate={{ y: [0, 6, 0] }}
