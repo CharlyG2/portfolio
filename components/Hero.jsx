@@ -11,11 +11,6 @@ export default function Hero() {
   const [hoverGourves, setHoverGourves] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
-  // Un solo gesto de movimiento, no varios compitiendo entre sí: el bloque
-  // completo del nombre se inclina en 3D como una sola pieza rígida.
-  // Antes "Charly" y "Gourves" se movían en direcciones OPUESTAS entre sí
-  // más una sombra fantasma con su propio desplazamiento — eso es lo que
-  // se leía como descoordinado/tosco, no como pulido.
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
 
@@ -39,8 +34,6 @@ export default function Hero() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* grano sutil sobre el fondo — opacidad 4%, le da profundidad táctil
-          sin ensuciar el plano de color. Reemplaza al "vacío total" de antes. */}
       <svg
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 w-full h-full opacity-[0.045] mix-blend-multiply"
@@ -81,13 +74,6 @@ export default function Hero() {
           <span style={{ color: "#AC5142" }}>Charly</span>
         </motion.span>
 
-        {/* Gourves — el contorno (-webkit-text-stroke) solo funciona en
-            navegadores WebKit/Blink. Antes el color por defecto era
-            "transparent" sin ningún respaldo — en un navegador sin soporte,
-            la palabra se volvía invisible. Ahora la clase .name-outline
-            (ver globals.css) define un color de relleno visible por
-            defecto, y solo lo vuelve transparente si el navegador
-            confirma soporte real vía @supports. Nunca desaparece. */}
         <motion.span
           className="name-outline block font-impact leading-[0.8] whitespace-nowrap transition-colors duration-500"
           style={{
@@ -102,8 +88,10 @@ export default function Hero() {
         </motion.span>
       </motion.div>
 
+      <div className="pb-8" />
+
       <motion.p
-        className="relative font-display text-xl md:text-2xl text-ink mt-16 md:mt-20"
+        className="relative font-display text-xl md:text-2xl text-ink mt-24 md:mt-28"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.45 }}
@@ -111,10 +99,6 @@ export default function Hero() {
         Convierto procesos de negocio en productos que la gente entiende.
       </motion.p>
 
-      {/* Prueba visual real del trabajo, directo en el hero — no solo
-          tipografía y estructura. Capturas reales de Beliv, CSI y viajes,
-          con entrada escalonada. Esto ya estaba construido en el repo
-          (HeroCollage.jsx) pero nunca se conectó a la página. */}
       <div className="relative mt-14 md:mt-16 w-full">
         <HeroCollage />
       </div>
