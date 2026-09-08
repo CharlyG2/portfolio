@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #F7F1E4;
+  color: #221D18;
+}
+
+/* "Gourves" en el hero: contorno solo, con respaldo real. Por defecto
+   (sin soporte de -webkit-text-stroke) se ve como texto sólido en un
+   tono claro — legible, on-brand, nunca invisible. Solo se vuelve
+   transparente (efecto outline puro) si el navegador confirma soporte. */
+.name-outline {
+  color: #E4DBC8;
+  -webkit-text-stroke: 2.6px #7A2F22;
+}
+@supports ((-webkit-text-stroke: 1px black) or (text-stroke: 1px black)) {
+  .name-outline {
+    color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::selection {
+  background: #AC5142;
+  color: #FFFFFF;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.tag-bracket::before {
+  content: "<";
+  opacity: 0.5;
+}
+.tag-bracket::after {
+  content: "/>";
+  opacity: 0.5;
+}
+
+.dot-grid {
+  background-image: radial-gradient(
+    rgba(11, 14, 20, 0.1) 1.5px,
+    transparent 1.5px
+  );
+  background-size: 24px 24px;
+}
+
+.stat-number {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid #AC5142;
+  outline-offset: 3px;
+}
