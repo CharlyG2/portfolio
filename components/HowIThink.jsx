@@ -2,40 +2,48 @@
 
 import Reveal from "./Reveal";
 
+// Solo 2 colores — los de la paleta de marca, alternados. Antes había 6
+// colores random (azul, verde, ámbar, rosa, naranja) sin relación con el
+// resto del sitio. Esto es lo que un reclutador ve como "los colores no
+// cuadran" — un sistema real usa pocos colores con una regla, no muchos
+// porque sí.
+const RUST = "#AC5142";
+const SAGE = "#3D5A56";
+
 const steps = [
   {
     n: "01",
-    color: "#3D5AFE",
+    color: RUST,
     title: "Cuestiono todo",
     text: "No diseño antes de entender el problema de verdad — ni aunque la fecha de entrega esté encima.",
   },
   {
     n: "02",
-    color: "#0EA5A0",
+    color: SAGE,
     title: "Busco la fricción",
     text: "Ahí es donde se rompe la experiencia de verdad, no en lo que se ve bonito o feo.",
   },
   {
     n: "03",
-    color: "#FFB020",
+    color: RUST,
     title: "Diseño con restricciones",
     text: "El producto real tiene negocio, tecnología y plazos — diseñar sin eso es diseñar en el vacío.",
   },
   {
     n: "04",
-    color: "#F43F5E",
+    color: SAGE,
     title: "Pruebo antes de defender",
     text: "Si los datos contradicen mi idea favorita, gana el dato — mi ego puede esperar.",
   },
   {
     n: "05",
-    color: "#FD9047",
+    color: RUST,
     title: "Construyo con quien lo sostiene",
     text: "Si el equipo de desarrollo no lo puede mantener después, no importa qué tan bien se vea.",
   },
   {
     n: "06",
-    color: "#3D5AFE",
+    color: SAGE,
     title: "Nada es definitivo",
     text: "Mido, aprendo, cambio. El lanzamiento es el punto de partida, no la meta.",
   },

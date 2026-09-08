@@ -32,7 +32,11 @@ export default function CyclingWords() {
   }
 
   return (
-    <div className="h-8 md:h-9 flex items-center justify-center overflow-hidden">
+    // min-width reservado para la palabra más larga ("Estrategia de
+    // negocio") — antes el contenedor se ajustaba al ancho de cada
+    // palabra, así que el bloque completo saltaba horizontalmente cada
+    // 1.8s al cambiar de palabra.
+    <div className="h-8 md:h-9 min-w-[230px] md:min-w-[280px] flex items-center justify-center overflow-hidden">
       <AnimatePresence mode="wait">
         <motion.p
           key={words[i]}

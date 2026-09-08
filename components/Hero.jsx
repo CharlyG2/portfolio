@@ -4,25 +4,23 @@ import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 import { SPRING, EASE } from "@/lib/motion";
 import CyclingWords from "./CyclingWords";
+import HeroCollage from "./HeroCollage";
 
 export default function Hero() {
   const ref = useRef(null);
   const [hoverGourves, setHoverGourves] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
+  // Un solo gesto de movimiento, no varios compitiendo entre sí: el bloque
+  // completo del nombre se inclina en 3D como una sola pieza rígida.
+  // Antes "Charly" y "Gourves" se movían en direcciones OPUESTAS entre sí
+  // más una sombra fantasma con su propio desplazamiento — eso es lo que
+  // se leía como descoordinado/tosco, no como pulido.
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
 
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [18, -18]), SPRING);
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-18, 18]), SPRING);
-
-  const charlyX = useSpring(useTransform(mx, [-0.5, 0.5], [-26, 26]), SPRING);
-  const charlyY = useSpring(useTransform(my, [-0.5, 0.5], [-16, 16]), SPRING);
-  const gourvesX = useSpring(useTransform(mx, [-0.5, 0.5], [14, -14]), SPRING);
-  const gourvesY = useSpring(useTransform(my, [-0.5, 0.5], [8, -8]), SPRING);
-
-  const shadowX = useSpring(useTransform(mx, [-0.5, 0.5], [22, -22]), SPRING);
-  const shadowY = useSpring(useTransform(my, [-0.5, 0.5], [22, -22]), SPRING);
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [12, -12]), SPRING);
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-12, 12]), SPRING);
 
   const handleMouseMove = (e) => {
     if (shouldReduceMotion) return;
@@ -73,23 +71,9 @@ export default function Hero() {
         onMouseEnter={() => setHoverGourves(true)}
         onMouseLeave={() => setHoverGourves(false)}
       >
-        {/* sombra fantasma detrás del nombre — profundidad sin animación */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 font-impact leading-[0.8] whitespace-nowrap select-none pointer-events-none"
-          style={{ fontSize: "clamp(4rem, 18vw, 16rem)", color: "rgba(34,29,24,0.16)", filter: "blur(2px)" }}
-        >
-          <motion.div style={{ x: shadowX, y: shadowY }}>Charly</motion.div>
-          <motion.div style={{ x: shadowX, y: shadowY }}>Gourves</motion.div>
-        </div>
-
         <motion.span
           className="block font-impact leading-[0.8] whitespace-nowrap"
-          style={{
-            fontSize: "clamp(4rem, 18vw, 16rem)",
-            x: shouldReduceMotion ? 0 : charlyX,
-            y: shouldReduceMotion ? 0 : charlyY,
-          }}
+          style={{ fontSize: "clamp(4rem, 18vw, 16rem)" }}
           initial={{ opacity: 0, y: "110%" }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, ease: EASE }}
@@ -97,17 +81,18 @@ export default function Hero() {
           <span style={{ color: "#AC5142" }}>Charly</span>
         </motion.span>
 
-        {/* Gourves — contorno con más peso: de 2px a 2.6px y color más
-            saturado/oscuro (espresso en vez de rust puro) para que nunca
-            se sienta "perdido" contra el crema, sea cual sea la pantalla */}
+        {/* Gourves — el contorno (-webkit-text-stroke) solo funciona en
+            navegadores WebKit/Blink. Antes el color por defecto era
+            "transparent" sin ningún respaldo — en un navegador sin soporte,
+            la palabra se volvía invisible. Ahora la clase .name-outline
+            (ver globals.css) define un color de relleno visible por
+            defecto, y solo lo vuelve transparente si el navegador
+            confirma soporte real vía @supports. Nunca desaparece. */}
         <motion.span
-          className="block font-impact leading-[0.8] whitespace-nowrap transition-colors duration-500"
+          className="name-outline block font-impact leading-[0.8] whitespace-nowrap transition-colors duration-500"
           style={{
             fontSize: "clamp(4rem, 18vw, 16rem)",
-            WebkitTextStroke: "2.6px #7A2F22",
-            color: hoverGourves ? "#7A2F22" : "transparent",
-            x: shouldReduceMotion ? 0 : gourvesX,
-            y: shouldReduceMotion ? 0 : gourvesY,
+            ...(hoverGourves ? { color: "#7A2F22" } : {}),
           }}
           initial={{ opacity: 0, y: "110%" }}
           animate={{ opacity: 1 }}
@@ -125,6 +110,14 @@ export default function Hero() {
       >
         Convierto procesos de negocio en productos que la gente entiende.
       </motion.p>
+
+      {/* Prueba visual real del trabajo, directo en el hero — no solo
+          tipografía y estructura. Capturas reales de Beliv, CSI y viajes,
+          con entrada escalonada. Esto ya estaba construido en el repo
+          (HeroCollage.jsx) pero nunca se conectó a la página. */}
+      <div className="relative mt-14 md:mt-16 w-full">
+        <HeroCollage />
+      </div>
 
       <motion.a
         href="#nada-es-definitivo"

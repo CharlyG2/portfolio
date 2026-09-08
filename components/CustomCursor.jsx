@@ -39,18 +39,20 @@ export default function CustomCursor() {
 
   if (isTouch || !ready) return null;
 
+  // Recoloreado a la paleta real (terracota/salvia) — antes usaba azul y
+  // ámbar sueltos, sin relación con el resto del sitio.
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full bg-signalSoft pointer-events-none z-[999] mix-blend-difference"
-        style={{ x: springX, y: springY, translateX: "-50%", translateY: "-50%" }}
+        className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full pointer-events-none z-[999] mix-blend-difference"
+        style={{ x: springX, y: springY, translateX: "-50%", translateY: "-50%", background: "#F7F1E4" }}
       />
       <motion.div
         className="fixed top-0 left-0 rounded-full border pointer-events-none z-[998] mix-blend-difference"
         animate={{
           width: hovering ? 56 : 28,
           height: hovering ? 56 : 28,
-          borderColor: hovering ? "#FFB020" : "#8FA0FF",
+          borderColor: hovering ? "#AC5142" : "#F7F1E4",
           opacity: hovering ? 1 : 0.6,
         }}
         transition={{ duration: 0.2 }}
