@@ -1,6 +1,7 @@
 import { Space_Grotesk, Inter, IBM_Plex_Mono, Anton, Caveat } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
+import Preloader from "@/components/Preloader";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -42,6 +43,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es" className={`${display.variable} ${body.variable} ${mono.variable} ${impact.variable} ${hand.variable}`}>
       <body className="font-body antialiased">
+        <Preloader />
         <CustomCursor />
         {children}
       </body>
