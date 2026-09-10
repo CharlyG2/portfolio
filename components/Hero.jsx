@@ -1,19 +1,19 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 import { SPRING, EASE } from "@/lib/motion";
-import SystemGraph from "./SystemGraph";
 
 const words = ["Product Design", "Design Systems", "UX Research", "UX Writing", "Estrategia de negocio"];
 
-// Composición estructuralmente distinta a la que veníamos usando — no es
-// el mismo esqueleto centrado con otro color encima. Dos columnas
-// asimétricas: el nombre a la izquierda, grande y pegado al borde, casi
-// saliéndose de la pantalla (como Digital Cover / RNO1). A la derecha, el
-// SystemGraph deja de ser decoración al 8% de opacidad detrás del nombre
-// y pasa a ser protagonista real: grande, armándose en vivo, nodo por
-// nodo. Dos elementos con peso, no uno con textura.
+// Síntesis real de dos sistemas de diseño reales (Linear + Stripe), no
+// adjetivos: fondo casi negro y un solo acento cromático usado con
+// moderación (Linear — #010102, #5e6ad2 solo en marca/CTA, "nunca
+// decorativo"), y UNA captura de producto real, grande, enmarcada limpia
+// en vez de textura abstracta ("page rhythm leans on product UI
+// screenshots framed in dark panels rather than atmospheric color").
+// No es el collage rotado que se sacó antes — un marco, una pantalla.
 export default function Hero() {
   const ref = useRef(null);
   const [hoverGourves, setHoverGourves] = useState(false);
@@ -28,8 +28,8 @@ export default function Hero() {
 
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [4, -4]), SPRING);
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-4, 4]), SPRING);
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [3, -3]), SPRING);
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-3, 3]), SPRING);
 
   const handleMouseMove = (e) => {
     if (shouldReduceMotion) return;
@@ -44,76 +44,44 @@ export default function Hero() {
 
   return (
     <section
-      className="relative bg-paper text-ink min-h-screen overflow-hidden pt-28 pb-16"
+      className="relative min-h-screen overflow-hidden pt-28 pb-16"
+      style={{ background: "#1A1512" }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Mesh gradient — más presente que antes, ancla el costado derecho
-          donde vive el diagrama, en vez de estar centrado y disperso. */}
-      <motion.div
+      {/* Un solo acento cromático, muy contenido — no mesh, no textura
+          decorativa. Una línea de luz sutil arriba, como borde de vidrio. */}
+      <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(circle at 78% 30%, rgba(172,81,66,0.5), transparent 45%),
-            radial-gradient(circle at 90% 75%, rgba(61,90,86,0.45), transparent 50%)
-          `,
-        }}
-        animate={{ backgroundPosition: ["0% 0%", "4% -3%", "0% 0%"] }}
-        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+        className="pointer-events-none absolute top-0 left-0 right-0 h-px"
+        style={{ background: "linear-gradient(90deg, transparent, rgba(172,81,66,0.5), transparent)" }}
       />
 
-      <svg
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 w-full h-full opacity-[0.03] mix-blend-multiply"
-      >
-        <filter id="heroGrain">
-          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#heroGrain)" />
-      </svg>
-
-      <div className="relative h-full min-h-[calc(100vh-7rem)] max-w-[1400px] mx-auto px-6 md:px-12 grid md:grid-cols-[1.15fr_1fr] items-center gap-8">
-        {/* Columna izquierda — el nombre, pegado al borde, no centrado */}
-        <motion.div
-          ref={ref}
-          className="relative overflow-visible cursor-default text-left -ml-1 md:-ml-2"
-          style={{
-            rotateX: shouldReduceMotion ? 0 : rotateX,
-            rotateY: shouldReduceMotion ? 0 : rotateY,
-            transformPerspective: 600,
-          }}
-          onMouseEnter={() => setHoverGourves(true)}
-          onMouseLeave={() => setHoverGourves(false)}
-        >
-          <div className="overflow-hidden">
-            <motion.span
-              className="block font-impact leading-[0.82] whitespace-nowrap"
-              style={{ fontSize: "clamp(3.5rem, 11vw, 9rem)" }}
-              initial={{ clipPath: "inset(0 0 100% 0)" }}
-              animate={{ clipPath: "inset(0 0 0% 0)" }}
-              transition={{ duration: 0.9, ease: EASE }}
-            >
-              <span style={{ color: "#AC5142" }}>Charly</span>
-            </motion.span>
-          </div>
-          <div className="overflow-hidden pb-4">
-            <motion.span
-              className="name-outline block font-impact leading-[0.82] whitespace-nowrap transition-colors duration-500"
-              style={{
-                fontSize: "clamp(3.5rem, 11vw, 9rem)",
-                ...(hoverGourves ? { color: "#7A2F22" } : {}),
-              }}
-              initial={{ clipPath: "inset(0 0 100% 0)" }}
-              animate={{ clipPath: "inset(0 0 0% 0)" }}
-              transition={{ duration: 0.9, delay: 0.12, ease: EASE }}
-            >
-              Gourves
-            </motion.span>
-          </div>
+      <div className="relative max-w-[1400px] mx-auto px-6 md:px-12 grid md:grid-cols-[1fr_1.05fr] items-center gap-10 min-h-[calc(100vh-7rem)]">
+        {/* Columna izquierda — nombre y texto, sobre fondo oscuro */}
+        <div ref={ref} className="text-left" onMouseEnter={() => setHoverGourves(true)} onMouseLeave={() => setHoverGourves(false)}>
+          <motion.span
+            className="block font-impact leading-[0.85] whitespace-nowrap"
+            style={{ fontSize: "clamp(3.2rem, 9vw, 7rem)", color: "#F7F1E4" }}
+            initial={{ clipPath: "inset(0 0 100% 0)" }}
+            animate={{ clipPath: "inset(0 0 0% 0)" }}
+            transition={{ duration: 0.9, ease: EASE }}
+          >
+            Charly
+          </motion.span>
+          <motion.span
+            className="block font-impact leading-[0.85] whitespace-nowrap"
+            style={{ fontSize: "clamp(3.2rem, 9vw, 7rem)", color: hoverGourves ? "#D6926E" : "#AC5142" }}
+            initial={{ clipPath: "inset(0 0 100% 0)" }}
+            animate={{ clipPath: "inset(0 0 0% 0)" }}
+            transition={{ duration: 0.9, delay: 0.1, ease: EASE }}
+          >
+            Gourves
+          </motion.span>
 
           <motion.p
-            className="font-display text-lg md:text-xl text-ink max-w-md mt-6"
+            className="font-display text-lg md:text-xl max-w-md mt-6"
+            style={{ color: "#B8AE9A" }}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
@@ -121,17 +89,16 @@ export default function Hero() {
             Convierto procesos de negocio en productos que la gente entiende.
           </motion.p>
 
-          {/* Una sola palabra a la vez, en línea con la frase — no una fila
-              aparte arriba del nombre como antes. Menos piezas apiladas. */}
           <motion.div
-            className="mt-4 h-6 overflow-hidden"
+            className="mt-5 h-6 overflow-hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.7 }}
           >
             <motion.span
               key={wordIndex}
-              className="font-mono text-xs uppercase tracking-widest text-rust inline-block"
+              className="font-mono text-xs uppercase tracking-widest inline-block"
+              style={{ color: "#AC5142" }}
               initial={{ y: 14, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.4 }}
@@ -142,34 +109,54 @@ export default function Hero() {
 
           <motion.a
             href="#nada-es-definitivo"
-            className="relative inline-flex items-center gap-2 font-mono text-xs mt-8 px-3 py-1.5 rounded-full border hover:border-rust/50 transition-colors"
-            style={{ background: "#FFFDF8", borderColor: "#E4DBC8", color: "#6B6259" }}
+            className="relative inline-flex items-center gap-2 font-mono text-xs mt-8 px-3 py-1.5 rounded-full border transition-colors"
+            style={{ background: "rgba(247,241,228,0.04)", borderColor: "rgba(247,241,228,0.14)", color: "#9C9082" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.9 }}
           >
-            <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "#3D5A56" }} />
+            <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "#AC5142" }} />
             Santiago, Chile — sigo iterando este portafolio (
-            <span className="text-rust">nada es definitivo →</span>)
+            <span style={{ color: "#AC5142" }}>nada es definitivo →</span>)
           </motion.a>
-        </motion.div>
+        </div>
 
-        {/* Columna derecha — el SystemGraph como protagonista real, no
-            textura de fondo al 8%. Grande, opaco, armándose nodo por nodo. */}
+        {/* Columna derecha — UNA captura real, enmarcada tipo ventana de
+            navegador, no un collage rotado. La técnica de Linear/Stripe:
+            producto real, grande, limpio, no textura ni ilustración. */}
         <motion.div
-          className="relative hidden md:flex items-center justify-center"
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.3, ease: EASE }}
+          className="relative hidden md:block"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.35, ease: EASE }}
         >
-          <div className="w-full max-w-[520px]">
-            <SystemGraph labelClassName="fill-muted" />
+          <div
+            className="rounded-xl overflow-hidden border"
+            style={{ borderColor: "rgba(247,241,228,0.1)", boxShadow: "0 30px 80px -20px rgba(0,0,0,0.6)" }}
+          >
+            {/* barra de ventana, como un browser chrome real */}
+            <div className="flex items-center gap-1.5 px-4 py-3" style={{ background: "#221D18" }}>
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#6B6259" }} />
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#6B6259" }} />
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#6B6259" }} />
+            </div>
+            <div className="relative w-full" style={{ aspectRatio: "16/10", background: "#FFFDF8" }}>
+              <Image
+                src="/images/csi-landing.png"
+                alt="Captura real del funnel de contratación CSI, uno de mis proyectos en BICE VIDA"
+                fill
+                className="object-cover object-top"
+                sizes="(min-width: 768px) 45vw, 0px"
+                priority
+              />
+            </div>
           </div>
         </motion.div>
       </div>
 
       <motion.div
-        className="relative flex flex-col items-center gap-2 text-muted mt-4 md:absolute md:bottom-10 md:left-1/2 md:-translate-x-1/2"
+        className="relative flex flex-col items-center gap-2 mt-4 md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2"
+        style={{ color: "#6B6259" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 1.1 }}
