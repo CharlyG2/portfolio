@@ -43,11 +43,33 @@ export default function Hero() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* grano sutil sobre el fondo — opacidad 4%, le da profundidad táctil
-          sin ensuciar el plano de color. Reemplaza al "vacío total" de antes. */}
+      {/* Mesh gradient real — varias manchas de color grandes y suaves que
+          se mueven lento de fondo, técnica que usa Stripe (cream, sherbet,
+          lavender, indigo, ruby, "the mesh IS the brand's depth system").
+          Acá con tu paleta: terracota, salvia, un tono cálido ámbar nuevo.
+          No es el blur/grano sucio de antes — son gradientes radiales
+          limpios, grandes, desenfocados a propósito, no ruido random. */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(circle at 20% 20%, rgba(172,81,66,0.22), transparent 45%),
+            radial-gradient(circle at 80% 15%, rgba(61,90,86,0.20), transparent 45%),
+            radial-gradient(circle at 50% 85%, rgba(214,140,90,0.18), transparent 50%)
+          `,
+        }}
+        animate={{
+          backgroundPosition: ["0% 0%", "5% -5%", "0% 0%"],
+        }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* grano sutil sobre el mesh — le da textura de superficie, no un
+          efecto aparte. Opacidad muy baja, mix-blend-multiply. */}
       <svg
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 w-full h-full opacity-[0.045] mix-blend-multiply"
+        className="pointer-events-none absolute inset-0 w-full h-full opacity-[0.03] mix-blend-multiply"
       >
         <filter id="heroGrain">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
@@ -68,7 +90,7 @@ export default function Hero() {
         transition={{ duration: 1.2, delay: 0.3 }}
         aria-hidden="true"
       >
-        <SystemGraph />
+        <SystemGraph labelClassName="fill-muted" />
       </motion.div>
 
       <motion.div
