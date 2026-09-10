@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 import { SPRING, EASE } from "@/lib/motion";
 import CyclingWords from "./CyclingWords";
-import HeroCollage from "./HeroCollage";
+import SystemGraph from "./SystemGraph";
 
 export default function Hero() {
   const ref = useRef(null);
@@ -19,8 +19,12 @@ export default function Hero() {
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
 
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [12, -12]), SPRING);
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-12, 12]), SPRING);
+  // Inclinación reducida de ±12° a ±5° — el rango anterior, combinado con
+  // el overflow visual del line-height apretado del nombre, podía empujar
+  // las letras lo suficiente como para volver a solaparse con el párrafo
+  // de abajo al mover el mouse. Menos inclinación, mismo gesto, sin el bug.
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [5, -5]), SPRING);
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-5, 5]), SPRING);
 
   const handleMouseMove = (e) => {
     if (shouldReduceMotion) return;
@@ -51,6 +55,22 @@ export default function Hero() {
         <rect width="100%" height="100%" filter="url(#heroGrain)" />
       </svg>
 
+      {/* El diagrama de jerarquía atómica que ya usamos en tu caso de
+          Design System — no es una foto de producto suelta, es literalmente
+          tu forma de pensar (átomo → molécula → organismo → plantilla →
+          página) puesta detrás de tu nombre. Un solo elemento de diseño
+          real, no una colección de capturas. Opacidad baja: es textura de
+          fondo, no compite con el nombre. */}
+      <motion.div
+        className="pointer-events-none absolute left-1/2 top-[58%] -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[900px] opacity-[0.08]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.08 }}
+        transition={{ duration: 1.2, delay: 0.3 }}
+        aria-hidden="true"
+      >
+        <SystemGraph />
+      </motion.div>
+
       <motion.div
         style={{ marginBottom: "48px" }}
         initial={{ opacity: 0 }}
@@ -71,53 +91,58 @@ export default function Hero() {
         onMouseEnter={() => setHoverGourves(true)}
         onMouseLeave={() => setHoverGourves(false)}
       >
-        <motion.span
-          className="block font-impact leading-[0.8] whitespace-nowrap"
-          style={{ fontSize: "clamp(4rem, 18vw, 16rem)" }}
-          initial={{ opacity: 0, y: "110%" }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, ease: EASE }}
-        >
-          <span style={{ color: "#AC5142" }}>Charly</span>
-        </motion.span>
+        {/* Reveal real, no solo fade: cada palabra entra recortada por un
+            clip-path que se abre de abajo hacia arriba — la animación
+            "significa" algo (revela, como abrir una cortina), no es solo
+            una opacidad subiendo. Esto es lo que Mat Voyce/RNO1 hacen bien
+            y lo que le faltaba a la versión anterior. */}
+        <div className="overflow-hidden">
+          <motion.span
+            className="block font-impact leading-[0.8] whitespace-nowrap"
+            style={{ fontSize: "clamp(4rem, 18vw, 16rem)" }}
+            initial={{ clipPath: "inset(0 0 100% 0)" }}
+            animate={{ clipPath: "inset(0 0 0% 0)" }}
+            transition={{ duration: 0.9, ease: EASE }}
+          >
+            <span style={{ color: "#AC5142" }}>Charly</span>
+          </motion.span>
+        </div>
 
         {/* Gourves — el contorno (-webkit-text-stroke) solo funciona en
-            navegadores WebKit/Blink. Antes el color por defecto era
-            "transparent" sin ningún respaldo — en un navegador sin soporte,
-            la palabra se volvía invisible. Ahora la clase .name-outline
-            (ver globals.css) define un color de relleno visible por
-            defecto, y solo lo vuelve transparente si el navegador
-            confirma soporte real vía @supports. Nunca desaparece. */}
-        <motion.span
-          className="name-outline block font-impact leading-[0.8] whitespace-nowrap transition-colors duration-500"
-          style={{
-            fontSize: "clamp(4rem, 18vw, 16rem)",
-            ...(hoverGourves ? { color: "#7A2F22" } : {}),
-          }}
-          initial={{ opacity: 0, y: "110%" }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.08, ease: EASE }}
-        >
-          Gourves
-        </motion.span>
+            navegadores WebKit/Blink. El color por defecto tiene un
+            respaldo real (ver .name-outline en globals.css) que nunca
+            desaparece, aunque el navegador no soporte el stroke. */}
+        <div className="overflow-hidden">
+          <motion.span
+            className="name-outline block font-impact leading-[0.8] whitespace-nowrap transition-colors duration-500"
+            style={{
+              fontSize: "clamp(4rem, 18vw, 16rem)",
+              ...(hoverGourves ? { color: "#7A2F22" } : {}),
+            }}
+            initial={{ clipPath: "inset(0 0 100% 0)" }}
+            animate={{ clipPath: "inset(0 0 0% 0)" }}
+            transition={{ duration: 0.9, delay: 0.12, ease: EASE }}
+          >
+            Gourves
+          </motion.span>
+        </div>
       </motion.div>
 
+      {/* pb-20 + mt-32: mucho más margen que antes (pb-8/mt-24). El bug de
+          solapamiento volvió a aparecer con el mouse en movimiento — este
+          buffer es deliberadamente generoso para que ni la inclinación 3D
+          ni el overflow del line-height puedan volver a juntar el nombre
+          con el párrafo, bajo ninguna circunstancia de uso real. */}
+      <div className="pb-20" />
+
       <motion.p
-        className="relative font-display text-xl md:text-2xl text-ink mt-16 md:mt-20"
+        className="relative font-display text-xl md:text-2xl text-ink mt-32 md:mt-40"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.45 }}
       >
         Convierto procesos de negocio en productos que la gente entiende.
       </motion.p>
-
-      {/* Prueba visual real del trabajo, directo en el hero — no solo
-          tipografía y estructura. Capturas reales de Beliv, CSI y viajes,
-          con entrada escalonada. Esto ya estaba construido en el repo
-          (HeroCollage.jsx) pero nunca se conectó a la página. */}
-      <div className="relative mt-14 md:mt-16 w-full">
-        <HeroCollage />
-      </div>
 
       <motion.a
         href="#nada-es-definitivo"
