@@ -11,11 +11,6 @@ export default function Hero() {
   const [hoverGourves, setHoverGourves] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
-  // Un solo gesto de movimiento, no varios compitiendo entre sí: el bloque
-  // completo del nombre se inclina en 3D como una sola pieza rígida.
-  // Antes "Charly" y "Gourves" se movían en direcciones OPUESTAS entre sí
-  // más una sombra fantasma con su propio desplazamiento — eso es lo que
-  // se leía como descoordinado/tosco, no como pulido.
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
 
@@ -43,8 +38,6 @@ export default function Hero() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* grano sutil sobre el fondo — opacidad 4%, le da profundidad táctil
-          sin ensuciar el plano de color. Reemplaza al "vacío total" de antes. */}
       <svg
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 w-full h-full opacity-[0.045] mix-blend-multiply"
@@ -108,6 +101,7 @@ export default function Hero() {
           </motion.span>
         </div>
 
+<<<<<<< HEAD
         {/* Gourves — el contorno (-webkit-text-stroke) solo funciona en
             navegadores WebKit/Blink. El color por defecto tiene un
             respaldo real (ver .name-outline en globals.css) que nunca
@@ -137,6 +131,26 @@ export default function Hero() {
 
       <motion.p
         className="relative font-display text-xl md:text-2xl text-ink mt-32 md:mt-40"
+=======
+        <motion.span
+          className="name-outline block font-impact leading-[0.8] whitespace-nowrap transition-colors duration-500"
+          style={{
+            fontSize: "clamp(4rem, 18vw, 16rem)",
+            ...(hoverGourves ? { color: "#7A2F22" } : {}),
+          }}
+          initial={{ opacity: 0, y: "110%" }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.08, ease: EASE }}
+        >
+          Gourves
+        </motion.span>
+      </motion.div>
+
+      <div className="pb-8" />
+
+      <motion.p
+        className="relative font-display text-xl md:text-2xl text-ink mt-24 md:mt-28"
+>>>>>>> a8c359f602231035b34119060a93adeee9931d3b
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.45 }}
@@ -144,6 +158,13 @@ export default function Hero() {
         Convierto procesos de negocio en productos que la gente entiende.
       </motion.p>
 
+<<<<<<< HEAD
+=======
+      <div className="relative mt-14 md:mt-16 w-full">
+        <HeroCollage />
+      </div>
+
+>>>>>>> a8c359f602231035b34119060a93adeee9931d3b
       <motion.a
         href="#nada-es-definitivo"
         className="relative inline-flex items-center gap-2 font-mono text-xs mt-8 px-3 py-1.5 rounded-full border hover:border-rust/50 transition-colors"
