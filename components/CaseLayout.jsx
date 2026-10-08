@@ -8,10 +8,10 @@ export function CaseHeader({ eyebrow, title, tldr, stats }) {
     <header className="pt-40 pb-16 md:pt-48 md:pb-20 border-b border-line">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <Link
-          href="/#casos"
+          href="/"
           className="font-mono text-xs text-muted hover:text-rust transition-colors"
         >
-          ← volver a casos
+          ← volver al museo
         </Link>
         <p className="eyebrow text-muted mt-8 mb-6" style={{ fontSize: "14px" }}>
           <span className="tag-bracket">{eyebrow}</span>
