@@ -34,7 +34,7 @@ export default function LeftNav() {
         </Link>
 
         <nav
-          className="flex flex-col items-center gap-7"
+          className="flex items-center gap-7"
           style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
         >
           {LINKS.map((l) => (
