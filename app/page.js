@@ -1,23 +1,20 @@
-import LeftNav from "@/components/LeftNav";
-import Hero from "@/components/Hero";
-import HowIThink from "@/components/HowIThink";
-import CaseIndex from "@/components/CaseIndex";
-import About from "@/components/About";
-import Trajectory from "@/components/Trajectory";
-import Resume from "@/components/Resume";
-import Footer from "@/components/Footer";
+import Link from "next/link";
+import MuseumLoader from "@/components/museum/MuseumLoader";
 
 export default function Home() {
   return (
-    <main className="bg-paper min-h-screen md:pl-[88px] pt-[52px] md:pt-0">
-      <LeftNav />
-      <Hero />
-      <HowIThink />
-      <CaseIndex />
-      <About />
-      <Trajectory />
-      <Resume />
-      <Footer />
+    <main>
+      <MuseumLoader />
+      <noscript>
+        <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center bg-paper">
+          <p className="font-serif text-2xl text-ink">
+            El museo 3D necesita JavaScript.
+          </p>
+          <Link href="/express" className="underline text-rust">
+            Ver el portafolio completo en modo express
+          </Link>
+        </div>
+      </noscript>
     </main>
   );
 }

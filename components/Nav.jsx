@@ -8,16 +8,16 @@ export default function Nav() {
           <span className="tag-bracket">cg</span>
         </Link>
         <nav className="hidden sm:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-muted">
-          <Link href="/#casos" className="hover:text-rust transition-colors">
+          <Link href="/express#casos" className="hover:text-rust transition-colors">
             Trabajo
           </Link>
-          <Link href="/#como-pienso" className="hover:text-rust transition-colors">
+          <Link href="/express#como-pienso" className="hover:text-rust transition-colors">
             Cómo pienso
           </Link>
-          <Link href="/#sobre-mi" className="hover:text-rust transition-colors">
+          <Link href="/express#sobre-mi" className="hover:text-rust transition-colors">
             Sobre mí
           </Link>
-          <Link href="/#cv" className="hover:text-rust transition-colors">
+          <Link href="/express#cv" className="hover:text-rust transition-colors">
             CV
           </Link>
           <a
