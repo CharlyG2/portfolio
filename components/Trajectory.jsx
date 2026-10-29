@@ -6,10 +6,10 @@ import Reveal from "./Reveal";
 
 const roles = [
   {
-    period: "2023 — presente",
+    period: "2023 — oct. 2026",
     role: "Product Designer",
     place: "BICE VIDA",
-    blurb: "Lidero el Design System de la compañía y los flujos de seguros de salud y viaje.",
+    blurb: "Lideré el Design System de la compañía y los flujos de seguros de salud y viaje.",
     color: "bg-signal",
   },
   {
