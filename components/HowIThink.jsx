@@ -14,38 +14,38 @@ const steps = [
   {
     n: "01",
     color: RUST,
-    title: "Cuestiono todo",
-    text: "No diseño antes de entender el problema de verdad — ni aunque la fecha de entrega esté encima.",
+    title: "Entiendo antes de diseñar",
+    text: "Antes de proponer soluciones, me aseguro de entender bien el problema junto al equipo. Hacer las preguntas correctas al inicio ahorra tiempo después.",
   },
   {
     n: "02",
     color: SAGE,
     title: "Busco la fricción",
-    text: "Ahí es donde se rompe la experiencia de verdad, no en lo que se ve bonito o feo.",
+    text: "Me enfoco en los puntos donde la experiencia se complica para las personas, más allá de lo visual.",
   },
   {
     n: "03",
     color: RUST,
     title: "Diseño con restricciones",
-    text: "El producto real tiene negocio, tecnología y plazos — diseñar sin eso es diseñar en el vacío.",
+    text: "Considero negocio, tecnología y plazos desde el inicio, para que el diseño sea viable.",
   },
   {
     n: "04",
     color: SAGE,
-    title: "Pruebo antes de defender",
-    text: "Si los datos contradicen mi idea favorita, gana el dato — mi ego puede esperar.",
+    title: "Valido antes de defender",
+    text: "Pongo a prueba mis ideas con datos y usuarios. Si la evidencia muestra otro camino, lo sigo.",
   },
   {
     n: "05",
     color: RUST,
-    title: "Construyo con quien lo sostiene",
-    text: "Si el equipo de desarrollo no lo puede mantener después, no importa qué tan bien se vea.",
+    title: "Diseño junto a desarrollo",
+    text: "Trabajo cerca del equipo técnico para que lo que diseño se pueda construir y mantener en el tiempo.",
   },
   {
     n: "06",
     color: SAGE,
     title: "Nada es definitivo",
-    text: "Mido, aprendo, cambio. El lanzamiento es el punto de partida, no la meta.",
+    text: "Mido, aprendo y ajusto. El lanzamiento es el punto de partida, no la meta.",
   },
 ];
 

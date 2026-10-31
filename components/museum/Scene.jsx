@@ -218,8 +218,8 @@ function FunnelSculpture() {
 
 function ManifestoWall({ lang, hovered, ...handlers }) {
   const lines = lang === "en"
-    ? ["Question everything", "Find the friction", "Design with constraints", "Test before defending", "Build with the team", "Nothing is final"]
-    : ["Cuestiono todo", "Busco la fricción", "Diseño con restricciones", "Pruebo antes de defender", "Construyo con quien lo sostiene", "Nada es definitivo"];
+    ? ["Understand before designing", "Find the friction", "Design with constraints", "Validate before defending", "Design with engineering", "Nothing is final"]
+    : ["Entiendo antes de diseñar", "Busco la fricción", "Diseño con restricciones", "Valido antes de defender", "Diseño junto a desarrollo", "Nada es definitivo"];
   return (
     <group position={[7.93, 2.45, 3.2]} rotation={[0, -Math.PI / 2, 0]} {...handlers}>
       {lines.map((l, i) => (
