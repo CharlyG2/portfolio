@@ -6,6 +6,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Que el título de cada sección no quede tapado por la barra fija */
+section[id] {
+  scroll-margin-top: 56px;
+}
+
 body {
   background-color: #F7F1E4;
   color: #221D18;
