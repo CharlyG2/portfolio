@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 // Generado en Omma (Spline) con vista previa visual real. Se sacó el
 // menú de navegación propio (duplicaba el Nav.jsx global del sitio) —
@@ -50,12 +50,6 @@ export default function Hero() {
   const sectionRef = useRef(null);
   const [activeTag, setActiveTag] = useState(0);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const bgFade = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
   useEffect(() => {
     if (shouldReduceMotion) return;
     const id = setInterval(() => {
@@ -82,32 +76,6 @@ export default function Hero() {
         fontFamily: "'Inter', sans-serif",
       }}
     >
-      <motion.div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: "45vh",
-          pointerEvents: "none",
-          background: "linear-gradient(to bottom, rgba(247,241,228,0) 0%, #F7F1E4 92%)",
-          opacity: bgFade,
-        }}
-      />
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: "22vh",
-          pointerEvents: "none",
-          background: "linear-gradient(to bottom, rgba(247,241,228,0) 0%, #F7F1E4 100%)",
-        }}
-      />
-
       <div
         style={{
           position: "relative",

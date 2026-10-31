@@ -1,4 +1,4 @@
-import LeftNav from "@/components/LeftNav";
+import TopNav from "@/components/TopNav";
 import Hero from "@/components/Hero";
 import HowIThink from "@/components/HowIThink";
 import CaseIndex from "@/components/CaseIndex";
@@ -13,8 +13,8 @@ export const metadata = {
 
 export default function Express() {
   return (
-    <main className="bg-paper min-h-screen md:pl-[88px] pt-[52px] md:pt-0">
-      <LeftNav />
+    <main className="bg-paper min-h-screen">
+      <TopNav />
       <Hero />
       <HowIThink />
       <CaseIndex />
