@@ -19,14 +19,6 @@ export default function Resume() {
           >
             Descargar CV ↓
           </a>
-          <a
-            href="/files/charly-gourves-cv-ats.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block mt-3 text-center font-mono text-[11px] text-muted underline underline-offset-2 hover:text-rust"
-          >
-            versión solo texto (1 página)
-          </a>
         </Reveal>
       </div>
     </section>
