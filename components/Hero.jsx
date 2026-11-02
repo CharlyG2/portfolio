@@ -165,7 +165,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.6 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
           style={{ marginTop: "64px", display: "flex", flexWrap: "wrap", gap: "10px" }}
         >
           {TAGS.map((tag, i) => (
@@ -191,7 +191,7 @@ export default function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 1.9 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
         style={{
           position: "relative",
           zIndex: 2,

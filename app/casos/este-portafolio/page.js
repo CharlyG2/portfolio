@@ -36,7 +36,7 @@ export default function PortfolioCase() {
           quería, así que el sitio terminó convirtiéndose en un museo 3D
           que se recorre: cada caso de estudio es una obra, con su ficha y
           su resultado. Para quien prefiere leer rápido, el mismo contenido
-          vive en el modo express.
+          vive en la versión rápida.
         </p>
         <p>
           Varias direcciones se descartaron por completo cuando dejaron de

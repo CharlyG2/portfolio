@@ -18,7 +18,7 @@ export default function Home() {
           <li><Link href="/casos/landing-viajes">Landing de seguros de viaje: +16% de visitas</Link></li>
           <li><Link href="/casos/funnel-csi">Funnel de contratación CSI: −12% de abandono</Link></li>
           <li><Link href="/casos/beliv">Beliv: app de bienestar en un Design Sprint de 3 días</Link></li>
-          <li><Link href="/express">Portafolio completo en modo express</Link></li>
+          <li><Link href="/express">Portafolio en versión rápida</Link></li>
           <li><a href="mailto:gourvestoro@gmail.com">gourvestoro@gmail.com</a></li>
         </ul>
       </div>
@@ -29,7 +29,7 @@ export default function Home() {
             El museo 3D necesita JavaScript.
           </p>
           <Link href="/express" className="underline text-rust">
-            Ver el portafolio completo en modo express
+            Ver el portafolio en versión rápida
           </Link>
         </div>
       </noscript>

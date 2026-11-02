@@ -10,7 +10,7 @@ import { PROFILE } from "@/lib/profile";
 
 const CV_HREF = "/files/charly-gourves-cv.pdf";
 
-function Loader({ text }) {
+function Loader({ text, fastLabel }) {
   const { progress, active } = useProgress();
   const [hidden, setHidden] = useState(false);
   useEffect(() => {
@@ -30,6 +30,12 @@ function Loader({ text }) {
       <div className="mt-5 w-48 h-[2px] bg-ink/15 overflow-hidden">
         <div className="h-full bg-rust transition-all duration-300" style={{ width: `${progress}%` }} />
       </div>
+      <Link
+        href="/express"
+        className="mt-8 rounded-full bg-ink text-paper px-5 py-2.5 text-sm font-medium hover:bg-[#3a3128] transition-colors"
+      >
+        {fastLabel} →
+      </Link>
     </div>
   );
 }
@@ -163,7 +169,7 @@ export default function Museum() {
         />
       </Canvas>
 
-      <Loader text={t.loading} />
+      <Loader text={t.loading} fastLabel={t.express} />
 
       {/* Cabecera */}
       <header className="absolute top-0 left-0 right-0 z-20 p-4 md:p-6 flex flex-col gap-3 pointer-events-none">
