@@ -21,13 +21,13 @@ export default function BelivCase() {
     <CaseLayout>
       <CaseHeader
         eyebrow="caso 04 · beliv"
-        title="Una app de bienestar completa, en un sprint de 3 días"
+        title="Beliv: de un sprint de 3 días a una app validada y desarrollada"
         tldr="BICE VIDA necesitaba una app de bienestar propia, rápido y con el menor costo posible. Lideré el equipo de diseño en un design sprint de 3 días: de la idea a las pantallas completas de onboarding, home, salud, social, gamificación y telesalud."
         stats={[
           { n: "3", l: "días de sprint" },
           { n: "8+", l: "pantallas de producto diseñadas" },
-          { n: "1", l: "equipo de diseño liderado" },
         ]}
+        meta="Rol: Design Lead del sprint · Equipo: desarrolladores, PO, agilistas y leads"
       />
 
       <CaseSection tag="contexto" title="Bienestar, no solo seguros">
@@ -73,6 +73,15 @@ export default function BelivCase() {
           fue lo que hizo posible cubrir tantas pantallas sin sacrificar
           consistencia. Diseñar el sistema antes es lo que permitió que un
           sprint así fuera viable.
+        </p>
+      </CaseSection>
+
+      <CaseSection tag="resultado" title="Del sprint a producto real">
+        <p>
+          Después del sprint, la app se probó con usuarios y pasó a
+          desarrollo. Más adelante, la empresa integró Beliv dentro de otra
+          de sus plataformas internas, así que lo diseñado en esos 3 días
+          siguió vivo como parte de un producto más grande.
         </p>
       </CaseSection>
 

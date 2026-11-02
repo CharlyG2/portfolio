@@ -15,8 +15,9 @@ export default function FunnelCase() {
         stats={[
           { n: "10 → 8", l: "pasos en el flujo de contratación" },
           { n: "-12%", l: "tasa de abandono (primer mes)" },
-          { n: "+2%", l: "tasa de contratación (primer mes)" },
+          { n: "+2%", l: "contratación (relativo, primer mes)" },
         ]}
+        meta="Rol: Product Designer · Equipo: desarrolladores, PO, agilistas y leads · Trabajo por sprints según el roadmap del PO"
       />
 
       <CaseSection tag="contexto" title="Un flujo largo para un producto simple">
@@ -30,11 +31,11 @@ export default function FunnelCase() {
 
       <CaseSection tag="problema" title="Los datos mostraban dónde se rompía">
         <p>
-          Con analítica real del funnel (mayo 2026) se identificó una caída
-          crítica en uno de los primeros pasos — antes de que el usuario
-          llegara siquiera a ver los planes disponibles. Ahí estaba
-          perdiendo a la mayoría de la gente que abandonaba el flujo
-          completo.
+          Con analítica real del funnel (mayo 2026) se vio un patrón claro:
+          la conversión era baja aunque entraba gente al flujo, y casi nadie
+          pasaba del paso 4. La causa era que el flujo pedía demasiada
+          información al inicio, antes de que la persona llegara siquiera a
+          ver los planes disponibles.
         </p>
       </CaseSection>
 
@@ -79,7 +80,8 @@ export default function FunnelCase() {
       <CaseSection tag="impacto" title="Medido un mes después de implementado">
         <p>
           Con el flujo de 8 pasos en producción, la tasa de abandono bajó un
-          12% y la tasa de contratación subió un 2% en el primer mes tras el
+          12% y la tasa de contratación subió un 2% sobre la que había, en el
+          primer mes tras el
           lanzamiento — medido comparando el mismo período de embudo antes y
           después del cambio.
         </p>

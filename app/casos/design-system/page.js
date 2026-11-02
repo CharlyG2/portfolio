@@ -13,12 +13,14 @@ export default function DesignSystemCase() {
       <CaseHeader
         eyebrow="caso 01 · design system"
         title="89 componentes, un solo lenguaje: el primer Design System de BICE VIDA"
-        tldr="BICE VIDA nunca había tenido un lenguaje de diseño compartido entre equipos. Propuse la metodología (diseño atómico), definí las reglas de entrada y salida junto al equipo de desarrollo, y hoy el sistema tiene 89 componentes en producción entre app y web."
+        tldr="BICE VIDA nunca había tenido un lenguaje de diseño compartido entre equipos. Propuse la metodología (diseño atómico), definí las reglas de entrada y salida junto al equipo de desarrollo, y hoy el sistema tiene 89 componentes en producción entre app y web, y es la base de trabajo de 10 células de producto."
         stats={[
           { n: "118", l: "componentes diseñados (Figma)" },
           { n: "89", l: "componentes en producción (Storybook)" },
-          { n: "22", l: "fundamentos definidos (tokens, tipografía, grillas)" },
+          { n: "10", l: "células de producto trabajando con el sistema" },
+          { n: "90%", l: "del trabajo de esas células se apoya en el DS" },
         ]}
+        meta="Rol: Product Designer, a cargo del Design System · Equipo: 10 células con desarrolladores, PO, agilistas y leads"
       />
 
       <CaseSection tag="contexto" title="Un producto vivo sin idioma común">
@@ -146,6 +148,13 @@ export default function DesignSystemCase() {
             </p>
           </div>
         </div>
+        <p>
+          Hoy las 10 células de producto trabajan con el sistema, y cerca
+          del 90% de lo que construyen se apoya en él. El efecto más
+          concreto se vio en las historias de usuario: como los componentes
+          ya estaban resueltos, el alcance de frontend de cada historia se
+          redujo, y ese tiempo se liberó para tareas de backend.
+        </p>
         <p>
           La brecha entre lo diseñado y lo que ya está en producción no es un
           problema — es la señal de que el pipeline sigue activo: el sistema
