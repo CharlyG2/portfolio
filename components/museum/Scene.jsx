@@ -439,7 +439,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
 
       {/* Sala 1: muro principal */}
       <Artwork
-        src="/images/viaje-landing-unificada.png"
+        src="/images/museo/viaje-landing-unificada.jpg"
         w={4.2}
         h={3.15}
         position={[0, 2.85, -7.92]}
@@ -457,7 +457,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
 
       {/* Sala 2: muro izquierdo, funnel CSI */}
       <Artwork
-        src="/images/csi-landing.png"
+        src="/images/museo/csi-landing.jpg"
         w={3}
         h={2.25}
         position={[-7.92, 2.7, -3.3]}
@@ -474,9 +474,9 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
 
       {/* Sala 3: tríptico Beliv */}
       {[
-        ["/images/beliv-home.png", -4.3],
-        ["/images/beliv-score.png", -3],
-        ["/images/beliv-salud.png", -1.7],
+        ["/images/museo/beliv-home.jpg", -4.3],
+        ["/images/museo/beliv-score.jpg", -3],
+        ["/images/museo/beliv-salud.jpg", -1.7],
       ].map(([src, z]) => (
         <Artwork
           key={src}

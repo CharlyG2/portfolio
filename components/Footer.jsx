@@ -2,10 +2,15 @@ import MagneticLink from "./MagneticLink";
 
 export default function Footer() {
   return (
-    <footer className="py-24 md:py-32 bg-paperSoft border-t border-line">
+    <footer id="contacto" className="py-24 md:py-32 bg-paperSoft border-t border-line">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <p className="font-display text-3xl md:text-5xl text-ink max-w-2xl leading-tight">
-          ¿Tienes un problema que valga la pena resolver?
+          Busco mi próximo equipo de producto.
+        </p>
+        <p className="mt-5 text-base md:text-lg text-muted max-w-xl leading-relaxed">
+          Estoy disponible para roles de Product Designer y Design Systems
+          en Santiago, en modalidad híbrida o la que use tu equipo.
+          Escríbeme y conversemos.
         </p>
         <div className="mt-10 flex flex-wrap gap-x-4 gap-y-4 font-mono text-sm">
           <MagneticLink

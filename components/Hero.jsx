@@ -108,7 +108,7 @@ export default function Hero() {
           }}
         >
           <span style={{ width: "6px", height: "6px", background: "#AC5142", display: "inline-block" }} />
-          Product Designer — Design Systems
+          Senior Product Designer — Design Systems
         </motion.div>
 
         <motion.h1
@@ -165,7 +165,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.6 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
           style={{ marginTop: "64px", display: "flex", flexWrap: "wrap", gap: "10px" }}
         >
           {TAGS.map((tag, i) => (
@@ -191,7 +191,7 @@ export default function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 1.9 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
         style={{
           position: "relative",
           zIndex: 2,
@@ -204,8 +204,11 @@ export default function Hero() {
         }}
       >
         <span style={{ color: "#8a8072" }}>
-          Santiago, Chile — sigo iterando este portafolio (
-          <span style={{ color: "#AC5142" }}>nada es definitivo →</span>)
+          Santiago, Chile —{" "}
+          <span style={{ color: "#7FB89A" }}>disponible para trabajar</span> ·{" "}
+          <a href="#contacto" style={{ color: "#F7F1E4", textDecoration: "underline", textUnderlineOffset: "3px" }}>
+            conversemos →
+          </a>
         </span>
       </motion.div>
     </section>

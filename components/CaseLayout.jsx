@@ -3,7 +3,7 @@ import Nav from "./Nav";
 import Footer from "./Footer";
 import Reveal from "./Reveal";
 
-export function CaseHeader({ eyebrow, title, tldr, stats }) {
+export function CaseHeader({ eyebrow, title, tldr, stats, meta }) {
   return (
     <header className="pt-40 pb-16 md:pt-48 md:pb-20 border-b border-line">
       <div className="max-w-content mx-auto px-6 md:px-10">
@@ -28,6 +28,11 @@ export function CaseHeader({ eyebrow, title, tldr, stats }) {
         >
           {tldr}
         </p>
+        {meta && (
+          <p className="mt-6 font-mono text-xs text-muted max-w-2xl leading-relaxed">
+            {meta}
+          </p>
+        )}
         {stats && (
           <div className="mt-10 flex flex-wrap gap-x-10 gap-y-4">
             {stats.map((s) => (

@@ -15,8 +15,9 @@ export default function ViajesCase() {
         stats={[
           { n: "2", l: "productos unificados en una sola landing" },
           { n: "+16%", l: "más visitantes a la landing" },
-          { n: "+2%", l: "en tasa de contratación" },
+          { n: "+2%", l: "en contratación (relativo, corto plazo)" },
         ]}
+        meta="Rol: Product Designer · Equipo: desarrolladores, PO, agilistas y leads · Trabajo por sprints según el roadmap del PO"
       />
 
       <CaseSection tag="contexto" title="Dos productos, una misma necesidad">
@@ -35,6 +36,22 @@ export default function ViajesCase() {
           ya sepa cuál necesita antes de cotizar — una decisión que en
           realidad depende de cuánto viaja al año, algo que muchas personas
           no tienen claro de entrada.
+        </p>
+      </CaseSection>
+
+      <CaseSection tag="research" title="Mirar a la competencia antes de proponer">
+        <p>
+          Antes de diseñar, hice un benchmark de la competencia: qué
+          funcionalidades ofrecía cada seguro de viaje, cómo explicaba su
+          propósito y cómo guiaba a la persona hasta elegir un plan. Lo
+          complementé con research sobre cómo las personas entendían la
+          diferencia entre un seguro por viaje y uno anual.
+        </p>
+        <p>
+          Con eso descarté las alternativas que repetían patrones que ya
+          existían en el mercado sin resolver la duda real, y las que
+          saturaban la pantalla con información que no era necesaria para
+          tomar la decisión.
         </p>
       </CaseSection>
 
@@ -70,15 +87,10 @@ export default function ViajesCase() {
       <CaseSection tag="impacto" title="Más visitas, más contratación">
         <p>
           Tras el lanzamiento de la landing unificada, el tráfico aumentó un
-          16% y la tasa de contratación un 2%. El feedback cualitativo
+          16% y la tasa de contratación un 2% sobre la que había, en el
+          corto plazo. El feedback cualitativo
           también fue positivo — los usuarios entendieron la comparación sin
           necesitar ayuda adicional para elegir entre los dos productos.
-        </p>
-        <p className="text-mutedLight text-sm">
-          El proceso pasó por varias iteraciones antes de llegar a esta
-          versión, pero no quedaron documentadas — por eso este caso se
-          centra en el resultado final y su impacto medido, no en el
-          proceso de descarte de alternativas.
         </p>
       </CaseSection>
     </CaseLayout>
