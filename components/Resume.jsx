@@ -6,8 +6,8 @@ export default function Resume() {
       <div className="max-w-content mx-auto px-6 md:px-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <Reveal>
           <p className="text-sm text-muted max-w-md">
-            Mi experiencia, resultados y formación en un PDF de dos
-            páginas.
+            Mi experiencia, resultados y formación en un PDF de una
+            página.
           </p>
         </Reveal>
         <Reveal delay={0.1}>
