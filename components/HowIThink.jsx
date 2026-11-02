@@ -56,7 +56,7 @@ export default function HowIThink() {
         <Reveal>
           <p className="eyebrow text-rust mb-4">cómo pienso</p>
           <h2 className="font-display text-2xl md:text-3xl text-ink max-w-lg mb-12">
-            Seis pasos, siempre en el mismo orden.
+            Seis principios que guían mi trabajo.
           </h2>
         </Reveal>
 

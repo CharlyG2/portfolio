@@ -9,7 +9,7 @@ export default function PortfolioCase() {
   return (
     <CaseLayout>
       <CaseHeader
-        eyebrow="caso 06 · este portafolio"
+        eyebrow="bonus · este portafolio"
         title="Este mismo portafolio, como caso de estudio"
         tldr="Dirigí cada decisión de diseño — paleta, tipografía, estructura, copy, interacciones — e iteré con Claude para la implementación del código, usando Cursor para correrlo localmente y GitHub Desktop + Vercel para publicarlo."
         stats={[
@@ -30,12 +30,13 @@ export default function PortfolioCase() {
 
       <CaseSection tag="proceso" title="Iterar de verdad, no aceptar la primera versión">
         <p>
-          El hero pasó por más de ocho versiones distintas antes de llegar a
-          la actual: probamos texto a dos columnas, collage de capturas
-          superpuestas, fondo oscuro con blobs de color, hasta llegar a la
-          versión final — nombre gigante con tratamiento tipográfico mixto
-          (relleno y contorno), profundidad real con paralaje entre planos,
-          y microinteracción al pasar el cursor.
+          La portada pasó por más de ocho versiones: texto a dos columnas,
+          collage de capturas, fondo oscuro con blobs de color, un hero
+          tipográfico con paralaje. Ninguna mostraba el trabajo como yo
+          quería, así que el sitio terminó convirtiéndose en un museo 3D
+          que se recorre: cada caso de estudio es una obra, con su ficha y
+          su resultado. Para quien prefiere leer rápido, el mismo contenido
+          vive en el modo express.
         </p>
         <p>
           Varias direcciones se descartaron por completo cuando dejaron de
@@ -47,12 +48,12 @@ export default function PortfolioCase() {
         </p>
       </CaseSection>
 
-      <CaseSection tag="cómo lo hice" title="Honestamente, no sabía programar cuando empecé esto">
+      <CaseSection tag="cómo lo hice" title="Diseñar y dirigir la implementación con IA">
         <p>
-          Lo que sí sabía era exactamente qué quería que se sintiera —
-          así que en vez de aprender React desde cero, dirigí cada
-          decisión y dejé que Claude escribiera el código. Cualquiera
-          podría hacer esto mismo, así fue paso a paso:
+          No vengo de programar, pero sabía exactamente qué quería que se
+          sintiera. En vez de aprender React desde cero, dirigí cada
+          decisión de diseño y usé Claude para escribir el código,
+          revisando cada resultado. Así fue el flujo, paso a paso:
         </p>
         <HowIBuiltThis />
       </CaseSection>

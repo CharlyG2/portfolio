@@ -40,10 +40,29 @@ const mono = IBM_Plex_Mono({
   variable: "--font-mono",
 });
 
+const TITLE = "Charly Gourves — Senior Product Designer, Design Systems";
+const DESCRIPTION =
+  "Senior Product Designer con 8+ años, especializado en Design Systems. Disponible para trabajar en Santiago, modalidad híbrida. Casos con métricas reales: seguros, viajes y bienestar.";
+
 export const metadata = {
-  title: "Charly Gourves — Product Designer, Design Systems",
-  description:
-    "Product Designer especializado en Design Systems, con foco en negocio. Casos de estudio reales: seguros, viajes y bienestar.",
+  metadataBase: new URL("https://charly-gourves.vercel.app"),
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "/",
+    siteName: "Charly Gourves",
+    locale: "es_CL",
+    type: "website",
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Museo 3D del portafolio de Charly Gourves" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: ["/og.jpg"],
+  },
 };
 
 export default function RootLayout({ children }) {

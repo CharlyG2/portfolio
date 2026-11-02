@@ -6,8 +6,8 @@ export default function Resume() {
       <div className="max-w-content mx-auto px-6 md:px-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <Reveal>
           <p className="text-sm text-muted max-w-md">
-            El portafolio cuenta la historia mejor que el CV — pero si
-            necesitas el resumen formal para RRHH, acá está.
+            Mi experiencia, resultados y formación en un PDF de dos
+            páginas.
           </p>
         </Reveal>
         <Reveal delay={0.1}>
@@ -18,6 +18,14 @@ export default function Resume() {
             className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest px-5 py-3 rounded-full border border-rust text-rust hover:bg-rust hover:text-white transition-colors shrink-0"
           >
             Descargar CV ↓
+          </a>
+          <a
+            href="/files/charly-gourves-cv-ats.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block mt-3 text-center font-mono text-[11px] text-muted underline underline-offset-2 hover:text-rust"
+          >
+            versión solo texto (1 página)
           </a>
         </Reveal>
       </div>

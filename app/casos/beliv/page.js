@@ -20,7 +20,7 @@ export default function BelivCase() {
   return (
     <CaseLayout>
       <CaseHeader
-        eyebrow="caso 05 · beliv"
+        eyebrow="caso 04 · beliv"
         title="Una app de bienestar completa, en un sprint de 3 días"
         tldr="BICE VIDA necesitaba una app de bienestar propia, rápido y con el menor costo posible. Lideré el equipo de diseño en un design sprint de 3 días: de la idea a las pantallas completas de onboarding, home, salud, social, gamificación y telesalud."
         stats={[

@@ -12,7 +12,7 @@ export default function DesignSystemCase() {
     <CaseLayout>
       <CaseHeader
         eyebrow="caso 01 · design system"
-        title="Construir el primer Design System de BICE VIDA"
+        title="89 componentes, un solo lenguaje: el primer Design System de BICE VIDA"
         tldr="BICE VIDA nunca había tenido un lenguaje de diseño compartido entre equipos. Propuse la metodología (diseño atómico), definí las reglas de entrada y salida junto al equipo de desarrollo, y hoy el sistema tiene 89 componentes en producción entre app y web."
         stats={[
           { n: "118", l: "componentes diseñados (Figma)" },

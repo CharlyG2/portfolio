@@ -6,6 +6,7 @@ import { Canvas } from "@react-three/fiber";
 import { CameraControls, useProgress } from "@react-three/drei";
 import Scene from "./Scene";
 import { OVERVIEW, OVERVIEW_MOBILE, STATIONS, UI } from "@/lib/museum";
+import { PROFILE } from "@/lib/profile";
 
 const CV_HREF = "/files/charly-gourves-cv.pdf";
 
@@ -54,6 +55,13 @@ function PillButton({ children, onClick, href, download, active, accent }) {
       : "bg-paper/85 backdrop-blur text-ink border-ink/15 hover:border-ink/50"
   }`;
   if (href) {
+    if (href.startsWith("mailto:")) {
+      return (
+        <a href={href} className={cls}>
+          {children}
+        </a>
+      );
+    }
     const external = href.endsWith(".pdf");
     return external ? (
       <a href={href} className={cls} target="_blank" rel="noopener noreferrer" download={download}>
@@ -162,6 +170,11 @@ export default function Museum() {
         <div className="pointer-events-auto self-start rounded-xl bg-paper/90 backdrop-blur border border-ink/10 px-4 py-2.5 shadow-sm">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-rust">{t.kicker}</p>
           <p className="font-serif text-lg md:text-xl text-ink leading-tight">Museo Charly Gourves</p>
+          <p className="text-xs md:text-sm text-ink/80 mt-1">{PROFILE.role[lang]}</p>
+          <p className="mt-1.5 inline-flex items-center gap-1.5 text-[11px] md:text-xs font-medium text-[#2F6B4F]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#2F6B4F]" aria-hidden="true" />
+            {PROFILE.availability[lang]}
+          </p>
         </div>
         <nav className="pointer-events-auto flex flex-wrap gap-2" aria-label="Controles del museo">
           <div className="inline-flex rounded-full border border-ink/15 bg-paper/85 backdrop-blur overflow-hidden text-xs md:text-sm font-medium">
@@ -185,6 +198,9 @@ export default function Museum() {
           </PillButton>
           <PillButton href={CV_HREF} download>
             ↓ {t.cv}
+          </PillButton>
+          <PillButton href={`mailto:${PROFILE.email}`}>
+            {t.contact}
           </PillButton>
           <PillButton onClick={() => setShowHelp((v) => !v)} active={showHelp}>
             ?
