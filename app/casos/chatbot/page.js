@@ -2,7 +2,7 @@ import CaseLayout, { CaseHeader, CaseSection } from "@/components/CaseLayout";
 import Screenshot from "@/components/Screenshot";
 
 export const metadata = {
-  title: "Roma IA: un asistente que ayuda a elegir mejor — Charly Gourves",
+  title: "Chatbot: un asistente que ayuda a elegir mejor — Charly Gourves",
 };
 
 const funnel = [
@@ -11,19 +11,19 @@ const funnel = [
   { stage: "Interés en planes", n: 193, pct: 69.4 },
 ];
 
-export default function RomaIACase() {
+export default function ChatbotCase() {
   return (
     <CaseLayout>
       <CaseHeader
-        eyebrow="caso 05 · roma ia"
-        title="Roma IA: un asistente virtual que ayuda a decidir según el producto"
-        tldr="Implementé Roma IA, un chatbot que acompaña al usuario dentro de cada producto de BICE VIDA para que tome una mejor decisión. Lo alimentamos con la base de datos de los productos, los dolores de los usuarios y las preguntas frecuentes del call center."
+        eyebrow="caso 05 · chatbot"
+        title="Chatbot: un asistente virtual que ayuda a decidir según el producto"
+        tldr="Implementé un chatbot con IA que acompaña al usuario dentro de cada producto de BICE VIDA para que tome una mejor decisión. Lo alimentamos con la base de datos de los productos, los dolores de los usuarios y las preguntas frecuentes del call center."
         stats={[
           { n: "611", l: "conversaciones en un mes (sep 2026)" },
           { n: "100%", l: "atendidas por el bot, sin derivar a ejecutivo" },
           { n: "69%", l: "de los contactos llegó a interés en planes" },
         ]}
-        meta="Rol: Product Designer · implementación del asistente · Producto: Seguro Complementario de Salud, BICE VIDA"
+        meta="Rol: Product Designer · implementación del asistente · Plataforma: Roma AI · Producto: Seguro Complementario de Salud, BICE VIDA"
       />
 
       <CaseSection tag="contexto" title="Las mismas dudas, una y otra vez">
@@ -37,7 +37,7 @@ export default function RomaIACase() {
 
       <CaseSection tag="propuesta" title="Un asistente que sabe en qué producto estás">
         <p>
-          Roma IA no es un chat genérico. Sabe en qué producto se encuentra
+          No es un chat genérico. Sabe en qué producto se encuentra
           el usuario y responde con ese contexto. Para eso lo alimentamos con
           tres fuentes:
         </p>
@@ -60,7 +60,7 @@ export default function RomaIACase() {
           iniciar la contratación.
         </p>
         <Screenshot
-          src="/images/roma/roma-chat.jpg"
+          src="/images/chatbot/chatbot-chat.jpg"
           alt="Landing del Seguro Complementario de Salud con el asistente virtual abierto"
           caption="El asistente dentro de la landing CSI — ayuda a comparar, cotizar y contratar"
           width={1600}
@@ -75,7 +75,7 @@ export default function RomaIACase() {
           solo y hasta dónde llegó cada persona en el embudo de venta.
         </p>
         <Screenshot
-          src="/images/roma/roma-analiticas.jpg"
+          src="/images/chatbot/chatbot-analiticas.jpg"
           alt="Panel de analíticas con conversaciones, mensajes y atención por bot versus ejecutivo"
           caption="Panel de analíticas — septiembre 2026"
           width={1600}
@@ -101,7 +101,7 @@ export default function RomaIACase() {
           ))}
         </div>
         <Screenshot
-          src="/images/roma/roma-embudo.jpg"
+          src="/images/chatbot/chatbot-embudo.jpg"
           alt="Embudo de ventas y gráfico de conversaciones y mensajes por día"
           caption="Embudo de ventas y conversaciones por día"
           width={1600}

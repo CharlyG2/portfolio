@@ -61,11 +61,11 @@ const cases = [
     thumb: "/images/beliv-home.png",
   },
   {
-    slug: "roma-ia",
+    slug: "chatbot",
     color: "signal",
     role: "Product Designer · BICE VIDA · Chile",
     industries: "Insurtech · IA conversacional",
-    title: "Roma IA: un asistente que ayuda a elegir según el producto",
+    title: "Chatbot: un asistente que ayuda a elegir según el producto",
     impactStat: "611", impactLabel: "conversaciones en un mes",
     secondaryStat: "100% resueltas por el bot",
     tags: ["Chatbot", "IA", "Datos"],
