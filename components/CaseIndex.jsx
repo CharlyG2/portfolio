@@ -60,6 +60,17 @@ const cases = [
     tags: ["Mobile App", "Design Sprint", "Liderazgo"],
     thumb: "/images/beliv-home.png",
   },
+  {
+    slug: "roma-ia",
+    color: "signal",
+    role: "Product Designer · BICE VIDA · Chile",
+    industries: "Insurtech · IA conversacional",
+    title: "Roma IA: un asistente que ayuda a elegir según el producto",
+    impactStat: "611", impactLabel: "conversaciones en un mes",
+    secondaryStat: "100% resueltas por el bot",
+    tags: ["Chatbot", "IA", "Datos"],
+    thumb: null,
+  },
 ];
 
 const bonusCase = {
@@ -120,7 +131,7 @@ export default function CaseIndex() {
         <Reveal>
           <p className="eyebrow text-rust mb-4">trabajo</p>
           <h2 className="font-display text-2xl md:text-3xl text-ink max-w-xl">
-            Cuatro proyectos, cuatro decisiones de negocio detrás de cada
+            Cinco proyectos, cinco decisiones de negocio detrás de cada
             pantalla.
           </h2>
         </Reveal>

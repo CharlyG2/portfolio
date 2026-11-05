@@ -6,6 +6,7 @@ const PATHS = [
   "/casos/landing-viajes",
   "/casos/funnel-csi",
   "/casos/beliv",
+  "/casos/roma-ia",
   "/casos/este-portafolio",
 ];
 

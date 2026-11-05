@@ -88,6 +88,69 @@ export default function DesignSystemCase() {
         </div>
       </CaseSection>
 
+      <CaseSection tag="fundamentos" title="Tokens de color: el nombre dice para qué sirve">
+        <p>
+          Antes de los componentes vienen los fundamentos. Definí los tokens
+          de color de la compañía con nombres semánticos: en vez de usar
+          "blue-500" directo en un botón, el componente usa{" "}
+          <code className="font-mono text-xs text-ink">
+            color-bg-action-primary-default
+          </code>
+          , y ese token apunta al color de la paleta. Si mañana cambia la
+          marca, se cambia el valor del token y todos los componentes se
+          actualizan solos.
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 not-prose">
+          {[
+            { n: "43", l: "background" },
+            { n: "36", l: "text" },
+            { n: "26", l: "icon" },
+            { n: "8", l: "border" },
+          ].map((g) => (
+            <div key={g.l} className="rounded-xl border border-line p-5">
+              <div className="stat-number text-2xl text-ink">{g.n}</div>
+              <p className="font-mono text-xs text-signalSoft mt-1">{g.l}</p>
+            </div>
+          ))}
+        </div>
+        <p>
+          Son 113 tokens organizados en cuatro grupos y, dentro de cada uno,
+          por categoría semántica: canvas, surface, action, feedback,
+          decorative. Cada token de acción tiene sus estados (default,
+          hover, pressed, disabled), así desarrollo no tiene que adivinar qué
+          color va cuando el usuario pasa el mouse. La notación con slash (/)
+          coincide con las variables de Figma, para que diseño y código
+          hablen exactamente con las mismas palabras.
+        </p>
+        <Screenshot
+          src="/images/ds/tokens-color-background.png"
+          alt="Tabla de tokens de color de fondo: canvas, surface y action con sus estados"
+          caption="Background — canvas, surface y action, cada uno con su valor de paleta y para qué se usa"
+          width={1440}
+          height={2400}
+        />
+        <p>
+          Los tokens de texto e iconos incluyen además los pares "on": qué
+          color de texto va sobre cada fondo decorativo. Así el contraste
+          (AA/AAA) queda resuelto en el sistema y no depende de cada
+          diseñador.
+        </p>
+        <Screenshot
+          src="/images/ds/tokens-color-text.png"
+          alt="Tabla de tokens de color de texto: primary, secondary, tertiary, placeholder, disabled, brand y link"
+          caption="Text — jerarquía de texto y estados de los links"
+          width={1440}
+          height={1180}
+        />
+        <Screenshot
+          src="/images/ds/tokens-color-border.png"
+          alt="Tabla de tokens de color de borde: default, disabled, selected, focus e inverse"
+          caption="Border — incluye el anillo de foco para navegación con teclado"
+          width={1440}
+          height={990}
+        />
+      </CaseSection>
+
       <CaseSection tag="evidencia" title="El Textfield como ejemplo de profundidad">
         <p>
           En vez de documentar componentes de forma superficial, cada uno
@@ -102,6 +165,34 @@ export default function DesignSystemCase() {
           Prueba los estados — este componente reproduce las reglas reales
           definidas en la documentación del sistema.
         </p>
+        <p>
+          El mismo nivel de detalle se aplica a componentes más complejos,
+          como el File uploader: un componente base para copiar con sus
+          variantes (un archivo, varios archivos, error), su versión mobile,
+          la anatomía numerada pieza por pieza, espaciados, tamaños mínimos y
+          máximos, y ejemplos de uso correcto e incorrecto.
+        </p>
+        <Screenshot
+          src="/images/ds/file-uploader-estados.png"
+          alt="Variantes del File uploader: default, un archivo subiendo, error y múltiples archivos"
+          caption="File uploader — componente base con sus variantes"
+          width={960}
+          height={1580}
+        />
+        <Screenshot
+          src="/images/ds/file-uploader-anatomia.png"
+          alt="Anatomía numerada del componente file: icono, título, descripción, barra de progreso, botón y borde"
+          caption="Anatomía — cada pieza numerada y explicada, incluidos los estados de error"
+          width={1531}
+          height={1000}
+        />
+        <Screenshot
+          src="/images/ds/file-uploader-uso.png"
+          alt="Uso correcto e incorrecto del ancho del File uploader en mobile"
+          caption="Uso correcto e incorrecto — reglas claras para que cada célula lo aplique igual"
+          width={1240}
+          height={1080}
+        />
       </CaseSection>
 
       <CaseSection tag="en producto" title="El mismo sistema, dos productos distintos">

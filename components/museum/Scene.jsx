@@ -493,6 +493,18 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
       <Plaque position={[7.95, 1.2, -0.55]} rotY={-Math.PI / 2} title={texts.beliv.title} subtitle="Design Sprint · 8+" lang={lang} />
       <Spot position={[5.6, 5.8, -3]} target={[8, 2.5, -3]} intensity={2.4} angle={0.5} />
 
+      {/* Sala 5: muro del fondo, Roma IA */}
+      <Artwork
+        src="/images/museo/roma-ia.jpg"
+        w={2.7}
+        h={1.5}
+        position={[-4.9, 2.75, -7.92]}
+        hovered={hoveredId === "roma-ia"}
+        {...bind("roma-ia")}
+      />
+      <Plaque position={[-4.9, 1.45, -7.95]} title={texts["roma-ia"].title} subtitle="BICE VIDA · 611" lang={lang} />
+      <Spot position={[-4.9, 5.8, -5.2]} target={[-4.9, 2.75, -8]} intensity={2.4} angle={0.42} />
+
       {/* Sala 4: manifiesto */}
       <ManifestoWall lang={lang} hovered={hoveredId === "manifiesto"} {...bind("manifiesto")} />
       <Spot position={[5.6, 5.8, 3.2]} target={[8, 2.4, 3.2]} intensity={2} angle={0.5} />

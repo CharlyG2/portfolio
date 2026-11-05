@@ -18,6 +18,7 @@ export default function Home() {
           <li><Link href="/casos/landing-viajes">Landing de seguros de viaje: +16% de visitas</Link></li>
           <li><Link href="/casos/funnel-csi">Funnel de contratación CSI: −12% de abandono</Link></li>
           <li><Link href="/casos/beliv">Beliv: app de bienestar en un Design Sprint de 3 días</Link></li>
+          <li><Link href="/casos/roma-ia">Roma IA: asistente virtual con 611 conversaciones en un mes</Link></li>
           <li><Link href="/express">Portafolio en versión rápida</Link></li>
           <li><a href="mailto:gourvestoro@gmail.com">gourvestoro@gmail.com</a></li>
         </ul>
