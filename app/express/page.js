@@ -8,7 +8,7 @@ import Resume from "@/components/Resume";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "Charly Gourves — Senior Product Designer · Versión rápida",
+  title: "Charly Gourves — Product Designer · Versión rápida",
 };
 
 export default function Express() {
