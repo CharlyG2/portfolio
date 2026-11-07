@@ -39,9 +39,9 @@ const mono = IBM_Plex_Mono({
   variable: "--font-mono",
 });
 
-const TITLE = "Charly Gourves — Senior Product Designer, Design Systems";
+const TITLE = "Charly Gourves — Product Designer generalista";
 const DESCRIPTION =
-  "Senior Product Designer con 8+ años, especializado en Design Systems. Disponible para trabajar en Santiago, modalidad híbrida. Casos con métricas reales: seguros, viajes y bienestar.";
+  "Product Designer generalista con 8+ años, con experiencia en Design Systems. Disponible para trabajar en Santiago, modalidad híbrida. Casos con métricas reales: seguros, viajes y bienestar.";
 
 export const metadata = {
   metadataBase: new URL("https://charly-gourves.vercel.app"),
