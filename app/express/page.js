@@ -1,6 +1,7 @@
 import TopNav from "@/components/TopNav";
 import Hero from "@/components/Hero";
 import HowIThink from "@/components/HowIThink";
+import HowIWork from "@/components/HowIWork";
 import CaseIndex from "@/components/CaseIndex";
 import About from "@/components/About";
 import Trajectory from "@/components/Trajectory";
@@ -17,6 +18,7 @@ export default function Express() {
       <TopNav />
       <Hero />
       <HowIThink />
+      <HowIWork />
       <CaseIndex />
       <About />
       <Trajectory />
