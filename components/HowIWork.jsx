@@ -14,7 +14,7 @@ const stages = [
   {
     title: "Datos cualitativos y cuantitativos",
     text: "Cruzo analítica de comportamiento con la voz del cliente para encontrar dónde la gente se cae o tiene fricción.",
-    tools: ["GA4", "Pendo", "Hotjar", "NPS", "CES / CSAT", "Call center"],
+    tools: ["GA4", "Pendo", "Hotjar", "NPS", "ISN", "CES / CSAT", "Call center"],
   },
   {
     title: "Diseño end-to-end",
