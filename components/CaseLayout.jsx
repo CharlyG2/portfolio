@@ -53,7 +53,7 @@ export function CaseHeader({ eyebrow, title, tldr, stats, meta }) {
 export function CaseSection({ tag, title, children }) {
   return (
     <Reveal className="py-16 md:py-20 border-b border-line">
-      <div className="max-w-content mx-auto px-6 md:px-10 grid md:grid-cols-[200px_1fr] gap-8">
+      <div className="max-w-content mx-auto px-6 md:px-10 grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8">
         <div>
           <span className="font-mono text-xs text-mutedLight">
             &lt;{tag}&gt;
@@ -62,7 +62,7 @@ export function CaseSection({ tag, title, children }) {
             {title}
           </h2>
         </div>
-        <div className="text-sm md:text-base text-muted leading-relaxed max-w-2xl space-y-4">
+        <div className="min-w-0 text-sm md:text-base text-muted leading-relaxed max-w-2xl space-y-4">
           {children}
         </div>
       </div>

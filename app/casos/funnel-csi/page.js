@@ -1,5 +1,6 @@
 import CaseLayout, { CaseHeader, CaseSection } from "@/components/CaseLayout";
 import FunnelDiagram from "@/components/FunnelDiagram";
+import WireframeFlow from "@/components/WireframeFlow";
 
 export const metadata = {
   title: "Reducir el funnel de contratación CSI — Charly Gourves",
@@ -11,13 +12,14 @@ export default function FunnelCase() {
       <CaseHeader
         eyebrow="caso 03 · funnel csi"
         title="De 10 a 8 pasos: menos fricción, más contratación"
-        tldr="El flujo de contratación del Seguro Complementario de Salud tenía 10 pasos. Con datos reales de abandono y dos leyes de UX como marco de decisión, lo reduje a 8 — eliminando un paso completo y reordenando otro. Un mes después de implementado: -12% en abandono, +2% en contratación."
+        tldr="El flujo de contratación del Seguro Complementario de Salud tenía 10 pasos. Con analítica de abandono, entrevistas a unas 15 personas y dos leyes de UX como marco de decisión, lo reduje a 8 — eliminando un paso completo y reordenando otro. Un mes después de implementado: -12% en abandono, +2% en contratación."
         stats={[
           { n: "10 → 8", l: "pasos en el flujo de contratación" },
+          { n: "~15", l: "personas entrevistadas" },
           { n: "-12%", l: "tasa de abandono (primer mes)" },
           { n: "+2%", l: "contratación (relativo, primer mes)" },
         ]}
-        meta="Rol: Product Designer · Equipo: desarrolladores, PO, agilistas y leads · Trabajo por sprints según el roadmap del PO"
+        meta="Rol: Product Designer, de discovery a implementación · Equipo: desarrolladores, PO, agilistas, leads y stakeholders de negocio · Herramientas: GA4, Pendo, Hotjar, Figma"
       />
 
       <CaseSection tag="contexto" title="Un flujo largo para un producto simple">
@@ -36,6 +38,40 @@ export default function FunnelCase() {
           pasaba del paso 4. La causa era que el flujo pedía demasiada
           información al inicio, antes de que la persona llegara siquiera a
           ver los planes disponibles.
+        </p>
+      </CaseSection>
+
+      <CaseSection tag="research" title="Datos para ver dónde, entrevistas para entender por qué">
+        <p>
+          La analítica decía en qué paso se caía la gente, pero no por qué.
+          Para eso combiné dos tipos de datos:
+        </p>
+        <div className="grid sm:grid-cols-2 gap-4 not-prose">
+          <div className="rounded-xl border border-line p-5">
+            <p className="font-mono text-xs text-signalSoft mb-3">
+              Cuantitativo · GA4, Pendo y Hotjar
+            </p>
+            <p className="text-sm text-muted">
+              Embudo por paso, mapas de calor y grabaciones de sesión para
+              ver dónde había más abandono y más fricción dentro de cada
+              pantalla.
+            </p>
+          </div>
+          <div className="rounded-xl border border-line p-5">
+            <p className="font-mono text-xs text-signalSoft mb-3">
+              Cualitativo · ~15 entrevistas
+            </p>
+            <p className="text-sm text-muted">
+              Entrevistas con usuarios para verificar cuánta confianza les
+              daba cada paso y cuáles sentían necesarios. Con eso decidimos
+              qué mantener, qué fusionar y qué quitar.
+            </p>
+          </div>
+        </div>
+        <p>
+          Antes de diseñar, también hicimos sesiones con los stakeholders de
+          negocio: ellos son el punto de partida de qué se puede cambiar en
+          un proceso de contratación de seguros y qué no.
         </p>
       </CaseSection>
 
@@ -75,6 +111,18 @@ export default function FunnelCase() {
           pago, donde el usuario ya está comprometido con la compra.
         </p>
         <FunnelDiagram />
+        <p>
+          Con el flujo definido, bajé cada paso a wireframes para revisar la
+          estructura con el PO y desarrollo antes de pasar a alta fidelidad
+          con los componentes del Design System.
+        </p>
+        <WireframeFlow />
+        <p>
+          Los hallazgos de las entrevistas y las decisiones de diseño
+          quedaron documentados en Confluence y registrados en Airtable,
+          para que cualquier célula pudiera entender por qué el flujo
+          quedó así.
+        </p>
       </CaseSection>
 
       <CaseSection tag="impacto" title="Medido un mes después de implementado">
