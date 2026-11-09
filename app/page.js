@@ -7,9 +7,9 @@ export default function Home() {
       {/* Resumen en texto para buscadores, vistas previas y lectores de
           pantalla: el museo 3D solo se arma en el navegador. */}
       <div className="sr-only">
-        <h1>Charly Gourves — Product Designer generalista</h1>
+        <h1>Charly Gourves — Product Designer</h1>
         <p>
-          Product Designer generalista con más de 8 años de experiencia,
+          Product Designer con más de 8 años de experiencia,
           incluyendo Design Systems. Disponible para trabajar en
           Santiago, modalidad híbrida.
         </p>
