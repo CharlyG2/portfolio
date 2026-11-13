@@ -8,7 +8,7 @@ export default function Footer() {
           Busco mi próximo equipo de producto.
         </p>
         <p className="mt-5 text-base md:text-lg text-muted max-w-xl leading-relaxed">
-          Estoy disponible para roles de Product Designer y Design Systems
+          Estoy disponible para roles de AI Product Designer, Product Designer y Design Systems
           en Santiago, en modalidad híbrida o la que use tu equipo.
           Escríbeme y conversemos.
         </p>

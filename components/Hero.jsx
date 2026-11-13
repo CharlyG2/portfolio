@@ -108,7 +108,7 @@ export default function Hero() {
           }}
         >
           <span style={{ width: "6px", height: "6px", background: "#AC5142", display: "inline-block" }} />
-          Product Designer
+          AI Product Designer
         </motion.div>
 
         <motion.h1

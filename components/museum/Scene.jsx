@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useTexture, MeshReflectorMaterial, RoundedBox } from "@react-three/drei";
 
-const WALL = "#EFE9DF";
+const WALL = "#E9E2D6";
 const FRAME_DARK = "#1c1712";
 const FRAME_GOLD = "#B8925A";
 
@@ -63,7 +63,7 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   ctx.fillText(line, x, y);
 }
 
-function Spot({ position, target, intensity = 2.2, angle = 0.42, color = "#fff4e0" }) {
+function Spot({ position, target, intensity = 2.2, angle = 0.42, color = "#ffeccc" }) {
   const targetObj = useMemo(() => new THREE.Object3D(), []);
   useEffect(() => {
     targetObj.position.set(...target);
@@ -75,9 +75,9 @@ function Spot({ position, target, intensity = 2.2, angle = 0.42, color = "#fff4e
       <spotLight
         position={position}
         target={targetObj}
-        intensity={intensity}
+        intensity={intensity * 1.5}
         angle={angle}
-        penumbra={0.65}
+        penumbra={0.55}
         decay={0}
         distance={14}
         color={color}
@@ -114,7 +114,8 @@ function Artwork({ src, w, h, position, rotY = 0, frame = FRAME_DARK, mat = 0.12
       </mesh>
       <mesh position={[0, 0, 0.056]}>
         <planeGeometry args={[w, h]} />
-        <meshStandardMaterial map={tex} roughness={0.55} />
+        {/* sin luz propia: la captura se ve nítida y con sus colores reales */}
+        <meshBasicMaterial map={tex} color="#ececec" />
       </mesh>
     </group>
   );
@@ -196,11 +197,80 @@ function SystemSculpture({ hovered, ...handlers }) {
   );
 }
 
+// Usuarios sintéticos: esferas que bajan en espiral por el embudo. Algunas
+// abandonan en el camino (salen disparadas y se apagan), como en el funnel real.
+const SYNTH_COUNT = 42;
+function SyntheticUsers({ rings, topY, step, hovered }) {
+  const ref = useRef();
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const users = useMemo(
+    () =>
+      Array.from({ length: SYNTH_COUNT }, (_, i) => ({
+        offset: i / SYNTH_COUNT,
+        angle: (i * 2.399963) % (Math.PI * 2),
+        // ~1 de cada 4 abandona, en un anillo distinto cada vez
+        dropAt: (i * 7) % 4 === 0 ? 1 + ((i * 3) % (rings.length - 2)) : -1,
+      })),
+    [rings.length]
+  );
+  const colors = useMemo(() => {
+    const c = new THREE.Color();
+    const arr = new Float32Array(SYNTH_COUNT * 3);
+    users.forEach((u, i) => {
+      c.set(u.dropAt >= 0 ? "#F43F5E" : "#5FE3D0");
+      c.toArray(arr, i * 3);
+    });
+    return arr;
+  }, [users]);
+  useEffect(() => {
+    for (let i = 0; i < SYNTH_COUNT; i++) {
+      ref.current.setColorAt(i, new THREE.Color().fromArray(colors, i * 3));
+    }
+    ref.current.instanceColor.needsUpdate = true;
+  }, [colors]);
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    const speed = hovered ? 0.16 : 0.09;
+    const t0 = clock.elapsedTime * speed;
+    users.forEach((u, i) => {
+      const p = (t0 + u.offset) % 1; // 0 arriba → 1 abajo
+      const ringF = p * (rings.length - 1);
+      const ri = Math.floor(ringF);
+      const r = THREE.MathUtils.lerp(rings[ri], rings[Math.min(ri + 1, rings.length - 1)], ringF - ri) * 1.12 + 0.04;
+      const a = u.angle + p * Math.PI * 5;
+      let x = Math.cos(a) * r;
+      let z = Math.sin(a) * r;
+      let y = topY + 0.35 - p * ((rings.length - 1) * step + 0.55);
+      let scale = 1;
+      if (u.dropAt >= 0 && ringF > u.dropAt) {
+        // abandona: sale hacia afuera y cae
+        const k = Math.min(1, (ringF - u.dropAt) / 1.6);
+        x += Math.cos(a) * k * 0.9;
+        z += Math.sin(a) * k * 0.9;
+        y -= k * k * 0.8;
+        scale = 1 - k;
+      }
+      dummy.position.set(x, y, z);
+      dummy.scale.setScalar(Math.max(scale, 0.001));
+      dummy.updateMatrix();
+      ref.current.setMatrixAt(i, dummy.matrix);
+    });
+    ref.current.instanceMatrix.needsUpdate = true;
+  });
+  return (
+    <instancedMesh ref={ref} args={[null, null, SYNTH_COUNT]} frustumCulled={false}>
+      <sphereGeometry args={[0.034, 12, 12]} />
+      <meshBasicMaterial toneMapped={false} />
+    </instancedMesh>
+  );
+}
+
 // Escultura del funnel: anillos que se angostan, de 10 pasos a 8.
-function FunnelSculpture() {
+function FunnelSculpture({ hovered }) {
   const rings = [0.62, 0.55, 0.48, 0.41, 0.34, 0.27, 0.2, 0.14];
   return (
     <group position={[-6.4, 0, -0.6]}>
+      <SyntheticUsers rings={rings} topY={2.35} step={0.17} hovered={hovered} />
       <Pedestal position={[0, 0, 0]} w={1.2} h={0.9} d={1.2} />
       {rings.map((r, i) => (
         <mesh key={i} position={[0, 2.35 - i * 0.17, 0]} castShadow>
@@ -209,6 +279,8 @@ function FunnelSculpture() {
             color={new THREE.Color("#FFB020").lerp(new THREE.Color("#AC5142"), i / rings.length)}
             roughness={0.3}
             metalness={0.25}
+            transparent
+            opacity={0.82}
           />
         </mesh>
       ))}
@@ -273,14 +345,14 @@ function WallTitle({ lang }) {
       ctx.clearRect(0, 0, w, h);
       ctx.fillStyle = "#221D18";
       ctx.textAlign = "center";
-      ctx.font = "600 130px Georgia, 'Times New Roman', serif";
-      ctx.fillText("Charly Gourves", w / 2, 150);
+      ctx.font = "600 150px Georgia, 'Times New Roman', serif";
+      ctx.fillText("Charly Gourves", w / 2, 160);
       ctx.fillStyle = "#AC5142";
-      ctx.font = "44px 'Courier New', monospace";
+      ctx.font = "600 48px 'Courier New', monospace";
       ctx.fillText(
-        lang === "en" ? "PRODUCT DESIGN · PERMANENT EXHIBITION" : "DISEÑO DE PRODUCTO · EXPOSICIÓN PERMANENTE",
+        lang === "en" ? "AI PRODUCT DESIGNER · PERMANENT EXHIBITION" : "AI PRODUCT DESIGNER · EXPOSICIÓN PERMANENTE",
         w / 2,
-        235
+        250
       );
     },
     [lang],
@@ -350,13 +422,13 @@ function Room() {
           blur={[300, 80]}
           resolution={512}
           mixBlur={1}
-          mixStrength={0.6}
-          roughness={0.85}
+          mixStrength={1.6}
+          roughness={0.75}
           depthScale={1}
           minDepthThreshold={0.4}
           maxDepthThreshold={1.2}
-          color="#8a735f"
-          metalness={0.2}
+          color="#2b2420"
+          metalness={0.4}
         />
       </mesh>
       {/* muros */}
@@ -395,7 +467,7 @@ function Room() {
       {[-3.5, 0, 3.5, 7, 10.5].map((z) => (
         <mesh key={z} position={[0, 5.98, z - 1]} rotation={[Math.PI / 2, 0, 0]}>
           <planeGeometry args={[10, 1.1]} />
-          <meshBasicMaterial color="#FFF8EA" toneMapped={false} />
+          <meshBasicMaterial color="#FFF3DC" />
         </mesh>
       ))}
       {/* rieles de luz */}
@@ -428,11 +500,11 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
 
   return (
     <>
-      <color attach="background" args={["#d9d2c6"]} />
-      <fog attach="fog" args={["#d9d2c6", 18, 34]} />
-      <ambientLight intensity={0.8} />
-      <hemisphereLight args={["#fff8ec", "#3a2c22", 0.55]} />
-      <directionalLight position={[4, 8, 6]} intensity={0.5} />
+      <color attach="background" args={["#1a1613"]} />
+      <fog attach="fog" args={["#1a1613", 16, 30]} />
+      <ambientLight intensity={0.32} />
+      <hemisphereLight args={["#fff3df", "#2a211b", 0.45]} />
+      <directionalLight position={[4, 8, 6]} intensity={0.25} />
 
       <Room />
       <WallTitle lang={lang} />
@@ -467,7 +539,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
       />
       <Plaque position={[-7.95, 1.6, -5.3]} rotY={Math.PI / 2} title={texts["funnel-csi"].title} subtitle="BICE VIDA · −12%" lang={lang} />
       <group {...bind("funnel-csi")}>
-        <FunnelSculpture />
+        <FunnelSculpture hovered={hoveredId === "funnel-csi"} />
       </group>
       <Spot position={[-5.6, 5.8, -3.3]} target={[-8, 2.6, -3.3]} intensity={2.4} />
       <Spot position={[-5.6, 5.8, -0.6]} target={[-6.4, 1.6, -0.6]} intensity={1.4} angle={0.3} />

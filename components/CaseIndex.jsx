@@ -46,7 +46,7 @@ const cases = [
     title: "Reducir el funnel de contratación CSI",
     impactStat: "-12%", impactLabel: "abandono",
     secondaryStat: "+2% contratación",
-    tags: ["Funnel", "UX Laws", "Datos"],
+    tags: ["Funnel", "Usuarios sintéticos · IA", "Datos"],
     thumb: null,
     proof: "steps",
   },

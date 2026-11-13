@@ -1,9 +1,14 @@
+import { pageMetadata } from "@/lib/seo";
 import CaseLayout, { CaseHeader, CaseSection } from "@/components/CaseLayout";
 import Screenshot from "@/components/Screenshot";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Chatbot: un asistente que ayuda a elegir mejor — Charly Gourves",
-};
+  description:
+    "Diseño de un asistente virtual con IA para el Seguro Complementario de Salud de BICE VIDA: 611 conversaciones en su primer mes, todas resueltas por el bot.",
+  path: "/casos/chatbot",
+  image: "/images/museo/chatbot.jpg",
+});
 
 const funnel = [
   { stage: "Contacto inicial", n: 278, pct: 100 },

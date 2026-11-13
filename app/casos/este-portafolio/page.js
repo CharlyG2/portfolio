@@ -1,9 +1,13 @@
+import { pageMetadata } from "@/lib/seo";
 import CaseLayout, { CaseHeader, CaseSection } from "@/components/CaseLayout";
 import HowIBuiltThis from "@/components/HowIBuiltThis";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Este portafolio: proceso y sistema — Charly Gourves",
-};
+  description:
+    "Cómo diseñé y construí este portafolio en forma de museo 3D: decisiones, sistema visual y lo que aprendí en el proceso.",
+  path: "/casos/este-portafolio",
+});
 
 export default function PortfolioCase() {
   return (

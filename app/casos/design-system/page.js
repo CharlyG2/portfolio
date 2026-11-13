@@ -1,11 +1,15 @@
+import { pageMetadata } from "@/lib/seo";
 import CaseLayout, { CaseHeader, CaseSection } from "@/components/CaseLayout";
 import TextfieldDemo from "@/components/TextfieldDemo";
 import Screenshot from "@/components/Screenshot";
 import SystemGraph from "@/components/SystemGraph";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "El Design System de BICE VIDA — Charly Gourves",
-};
+  description:
+    "El Design System de BICE VIDA: 89 componentes en producción, usados por 10 células de producto.",
+  path: "/casos/design-system",
+});
 
 export default function DesignSystemCase() {
   return (
