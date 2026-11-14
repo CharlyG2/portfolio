@@ -1,9 +1,14 @@
+import { pageMetadata } from "@/lib/seo";
 import CaseLayout, { CaseHeader, CaseSection } from "@/components/CaseLayout";
 import Screenshot from "@/components/Screenshot";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Unificar dos seguros de viaje en una sola landing — Charly Gourves",
-};
+  description:
+    "Dos seguros de viaje que competían entre sí, unificados en una landing con comparador: +16% de visitas y +2% de contratación.",
+  path: "/casos/landing-viajes",
+  image: "/images/museo/viaje-landing-unificada.jpg",
+});
 
 export default function ViajesCase() {
   return (

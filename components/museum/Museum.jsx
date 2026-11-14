@@ -22,17 +22,17 @@ function Loader({ text, fastLabel }) {
   if (hidden) return null;
   return (
     <div
-      className={`absolute inset-0 z-30 flex flex-col items-center justify-center bg-[#d9d2c6] transition-opacity duration-500 ${
+      className={`absolute inset-0 z-30 flex flex-col items-center justify-center bg-[#1a1613] transition-opacity duration-500 ${
         !active && progress >= 100 ? "opacity-0" : "opacity-100"
       }`}
     >
-      <p className="font-serif italic text-2xl text-ink">{text}</p>
-      <div className="mt-5 w-48 h-[2px] bg-ink/15 overflow-hidden">
+      <p className="font-serif italic text-2xl text-paper">{text}</p>
+      <div className="mt-5 w-48 h-[2px] bg-paper/15 overflow-hidden">
         <div className="h-full bg-rust transition-all duration-300" style={{ width: `${progress}%` }} />
       </div>
       <Link
         href="/express"
-        className="mt-8 rounded-full bg-ink text-paper px-5 py-2.5 text-sm font-medium hover:bg-[#3a3128] transition-colors"
+        className="mt-8 rounded-full bg-paper text-ink px-5 py-2.5 text-sm font-medium hover:bg-white transition-colors"
       >
         {fastLabel} →
       </Link>
@@ -53,7 +53,7 @@ function useIsMobile() {
 }
 
 function PillButton({ children, onClick, href, download, active, accent }) {
-  const cls = `inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs md:text-sm font-medium border transition-colors ${
+  const cls = `shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs md:text-sm font-medium border transition-colors ${
     accent
       ? "bg-ink text-paper border-ink hover:bg-[#3a3128]"
       : active
@@ -147,7 +147,7 @@ export default function Museum() {
   const hovered = STATIONS.find((s) => s.id === hoveredId);
 
   return (
-    <div className="fixed inset-0 bg-[#d9d2c6] overflow-hidden select-none">
+    <div className="fixed inset-0 bg-[#1a1613] overflow-hidden select-none">
       <Canvas
         dpr={[1, 1.75]}
         camera={{ position: OVERVIEW.pos, fov: 50, near: 0.1, far: 80 }}
@@ -171,19 +171,20 @@ export default function Museum() {
 
       <Loader text={t.loading} fastLabel={t.express} />
 
-      {/* Cabecera */}
-      <header className="absolute top-0 left-0 right-0 z-20 p-4 md:p-6 flex flex-col gap-3 pointer-events-none">
-        <div className="pointer-events-auto self-start rounded-xl bg-paper/90 backdrop-blur border border-ink/10 px-4 py-2.5 shadow-sm">
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-rust">{t.kicker}</p>
-          <p className="font-serif text-lg md:text-xl text-ink leading-tight">Museo Charly Gourves</p>
-          <p className="text-xs md:text-sm text-ink/80 mt-1">{PROFILE.role[lang]}</p>
-          <p className="mt-1.5 inline-flex items-center gap-1.5 text-[11px] md:text-xs font-medium text-[#2F6B4F]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#2F6B4F]" aria-hidden="true" />
-            {PROFILE.availability[lang]}
-          </p>
+      {/* Cabecera: marca a la izquierda, controles en una sola fila */}
+      <header className="absolute top-0 left-0 right-0 z-20 p-3 md:p-6 flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-4 pointer-events-none">
+        <div className="pointer-events-auto self-start flex items-center gap-2.5 rounded-full bg-[#14110e]/70 backdrop-blur border border-white/10 pl-3 pr-4 py-1.5 text-paper">
+          <span className="w-2 h-2 rounded-full bg-[#5FE3D0] shadow-[0_0_10px_#5FE3D0]" aria-hidden="true" />
+          <span className="font-serif text-sm md:text-base leading-none">Charly Gourves</span>
+          <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.16em] text-[#8FE9DA] leading-none">
+            {PROFILE.role[lang]}
+          </span>
         </div>
-        <nav className="pointer-events-auto flex flex-wrap gap-2" aria-label="Controles del museo">
-          <div className="inline-flex rounded-full border border-ink/15 bg-paper/85 backdrop-blur overflow-hidden text-xs md:text-sm font-medium">
+        <nav
+          className="pointer-events-auto flex flex-nowrap md:flex-wrap md:justify-end gap-2 overflow-x-auto -mx-3 px-3 md:mx-0 md:px-0 pb-1 md:pb-0 [scrollbar-width:none]"
+          aria-label="Controles del museo"
+        >
+          <div className="shrink-0 inline-flex rounded-full border border-ink/15 bg-paper/85 backdrop-blur overflow-hidden text-xs md:text-sm font-medium">
             {["es", "en"].map((l) => (
               <button
                 key={l}
@@ -196,9 +197,11 @@ export default function Museum() {
               </button>
             ))}
           </div>
-          <PillButton onClick={() => setSelected(null)} active={!selected}>
-            {t.overview}
-          </PillButton>
+          {selected && (
+            <PillButton onClick={() => setSelected(null)}>
+              {t.overview}
+            </PillButton>
+          )}
           <PillButton href="/express" accent>
             {t.express}
           </PillButton>
@@ -213,11 +216,31 @@ export default function Museum() {
           </PillButton>
         </nav>
         {showHelp && (
-          <p className="pointer-events-auto max-w-sm rounded-xl bg-ink text-paper text-sm leading-relaxed px-4 py-3 shadow-lg">
+          <p className="pointer-events-auto max-w-sm rounded-xl bg-ink text-paper text-sm leading-relaxed px-4 py-3 shadow-lg md:absolute md:right-6 md:top-20">
             {t.help}
           </p>
         )}
       </header>
+
+      {/* Portada: lo primero que lee un reclutador, sobre la sala */}
+      <div
+        className={`absolute inset-x-0 bottom-0 z-10 pointer-events-none transition-opacity duration-500 ${
+          selected ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        <div className="bg-gradient-to-t from-[#14110e] via-[#14110e]/80 to-transparent pt-20 md:pt-32 pb-24 md:pb-28 px-5 md:px-12">
+          <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#E08A74]">{t.kicker}</p>
+          <p className="font-serif text-paper leading-[0.95] mt-3 text-[38px] sm:text-5xl md:text-6xl xl:text-7xl">
+            {t.heroTitle}
+            <span className="block italic text-[#5FE3D0]">{t.heroAccent}</span>
+          </p>
+          <p className="mt-4 md:mt-5 max-w-xl text-sm md:text-base text-paper/75 leading-relaxed">{t.heroSub}</p>
+          <p className="mt-3 inline-flex items-center gap-2 text-xs md:text-sm text-paper/80">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#5FE3D0]" aria-hidden="true" />
+            {PROFILE.availability[lang]} · {PROFILE.location[lang]}
+          </p>
+        </div>
+      </div>
 
       {/* Etiqueta de la obra bajo el cursor */}
       {hovered && !selected && (
@@ -272,7 +295,7 @@ export default function Museum() {
       {/* Recorrido */}
       <div
         className={`absolute left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 transition-all ${
-          station && isMobile ? "bottom-[calc(48vh+20px)]" : "bottom-5 md:bottom-8"
+          station && isMobile ? "bottom-[calc(48vh+20px)]" : "bottom-5 md:bottom-10"
         }`}
       >
         <PillButton onClick={() => go(-1)}>← {isMobile ? "" : t.prev}</PillButton>
@@ -290,7 +313,7 @@ export default function Museum() {
       </div>
 
       {!selected && (
-        <p className="hidden md:block absolute right-6 bottom-8 z-10 max-w-[240px] text-right font-mono text-[11px] text-ink/60 pointer-events-none">
+        <p className="hidden md:block absolute right-6 bottom-10 z-10 max-w-[240px] text-right font-mono text-[11px] text-paper/80 pointer-events-none">
           {t.hint}
         </p>
       )}

@@ -51,7 +51,7 @@ export default function Preloader() {
           animate={{ y: exiting ? "-100%" : 0 }}
           transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
         >
-          <div className="font-mono text-sm tracking-widest" style={{ color: "#9C9082" }}>
+          <div className="font-mono text-sm tracking-widest" style={{ color: "#B5AA99" }}>
             &lt;cg/&gt;
           </div>
           <div

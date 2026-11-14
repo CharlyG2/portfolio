@@ -1,7 +1,7 @@
 const steps = [
   {
     n: "01",
-    color: "text-signal",
+    color: "text-signalInk",
     bg: "bg-signal/5",
     border: "border-signal/20",
     title: "Definí la dirección con Claude",
@@ -9,7 +9,7 @@ const steps = [
   },
   {
     n: "02",
-    color: "text-mint",
+    color: "text-mintInk",
     bg: "bg-mint/5",
     border: "border-mint/20",
     title: "Probé todo en Cursor",
@@ -17,7 +17,7 @@ const steps = [
   },
   {
     n: "03",
-    color: "text-amber",
+    color: "text-amberInk",
     bg: "bg-amber/5",
     border: "border-amber/20",
     title: "Metí capturas reales, no mockups",
@@ -25,7 +25,7 @@ const steps = [
   },
   {
     n: "04",
-    color: "text-rose",
+    color: "text-roseInk",
     bg: "bg-rose/5",
     border: "border-rose/20",
     title: "Cuando algo no funcionaba, lo dijimos",
@@ -41,7 +41,7 @@ const steps = [
   },
   {
     n: "06",
-    color: "text-signal",
+    color: "text-signalInk",
     bg: "bg-signal/5",
     border: "border-signal/20",
     title: "Publiqué en Vercel",

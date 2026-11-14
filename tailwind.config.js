@@ -17,15 +17,21 @@ module.exports = {
         lineLight: "#E0D3B8",
         signal: "#3D5AFE",
         signalSoft: "#5B72FF",
+        // Versiones para texto: los acentos originales no llegan a 4.5:1
+        // (WCAG AA) sobre el papel. Úsalas siempre que el color sea texto.
+        signalInk: "#2F45D0",
+        mintInk: "#076B67",
+        amberInk: "#8A5000",
+        roseInk: "#B8233F",
         amber: "#FFB020",
         mint: "#0EA5A0",
         rose: "#F43F5E",
         sunset: "#FD9047",
-        rust: "#AC5142",
+        rust: "#9A4536",
         sage: "#3D5A56",
         espresso: "#4D3532",
         muted: "#6B6259",
-        mutedLight: "#9C9082",
+        mutedLight: "#6E6457",
       },
       fontFamily: {
         display: ["var(--font-display)", "sans-serif"],

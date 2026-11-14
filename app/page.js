@@ -7,16 +7,16 @@ export default function Home() {
       {/* Resumen en texto para buscadores, vistas previas y lectores de
           pantalla: el museo 3D solo se arma en el navegador. */}
       <div className="sr-only">
-        <h1>Charly Gourves — Product Designer</h1>
+        <h1>Charly Gourves — AI Product Designer</h1>
         <p>
-          Product Designer con más de 8 años de experiencia,
-          incluyendo Design Systems. Disponible para trabajar en
+          AI Product Designer con más de 8 años de experiencia, diseñando productos con IA
+          (chatbots, usuarios sintéticos) y Design Systems. Disponible para trabajar en
           Santiago, modalidad híbrida.
         </p>
         <ul>
           <li><Link href="/casos/design-system">Design System de BICE VIDA: 89 componentes en producción</Link></li>
           <li><Link href="/casos/landing-viajes">Landing de seguros de viaje: +16% de visitas</Link></li>
-          <li><Link href="/casos/funnel-csi">Funnel de contratación CSI: −12% de abandono</Link></li>
+          <li><Link href="/casos/funnel-csi">Funnel de contratación CSI: −12% de abandono, validado con usuarios sintéticos generados con IA</Link></li>
           <li><Link href="/casos/beliv">Beliv: app de bienestar en un Design Sprint de 3 días</Link></li>
           <li><Link href="/casos/chatbot">Chatbot con IA: asistente virtual con 611 conversaciones en un mes</Link></li>
           <li><Link href="/express">Portafolio en versión rápida</Link></li>

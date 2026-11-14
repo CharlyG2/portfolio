@@ -1,9 +1,14 @@
+import { pageMetadata } from "@/lib/seo";
 import CaseLayout, { CaseHeader, CaseSection } from "@/components/CaseLayout";
 import MobileGallery from "@/components/MobileGallery";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Beliv: una app completa en un sprint de 3 días — Charly Gourves",
-};
+  description:
+    "Diseño de Beliv, app de bienestar de BICE VIDA, en un Design Sprint de 3 días donde lideré el diseño: 8+ pantallas, prueba con usuarios y paso a desarrollo.",
+  path: "/casos/beliv",
+  image: "/images/museo/beliv-home.jpg",
+});
 
 const screens = [
   { src: "/images/beliv-onboarding.png", alt: "Onboarding de Beliv", caption: "onboarding" },
