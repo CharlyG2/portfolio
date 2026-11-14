@@ -66,7 +66,7 @@ const cases = [
     role: "Product Designer · BICE VIDA · Chile",
     industries: "Insurtech · IA conversacional",
     title: "Chatbot: un asistente que ayuda a elegir según el producto",
-    impactStat: "611", impactLabel: "conversaciones en un mes",
+    impactStat: "1.058", impactLabel: "conversaciones en un mes",
     secondaryStat: "90% resueltas por el bot",
     tags: ["Chatbot", "IA", "Datos"],
     thumb: null,

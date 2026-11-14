@@ -575,7 +575,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
         hovered={hoveredId === "chatbot"}
         {...bind("chatbot")}
       />
-      <Plaque position={[-4.9, 1.45, -7.95]} title={texts["chatbot"].title} subtitle="BICE VIDA · 611" lang={lang} />
+      <Plaque position={[-4.9, 1.45, -7.95]} title={texts["chatbot"].title} subtitle="BICE VIDA · 1.058" lang={lang} />
       <Spot position={[-4.9, 5.8, -5.2]} target={[-4.9, 2.75, -8]} intensity={2.4} angle={0.42} />
 
       {/* Sala 4: manifiesto */}
