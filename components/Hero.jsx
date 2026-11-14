@@ -100,7 +100,7 @@ export default function Hero() {
             fontSize: "clamp(11px, 1.1vw, 13px)",
             letterSpacing: "0.14em",
             textTransform: "uppercase",
-            color: "#AC5142",
+            color: "#E08A74",
             marginBottom: "28px",
             display: "flex",
             alignItems: "center",
@@ -150,7 +150,7 @@ export default function Hero() {
                   transition={{ duration: 0.5, delay: wordDelayBase + i * wordStep, ease: [0.16, 1, 0.3, 1] }}
                   style={{
                     display: "inline-block",
-                    color: word === "entiende." ? "#AC5142" : "#F7F1E4",
+                    color: word === "entiende." ? "#E08A74" : "#F7F1E4",
                     paddingBottom: "0.08em",
                   }}
                 >
@@ -177,7 +177,7 @@ export default function Hero() {
                 letterSpacing: "0.04em",
                 padding: "7px 14px",
                 border: `1px solid ${i === activeTag ? "#3D5A56" : "#4a4238"}`,
-                color: i === activeTag ? "#3D5A56" : "#a89c8a",
+                color: i === activeTag ? "#8FD4C1" : "#B5AA99",
                 background: i === activeTag ? "rgba(247,241,228,0.08)" : "transparent",
                 transition: "all 0.4s ease",
               }}
@@ -203,7 +203,7 @@ export default function Hero() {
           letterSpacing: "0.03em",
         }}
       >
-        <span style={{ color: "#8a8072" }}>
+        <span style={{ color: "#A39888" }}>
           Santiago, Chile —{" "}
           <span style={{ color: "#7FB89A" }}>disponible para trabajar</span> ·{" "}
           <a href="#contacto" style={{ color: "#F7F1E4", textDecoration: "underline", textUnderlineOffset: "3px" }}>

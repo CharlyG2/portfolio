@@ -54,7 +54,7 @@ export default function Trajectory() {
     <section id="trayectoria" className="py-24 md:py-32 border-t border-line">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <Reveal>
-          <p className="eyebrow text-signal mb-4">trayectoria</p>
+          <p className="eyebrow text-signalInk mb-4">trayectoria</p>
           <h2 className="font-display text-2xl md:text-4xl text-ink leading-snug max-w-2xl">
             De construir interfaces a construir el sistema completo.
           </h2>

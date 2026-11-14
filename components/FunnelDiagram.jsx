@@ -25,8 +25,8 @@ const after = [
 function Step({ label, tone = "default" }) {
   const toneClasses = {
     default: "border-line text-muted",
-    removed: "border-red-400/40 text-red-400/70 line-through",
-    merged: "border-signal/50 text-signalSoft",
+    removed: "border-red-400/40 text-red-700 line-through",
+    merged: "border-signal/50 text-signalInk",
   };
   return (
     <div

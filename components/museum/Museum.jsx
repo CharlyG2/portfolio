@@ -176,7 +176,7 @@ export default function Museum() {
         <div className="pointer-events-auto self-start flex items-center gap-2.5 rounded-full bg-[#14110e]/70 backdrop-blur border border-white/10 pl-3 pr-4 py-1.5 text-paper">
           <span className="w-2 h-2 rounded-full bg-[#5FE3D0] shadow-[0_0_10px_#5FE3D0]" aria-hidden="true" />
           <span className="font-serif text-sm md:text-base leading-none">Charly Gourves</span>
-          <span className="hidden sm:inline font-mono text-[10px] md:text-[11px] uppercase tracking-[0.16em] text-paper/60 leading-none">
+          <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.16em] text-[#8FE9DA] leading-none">
             {PROFILE.role[lang]}
           </span>
         </div>
@@ -313,7 +313,7 @@ export default function Museum() {
       </div>
 
       {!selected && (
-        <p className="hidden md:block absolute right-6 bottom-10 z-10 max-w-[240px] text-right font-mono text-[11px] text-paper/55 pointer-events-none">
+        <p className="hidden md:block absolute right-6 bottom-10 z-10 max-w-[240px] text-right font-mono text-[11px] text-paper/80 pointer-events-none">
           {t.hint}
         </p>
       )}

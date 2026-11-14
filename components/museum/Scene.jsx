@@ -347,13 +347,10 @@ function WallTitle({ lang }) {
       ctx.textAlign = "center";
       ctx.font = "600 150px Georgia, 'Times New Roman', serif";
       ctx.fillText("Charly Gourves", w / 2, 160);
-      ctx.fillStyle = "#AC5142";
-      ctx.font = "600 48px 'Courier New', monospace";
-      ctx.fillText(
-        lang === "en" ? "AI PRODUCT DESIGNER · PERMANENT EXHIBITION" : "AI PRODUCT DESIGNER · EXPOSICIÓN PERMANENTE",
-        w / 2,
-        250
-      );
+      // rojo oscuro y en negrita: el rust original se perdía sobre el muro
+      ctx.fillStyle = "#6E2A1F";
+      ctx.font = "700 72px 'Courier New', monospace";
+      ctx.fillText("AI PRODUCT DESIGNER", w / 2, 262);
     },
     [lang],
     2048,

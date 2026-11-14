@@ -83,7 +83,7 @@ export default function FunnelCase() {
         </p>
         <div className="grid sm:grid-cols-2 gap-4 not-prose">
           <div className="rounded-xl border border-line p-5">
-            <p className="font-mono text-xs text-signalSoft mb-3">
+            <p className="font-mono text-xs text-signalInk mb-3">
               Cuantitativo · GA4, Pendo y Hotjar
             </p>
             <p className="text-sm text-muted">
@@ -93,7 +93,7 @@ export default function FunnelCase() {
             </p>
           </div>
           <div className="rounded-xl border border-line p-5">
-            <p className="font-mono text-xs text-signalSoft mb-3">
+            <p className="font-mono text-xs text-signalInk mb-3">
               Cualitativo · ~15 entrevistas
             </p>
             <p className="text-sm text-muted">
@@ -164,7 +164,7 @@ export default function FunnelCase() {
         </p>
         <div className="grid sm:grid-cols-2 gap-4 not-prose">
           <div className="rounded-xl border border-line p-5">
-            <p className="font-mono text-xs text-signalSoft mb-3">
+            <p className="font-mono text-xs text-signalInk mb-3">
               Ley de Hick
             </p>
             <p className="text-sm text-muted">
@@ -174,7 +174,7 @@ export default function FunnelCase() {
             </p>
           </div>
           <div className="rounded-xl border border-line p-5">
-            <p className="font-mono text-xs text-signalSoft mb-3">
+            <p className="font-mono text-xs text-signalInk mb-3">
               Ley de Miller
             </p>
             <p className="text-sm text-muted">

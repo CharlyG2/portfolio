@@ -8,10 +8,10 @@ import Reveal from "./Reveal";
 import { EASE } from "@/lib/motion";
 
 const colorMap = {
-  signal: { bg: "bg-signal", border: "border-signal/30", text: "text-signal", groupHover: "group-hover:text-signal", tag: "bg-signal/10 text-signal" },
-  mint: { bg: "bg-mint", border: "border-mint/30", text: "text-mint", groupHover: "group-hover:text-mint", tag: "bg-mint/10 text-mint" },
-  amber: { bg: "bg-amber", border: "border-amber/30", text: "text-amber", groupHover: "group-hover:text-amber", tag: "bg-amber/10 text-amber" },
-  rose: { bg: "bg-rose", border: "border-rose/30", text: "text-rose", groupHover: "group-hover:text-rose", tag: "bg-rose/10 text-rose" },
+  signal: { bg: "bg-signal", border: "border-signal/30", text: "text-signalInk", groupHover: "group-hover:text-signalInk", tag: "bg-signal/10 text-signalInk" },
+  mint: { bg: "bg-mint", border: "border-mint/30", text: "text-mintInk", groupHover: "group-hover:text-mintInk", tag: "bg-mint/10 text-mintInk" },
+  amber: { bg: "bg-amber", border: "border-amber/30", text: "text-amberInk", groupHover: "group-hover:text-amberInk", tag: "bg-amber/10 text-amberInk" },
+  rose: { bg: "bg-rose", border: "border-rose/30", text: "text-roseInk", groupHover: "group-hover:text-roseInk", tag: "bg-rose/10 text-roseInk" },
 };
 
 const cases = [
@@ -88,7 +88,7 @@ function StepsProof({ hovered }) {
       <span className={hovered ? "line-through text-mutedLight" : "text-muted"}>
         10 pasos
       </span>
-      {hovered && <span className="text-amber ml-1.5">→ 8 pasos</span>}
+      {hovered && <span className="text-amberInk ml-1.5">→ 8 pasos</span>}
     </p>
   );
 }
@@ -109,9 +109,9 @@ function ComponentStatesProof({ hovered }) {
               ? {
                   borderColor: idx === 0 ? "#3D5AFE" : "rgba(43,36,29,0.14)",
                   backgroundColor: idx === 0 ? "#3D5AFE" : "transparent",
-                  color: idx === 0 ? "#FFFFFF" : "#9C9082",
+                  color: idx === 0 ? "#FFFFFF" : "#6E6457",
                 }
-              : { borderColor: "rgba(43,36,29,0.14)", backgroundColor: "transparent", color: "#9C9082" }
+              : { borderColor: "rgba(43,36,29,0.14)", backgroundColor: "transparent", color: "#6E6457" }
           }
           transition={{ duration: 0.4, delay: hovered ? idx * 0.35 : 0, ease: EASE, repeat: hovered ? Infinity : 0, repeatDelay: 0.7, repeatType: "loop" }}
         >
@@ -218,13 +218,13 @@ export default function CaseIndex() {
             href={`/casos/${bonusCase.slug}`}
             className="mt-8 flex items-center gap-4 rounded-xl border border-line px-5 py-4 hover:border-amber/40 transition-colors group max-w-xl"
           >
-            <span className="font-mono text-[10px] uppercase tracking-widest text-amber shrink-0">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-amberInk shrink-0">
               Bonus
             </span>
             <span className="text-sm text-muted group-hover:text-ink transition-colors">
               {bonusCase.title.replace("Bonus: ", "")} — {bonusCase.description}
             </span>
-            <span className="ml-auto font-mono text-xs text-amber shrink-0">→</span>
+            <span className="ml-auto font-mono text-xs text-amberInk shrink-0">→</span>
           </Link>
         </Reveal>
       </div>

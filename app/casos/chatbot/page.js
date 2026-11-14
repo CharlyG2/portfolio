@@ -53,7 +53,7 @@ export default function ChatbotCase() {
             { t: "call center", d: "Las preguntas frecuentes que ya resolvía el equipo de atención." },
           ].map((s) => (
             <div key={s.t} className="rounded-xl border border-line p-5">
-              <p className="font-mono text-xs text-signalSoft mb-3">{s.t}</p>
+              <p className="font-mono text-xs text-signalInk mb-3">{s.t}</p>
               <p className="text-sm text-muted">{s.d}</p>
             </div>
           ))}
@@ -87,7 +87,7 @@ export default function ChatbotCase() {
           height={917}
         />
         <div className="not-prose rounded-xl border border-line p-5 space-y-4">
-          <p className="font-mono text-xs text-signalSoft">
+          <p className="font-mono text-xs text-signalInk">
             embudo de ventas · septiembre 2026
           </p>
           {funnel.map((f) => (

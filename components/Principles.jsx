@@ -30,7 +30,7 @@ export default function Principles() {
     <section className="py-24 md:py-32 border-t border-line">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <Reveal>
-          <p className="eyebrow text-signal mb-4">cómo pienso</p>
+          <p className="eyebrow text-signalInk mb-4">cómo pienso</p>
         </Reveal>
         <div className="grid md:grid-cols-3 gap-6 mt-8">
           {principles.map((p, i) => {

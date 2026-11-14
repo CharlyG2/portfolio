@@ -68,7 +68,7 @@ export default function DesignSystemCase() {
         </div>
         <div className="grid sm:grid-cols-2 gap-4 not-prose">
           <div className="rounded-xl border border-line p-5">
-            <p className="font-mono text-xs text-signalSoft mb-3">
+            <p className="font-mono text-xs text-signalInk mb-3">
               DoR — listo para empezar
             </p>
             <ul className="text-sm space-y-2 text-muted">
@@ -79,7 +79,7 @@ export default function DesignSystemCase() {
             </ul>
           </div>
           <div className="rounded-xl border border-line p-5">
-            <p className="font-mono text-xs text-signalSoft mb-3">
+            <p className="font-mono text-xs text-signalInk mb-3">
               DoD — listo para producción
             </p>
             <ul className="text-sm space-y-2 text-muted">
@@ -113,7 +113,7 @@ export default function DesignSystemCase() {
           ].map((g) => (
             <div key={g.l} className="rounded-xl border border-line p-5">
               <div className="stat-number text-2xl text-ink">{g.n}</div>
-              <p className="font-mono text-xs text-signalSoft mt-1">{g.l}</p>
+              <p className="font-mono text-xs text-signalInk mt-1">{g.l}</p>
             </div>
           ))}
         </div>
@@ -229,14 +229,14 @@ export default function DesignSystemCase() {
         </p>
         <div className="grid sm:grid-cols-2 gap-4 not-prose">
           <div className="rounded-xl border border-line p-5">
-            <p className="font-mono text-xs text-signalSoft mb-3">app</p>
+            <p className="font-mono text-xs text-signalInk mb-3">app</p>
             <p className="text-sm text-muted">
               8 fundamentos · 46 componentes diseñados · 31 en producción
               (Storybook)
             </p>
           </div>
           <div className="rounded-xl border border-line p-5">
-            <p className="font-mono text-xs text-signalSoft mb-3">web</p>
+            <p className="font-mono text-xs text-signalInk mb-3">web</p>
             <p className="text-sm text-muted">
               14 fundamentos · 72 componentes diseñados · 58 en producción
               (Storybook)

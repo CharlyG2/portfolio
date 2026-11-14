@@ -32,7 +32,7 @@ export default function TextfieldDemo() {
             onClick={() => setActive(s)}
             className={`font-mono text-[11px] uppercase tracking-widest px-3 py-1.5 rounded-full border transition-colors ${
               active === s
-                ? "border-signal text-signalSoft bg-signal/10"
+                ? "border-signal text-signalInk bg-signal/10"
                 : "border-line text-muted hover:text-ink"
             }`}
           >
@@ -53,9 +53,9 @@ export default function TextfieldDemo() {
         <span
           className={`text-xs mt-2 block ${
             active === "error"
-              ? "text-red-400"
+              ? "text-red-700"
               : active === "success"
-              ? "text-emerald-400"
+              ? "text-emerald-700"
               : "text-mutedLight"
           }`}
         >
