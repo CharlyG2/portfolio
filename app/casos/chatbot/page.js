@@ -11,9 +11,9 @@ export const metadata = pageMetadata({
 });
 
 const funnel = [
-  { stage: "Contacto inicial", n: 278, pct: 100 },
-  { stage: "Calificación", n: 225, pct: 80.9 },
-  { stage: "Interés en planes", n: 193, pct: 69.4 },
+  { stage: "Contacto inicial", n: 306, pct: 100 },
+  { stage: "Calificación", n: 248, pct: 81.0 },
+  { stage: "Interés en planes", n: 212, pct: 69.3 },
 ];
 
 export default function ChatbotCase() {
