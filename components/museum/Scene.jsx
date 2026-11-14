@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import { useTexture, MeshReflectorMaterial, RoundedBox } from "@react-three/drei";
+import { useTexture, MeshReflectorMaterial, RoundedBox, ContactShadows } from "@react-three/drei";
 
 const WALL = "#E9E2D6";
 const FRAME_DARK = "#1c1712";
@@ -126,19 +126,23 @@ function Plaque({ position, rotY = 0, title, subtitle, lang }) {
     (ctx, w, h) => {
       ctx.fillStyle = "#FBF8F2";
       ctx.fillRect(0, 0, w, h);
-      ctx.fillStyle = "#221D18";
-      ctx.font = "600 64px Georgia, 'Times New Roman', serif";
-      wrapText(ctx, title, 48, 110, w - 96, 74);
-      ctx.fillStyle = "#6B6259";
-      ctx.font = "36px 'Courier New', monospace";
-      wrapText(ctx, subtitle, 48, h - 90, w - 96, 44);
+      ctx.strokeStyle = "#D8CDBB";
+      ctx.lineWidth = 6;
+      ctx.strokeRect(3, 3, w - 6, h - 6);
+      ctx.fillStyle = "#1A1511";
+      ctx.font = "700 72px Georgia, 'Times New Roman', serif";
+      wrapText(ctx, title, 48, 115, w - 96, 82);
+      ctx.fillStyle = "#6E2A1F";
+      ctx.font = "700 46px 'Courier New', monospace";
+      wrapText(ctx, subtitle, 48, h - 60, w - 96, 46);
     },
     [title, subtitle, lang]
   );
   return (
     <mesh position={position} rotation={[0, rotY, 0]}>
-      <planeGeometry args={[0.9, 0.45]} />
-      <meshStandardMaterial map={tex} roughness={0.8} />
+      <planeGeometry args={[1.1, 0.55]} />
+      {/* sin sombreado: la cartela se lee igual dentro y fuera del foco */}
+      <meshBasicMaterial map={tex} color="#fbf6ec" />
     </mesh>
   );
 }
@@ -364,16 +368,21 @@ function WallTitle({ lang }) {
   );
 }
 
-function Bench({ position }) {
+function Bench({ position, rotY = 0 }) {
   return (
-    <group position={position}>
+    <group position={position} rotation={[0, rotY, 0]}>
       <RoundedBox args={[2.6, 0.14, 0.7]} radius={0.04} position={[0, 0.48, 0]} castShadow>
-        <meshStandardMaterial color="#6b4a33" roughness={0.6} />
+        <meshStandardMaterial color="#D9B98F" roughness={0.55} />
       </RoundedBox>
+      {/* canto más oscuro para que la tabla se lea como volumen */}
+      <mesh position={[0, 0.405, 0]}>
+        <boxGeometry args={[2.5, 0.02, 0.62]} />
+        <meshStandardMaterial color="#8C6A45" roughness={0.6} />
+      </mesh>
       {[-1.05, 1.05].map((x) => (
-        <mesh key={x} position={[x, 0.22, 0]}>
-          <boxGeometry args={[0.1, 0.44, 0.6]} />
-          <meshStandardMaterial color="#1c1712" metalness={0.5} roughness={0.4} />
+        <mesh key={x} position={[x, 0.2, 0]}>
+          <boxGeometry args={[0.08, 0.4, 0.56]} />
+          <meshStandardMaterial color="#141414" metalness={0.6} roughness={0.35} />
         </mesh>
       ))}
     </group>
@@ -402,7 +411,7 @@ function Stanchions({ z = -6.7, xs = [-2.4, 0, 2.4] }) {
       {xs.slice(0, -1).map((x, i) => (
         <mesh key={x} position={[(x + xs[i + 1]) / 2, 0.9, z]} rotation={[0, 0, Math.PI / 2]}>
           <cylinderGeometry args={[0.025, 0.025, xs[i + 1] - x, 8]} />
-          <meshStandardMaterial color="#7A1F2B" roughness={0.8} />
+          <meshStandardMaterial color="#A3233A" roughness={0.6} />
         </mesh>
       ))}
     </group>
@@ -419,13 +428,13 @@ function Room() {
           blur={[300, 80]}
           resolution={512}
           mixBlur={1}
-          mixStrength={1.6}
-          roughness={0.75}
+          mixStrength={0.9}
+          roughness={0.8}
           depthScale={1}
           minDepthThreshold={0.4}
           maxDepthThreshold={1.2}
-          color="#2b2420"
-          metalness={0.4}
+          color="#7a6a5c"
+          metalness={0.25}
         />
       </mesh>
       {/* muros */}
@@ -499,8 +508,8 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
     <>
       <color attach="background" args={["#1a1613"]} />
       <fog attach="fog" args={["#1a1613", 16, 30]} />
-      <ambientLight intensity={0.32} />
-      <hemisphereLight args={["#fff3df", "#2a211b", 0.45]} />
+      <ambientLight intensity={0.5} />
+      <hemisphereLight args={["#fff3df", "#3a2e25", 0.7]} />
       <directionalLight position={[4, 8, 6]} intensity={0.25} />
 
       <Room />
@@ -534,7 +543,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
         hovered={hoveredId === "funnel-csi"}
         {...bind("funnel-csi")}
       />
-      <Plaque position={[-7.95, 1.6, -5.3]} rotY={Math.PI / 2} title={texts["funnel-csi"].title} subtitle="BICE VIDA · −12%" lang={lang} />
+      <Plaque position={[-7.95, 1.6, -5.55]} rotY={Math.PI / 2} title={texts["funnel-csi"].title} subtitle="BICE VIDA · −12%" lang={lang} />
       <group {...bind("funnel-csi")}>
         <FunnelSculpture hovered={hoveredId === "funnel-csi"} />
       </group>
@@ -559,7 +568,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
           {...bind("beliv")}
         />
       ))}
-      <Plaque position={[7.95, 1.2, -0.55]} rotY={-Math.PI / 2} title={texts.beliv.title} subtitle="Design Sprint · 8+" lang={lang} />
+      <Plaque position={[7.95, 1.2, -0.4]} rotY={-Math.PI / 2} title={texts.beliv.title} subtitle="Design Sprint · 8+" lang={lang} />
       <Spot position={[5.6, 5.8, -3]} target={[8, 2.5, -3]} intensity={2.4} angle={0.5} />
 
       {/* Sala 5: muro del fondo, chatbot */}
@@ -590,10 +599,12 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
         hovered={hoveredId === "artista"}
         {...bind("artista")}
       />
-      <Plaque position={[-7.95, 1.45, 4.6]} rotY={Math.PI / 2} title={texts.artista.title} subtitle="Santiago, Chile" lang={lang} />
+      <Plaque position={[-7.95, 1.45, 4.75]} rotY={Math.PI / 2} title={texts.artista.title} subtitle="Santiago, Chile" lang={lang} />
       <Spot position={[-5.6, 5.8, 3.2]} target={[-8, 2.7, 3.2]} intensity={2.2} angle={0.36} />
 
-      <Bench position={[0, 0, 3.4]} />
+      {/* banca a un costado: queda a la vista y no detrás del texto de la portada */}
+      <Bench position={[3.6, 0, 0.6]} rotY={-0.35} />
+      <ContactShadows position={[0, 0.005, 2]} scale={[16, 20]} resolution={1024} far={2.5} blur={2.2} opacity={0.55} color="#1a120c" />
     </>
   );
 }

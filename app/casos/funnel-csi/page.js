@@ -14,8 +14,8 @@ export const metadata = pageMetadata({
 const SYNTH_STEPS = [
   {
     n: "01",
-    t: "Perfiles a partir de datos reales",
-    d: "Cada usuario sintético nace de los segmentos que ya conocíamos por GA4, Pendo y las entrevistas: edad, situación laboral, si ya tiene seguro, qué tan cómodo se siente con trámites digitales y qué le preocupa al contratar.",
+    t: "10 perfiles a partir de datos reales",
+    d: "Armé 10 usuarios sintéticos a partir de los arquetipos de cada producto y de los rangos de edad que ya conocíamos por GA4, Pendo y las entrevistas: qué buscan, qué les preocupa al contratar y qué tan cómodos se sienten con trámites digitales.",
   },
   {
     n: "02",
@@ -51,10 +51,11 @@ export default function FunnelCase() {
         stats={[
           { n: "10 → 8", l: "pasos en el flujo de contratación" },
           { n: "~15", l: "personas entrevistadas" },
+          { n: "10", l: "usuarios sintéticos con IA para comparar variantes" },
           { n: "-12%", l: "tasa de abandono (primer mes)" },
           { n: "+2%", l: "contratación (relativo, primer mes)" },
         ]}
-        meta="Rol: Product Designer, de discovery a implementación · Equipo: desarrolladores, PO, agilistas, leads y stakeholders de negocio · Herramientas: GA4, Pendo, Hotjar, Figma y un programa propio de usuarios sintéticos con IA"
+        meta="Rol: Product Designer, de discovery a implementación · Equipo: desarrolladores, PO, agilistas, leads y stakeholders de negocio · Herramientas: GA4, Pendo, Hotjar, Figma, y Claude + Cursor para el programa de usuarios sintéticos"
       />
 
       <CaseSection tag="contexto" title="Un flujo largo para un producto simple">
@@ -113,8 +114,8 @@ export default function FunnelCase() {
       <CaseSection tag="ia · usuarios sintéticos" title="Un programa para probar el flujo antes de construirlo">
         <p>
           Entrevistar es lento y cada variante del flujo cuesta un sprint de
-          desarrollo. Para no apostar a ciegas, construí un programa que
-          genera <strong className="text-ink font-medium">usuarios sintéticos</strong> con
+          desarrollo. Para no apostar a ciegas, construí con Claude y Cursor un
+          programa que genera <strong className="text-ink font-medium">usuarios sintéticos</strong> con
           IA y los hace recorrer el funnel, para comparar el flujo original
           con las versiones más cortas antes de diseñarlas en alta.
         </p>
