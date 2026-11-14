@@ -67,7 +67,7 @@ const cases = [
     industries: "Insurtech · IA conversacional",
     title: "Chatbot: un asistente que ayuda a elegir según el producto",
     impactStat: "611", impactLabel: "conversaciones en un mes",
-    secondaryStat: "100% resueltas por el bot",
+    secondaryStat: "90% resueltas por el bot",
     tags: ["Chatbot", "IA", "Datos"],
     thumb: null,
   },
