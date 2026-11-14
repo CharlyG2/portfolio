@@ -5,7 +5,7 @@ import Screenshot from "@/components/Screenshot";
 export const metadata = pageMetadata({
   title: "Chatbot: un asistente que ayuda a elegir mejor — Charly Gourves",
   description:
-    "Diseño de un asistente virtual con IA para el Seguro Complementario de Salud de BICE VIDA: 611 conversaciones en su primer mes, todas resueltas por el bot.",
+    "Diseño de un asistente virtual con IA para el Seguro Complementario de Salud de BICE VIDA: 611 conversaciones en su primer mes, el 90% resueltas por el bot.",
   path: "/casos/chatbot",
   image: "/images/museo/chatbot.jpg",
 });
@@ -25,7 +25,7 @@ export default function ChatbotCase() {
         tldr="Implementé un chatbot con IA que acompaña al usuario dentro de cada producto de BICE VIDA para que tome una mejor decisión. Lo alimentamos con la base de datos de los productos, los dolores de los usuarios y las preguntas frecuentes del call center."
         stats={[
           { n: "611", l: "conversaciones en un mes (sep 2026)" },
-          { n: "100%", l: "atendidas por el bot, sin derivar a ejecutivo" },
+          { n: "90%", l: "de las conversaciones resueltas por el bot, sin derivar a ejecutivo" },
           { n: "69%", l: "de los contactos llegó a interés en planes" },
         ]}
         meta="Rol: Product Designer · implementación del asistente · Plataforma: Roma AI · Producto: Seguro Complementario de Salud, BICE VIDA"
