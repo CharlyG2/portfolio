@@ -368,23 +368,18 @@ function WallTitle({ lang }) {
   );
 }
 
-function Bench({ position, rotY = 0 }) {
+// Banca de galería: tabla de roble sobre un zócalo negro retranqueado, así
+// la tabla parece flotar y se separa bien del piso.
+function Bench({ position }) {
   return (
-    <group position={position} rotation={[0, rotY, 0]}>
-      <RoundedBox args={[2.6, 0.14, 0.7]} radius={0.04} position={[0, 0.48, 0]} castShadow>
-        <meshStandardMaterial color="#D9B98F" roughness={0.55} />
+    <group position={position}>
+      <RoundedBox args={[2.4, 0.12, 0.62]} radius={0.03} position={[0, 0.46, 0]} castShadow>
+        <meshStandardMaterial color="#D2B086" roughness={0.5} />
       </RoundedBox>
-      {/* canto más oscuro para que la tabla se lea como volumen */}
-      <mesh position={[0, 0.405, 0]}>
-        <boxGeometry args={[2.5, 0.02, 0.62]} />
-        <meshStandardMaterial color="#8C6A45" roughness={0.6} />
+      <mesh position={[0, 0.2, 0]} castShadow>
+        <boxGeometry args={[1.96, 0.4, 0.38]} />
+        <meshStandardMaterial color="#2e2722" roughness={0.55} metalness={0.15} />
       </mesh>
-      {[-1.05, 1.05].map((x) => (
-        <mesh key={x} position={[x, 0.2, 0]}>
-          <boxGeometry args={[0.08, 0.4, 0.56]} />
-          <meshStandardMaterial color="#141414" metalness={0.6} roughness={0.35} />
-        </mesh>
-      ))}
     </group>
   );
 }
@@ -602,8 +597,10 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
       <Plaque position={[-7.95, 1.45, 4.75]} rotY={Math.PI / 2} title={texts.artista.title} subtitle="Santiago, Chile" lang={lang} />
       <Spot position={[-5.6, 5.8, 3.2]} target={[-8, 2.7, 3.2]} intensity={2.2} angle={0.36} />
 
-      {/* banca a un costado: queda a la vista y no detrás del texto de la portada */}
-      <Bench position={[3.6, 0, 0.6]} rotY={-0.35} />
+      {/* par de bancas simétricas, paralelas al muro principal y alineadas con
+          los pedestales: la sala se lee ordenada y el centro queda libre */}
+      <Bench position={[-3.3, 0, 0.9]} />
+      <Bench position={[3.3, 0, 0.9]} />
       <ContactShadows position={[0, 0.005, 2]} scale={[16, 20]} resolution={1024} far={2.5} blur={2.2} opacity={0.55} color="#1a120c" />
     </>
   );
