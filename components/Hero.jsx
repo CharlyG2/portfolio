@@ -1,28 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
-// Generado en Omma (Spline) con vista previa visual real. Se sacó el
-// menú de navegación propio (duplicaba el Nav.jsx global del sitio) —
-// todo lo demás, incluida la carga de fuentes, se dejó exactamente como
-// Omma lo entregó y probó, después de que cambiarla rompiera Anton.
-const FONT_LINKS = [
-  "https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap",
-];
-
-function useFontsInjected() {
-  useEffect(() => {
-    FONT_LINKS.forEach((href) => {
-      if (document.querySelector(`link[href="${href}"]`)) return;
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = href;
-      document.head.appendChild(link);
-    });
-  }, []);
-}
-
+// Portada de la versión rápida. Usa las mismas fuentes que carga
+// next/font en el layout (variables --font-*), así no se descargan dos
+// veces desde Google Fonts. Mismos acentos que la portada del museo:
+// etiqueta en terracota clara y palabra clave en menta.
 const TAGS = [
   "Product Design",
   "Design Systems",
@@ -31,186 +15,94 @@ const TAGS = [
   "Estrategia de Negocio",
 ];
 
-const HEADLINE_WORDS = [
-  "Convierto",
-  "procesos",
-  "de",
-  "negocio",
-  "en",
-  "productos",
-  "que",
-  "la",
-  "gente",
-  "entiende.",
-];
+const HEADLINE_WORDS = "AI Product Designer y especialista en Design Systems.".split(" ");
+const ACCENT_FROM = HEADLINE_WORDS.indexOf("especialista");
+
+const EASE_OUT = [0.16, 1, 0.3, 1];
 
 export default function Hero() {
-  useFontsInjected();
-  const shouldReduceMotion = useReducedMotion();
-  const sectionRef = useRef(null);
+  const reduce = useReducedMotion();
   const [activeTag, setActiveTag] = useState(0);
 
   useEffect(() => {
-    if (shouldReduceMotion) return;
-    const id = setInterval(() => {
-      setActiveTag((i) => (i + 1) % TAGS.length);
-    }, 2200);
+    if (reduce) return;
+    const id = setInterval(() => setActiveTag((i) => (i + 1) % TAGS.length), 2200);
     return () => clearInterval(id);
-  }, [shouldReduceMotion]);
-
-  const wordDelayBase = 0.5;
-  const wordStep = shouldReduceMotion ? 0 : 0.09;
+  }, [reduce]);
 
   return (
-    <section
-      ref={sectionRef}
-      style={{
-        position: "relative",
-        minHeight: "100vh",
-        width: "100%",
-        background: "#221D18",
-        color: "#F7F1E4",
-        overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
-        fontFamily: "'Inter', sans-serif",
-      }}
-    >
-      <div
-        style={{
-          position: "relative",
-          zIndex: 2,
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          paddingLeft: "clamp(24px, 5vw, 64px)",
-          paddingRight: "clamp(24px, 8vw, 120px)",
-          paddingTop: "120px",
-          paddingBottom: "80px",
-          boxSizing: "border-box",
-        }}
-      >
-        <motion.div
+    <section className="relative flex min-h-[100svh] w-full flex-col overflow-hidden bg-ink text-paper">
+      <div className="flex flex-1 flex-col justify-center px-6 pb-16 pt-28 md:px-16 md:pb-20 md:pt-32">
+        <motion.p
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          style={{
-            fontFamily: "'IBM Plex Mono', monospace",
-            fontSize: "clamp(11px, 1.1vw, 13px)",
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            color: "#E08A74",
-            marginBottom: "28px",
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-          }}
+          className="mb-7 flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-[#E08A74] md:text-[13px]"
         >
-          <span style={{ width: "6px", height: "6px", background: "#AC5142", display: "inline-block" }} />
-          AI Product Designer
-        </motion.div>
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#5FE3D0]" aria-hidden="true" />
+          Portafolio · 8+ años en producto digital
+        </motion.p>
 
         <motion.h1
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-          style={{
-            fontFamily: "'Anton', sans-serif",
-            fontWeight: 400,
-            fontSize: "clamp(52px, 11vw, 168px)",
-            lineHeight: 1.08,
-            letterSpacing: "-0.01em",
-            margin: 0,
-            color: "#F7F1E4",
-            textTransform: "none",
-          }}
+          transition={{ duration: 0.7, delay: 0.18, ease: EASE_OUT }}
+          className="m-0 font-impact text-[clamp(56px,11vw,168px)] font-normal leading-[1.04] tracking-[-0.01em] text-paper"
         >
           Charly
           <br />
           Gourves
         </motion.h1>
 
-        <div style={{ marginTop: "44px", maxWidth: "820px" }}>
-          <p
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 500,
-              fontSize: "clamp(20px, 3vw, 34px)",
-              lineHeight: 1.35,
-              margin: 0,
-              color: "#F7F1E4",
-            }}
-          >
-            {HEADLINE_WORDS.map((word, i) => (
-              <span key={i} style={{ display: "inline-block", overflow: "visible" }}>
-                <motion.span
-                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: wordDelayBase + i * wordStep, ease: [0.16, 1, 0.3, 1] }}
-                  style={{
-                    display: "inline-block",
-                    color: word === "entiende." ? "#E08A74" : "#F7F1E4",
-                    paddingBottom: "0.08em",
-                  }}
-                >
-                  {word}
-                </motion.span>
-                {i < HEADLINE_WORDS.length - 1 ? "\u00A0" : ""}
-              </span>
-            ))}
-          </p>
-        </div>
+        <p className="mt-10 max-w-[820px] font-display text-[clamp(20px,3vw,34px)] font-medium leading-[1.35] text-paper md:mt-11">
+          {HEADLINE_WORDS.map((word, i) => (
+            <span key={i} className="inline-block">
+              <motion.span
+                initial={{ opacity: 0, y: reduce ? 0 : 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 + i * (reduce ? 0 : 0.09), ease: EASE_OUT }}
+                className={`inline-block pb-[0.08em] ${i >= ACCENT_FROM ? "text-[#5FE3D0]" : ""}`}
+              >
+                {word}
+              </motion.span>
+              {i < HEADLINE_WORDS.length - 1 ? " " : ""}
+            </span>
+          ))}
+        </p>
 
-        <motion.div
+        <motion.ul
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.8 }}
-          style={{ marginTop: "64px", display: "flex", flexWrap: "wrap", gap: "10px" }}
+          className="mt-12 flex flex-wrap gap-2.5 md:mt-16"
+          aria-label="Especialidades"
         >
           {TAGS.map((tag, i) => (
-            <span
+            <li
               key={tag}
-              style={{
-                fontFamily: "'IBM Plex Mono', monospace",
-                fontSize: "12px",
-                letterSpacing: "0.04em",
-                padding: "7px 14px",
-                border: `1px solid ${i === activeTag ? "#3D5A56" : "#4a4238"}`,
-                color: i === activeTag ? "#8FD4C1" : "#B5AA99",
-                background: i === activeTag ? "rgba(247,241,228,0.08)" : "transparent",
-                transition: "all 0.4s ease",
-              }}
+              className={`rounded-full border px-3.5 py-1.5 font-mono text-xs tracking-[0.04em] transition-colors duration-500 ${
+                i === activeTag
+                  ? "border-[#5FE3D0]/60 bg-[#5FE3D0]/10 text-[#8FE9DA]"
+                  : "border-paper/20 text-paper/70"
+              }`}
             >
               {tag}
-            </span>
+            </li>
           ))}
-        </motion.div>
+        </motion.ul>
       </div>
 
-      <motion.div
+      <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.5 }}
-        style={{
-          position: "relative",
-          zIndex: 2,
-          paddingLeft: "clamp(24px, 5vw, 64px)",
-          paddingRight: "clamp(24px, 8vw, 120px)",
-          paddingBottom: "40px",
-          fontFamily: "'IBM Plex Mono', monospace",
-          fontSize: "12px",
-          letterSpacing: "0.03em",
-        }}
+        className="px-6 pb-10 font-mono text-xs tracking-[0.03em] text-paper/65 md:px-16"
       >
-        <span style={{ color: "#A39888" }}>
-          Santiago, Chile —{" "}
-          <span style={{ color: "#7FB89A" }}>disponible para trabajar</span> ·{" "}
-          <a href="#contacto" style={{ color: "#F7F1E4", textDecoration: "underline", textUnderlineOffset: "3px" }}>
-            conversemos →
-          </a>
-        </span>
-      </motion.div>
+        Santiago, Chile — <span className="text-[#8FE9DA]">disponible para trabajar</span> ·{" "}
+        <a href="#contacto" className="text-paper underline underline-offset-[3px] hover:text-[#8FE9DA]">
+          conversemos →
+        </a>
+      </motion.p>
     </section>
   );
 }

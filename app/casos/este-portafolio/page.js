@@ -11,7 +11,7 @@ export const metadata = pageMetadata({
 
 export default function PortfolioCase() {
   return (
-    <CaseLayout>
+    <CaseLayout slug="este-portafolio">
       <CaseHeader
         eyebrow="bonus · este portafolio"
         title="Este mismo portafolio, como caso de estudio"

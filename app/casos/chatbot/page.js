@@ -18,7 +18,7 @@ const funnel = [
 
 export default function ChatbotCase() {
   return (
-    <CaseLayout>
+    <CaseLayout slug="chatbot">
       <CaseHeader
         eyebrow="caso 05 · chatbot"
         title="Chatbot: un asistente virtual que ayuda a decidir según el producto"

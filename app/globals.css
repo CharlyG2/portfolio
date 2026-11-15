@@ -16,20 +16,6 @@ body {
   color: #221D18;
 }
 
-/* "Gourves" en el hero: contorno solo, con respaldo real. Por defecto
-   (sin soporte de -webkit-text-stroke) se ve como texto sólido en un
-   tono claro — legible, on-brand, nunca invisible. Solo se vuelve
-   transparente (efecto outline puro) si el navegador confirma soporte. */
-.name-outline {
-  color: #E4DBC8;
-  -webkit-text-stroke: 2.6px #7A2F22;
-}
-@supports ((-webkit-text-stroke: 1px black) or (text-stroke: 1px black)) {
-  .name-outline {
-    color: transparent;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

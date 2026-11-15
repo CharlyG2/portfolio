@@ -23,7 +23,7 @@ const screens = [
 
 export default function BelivCase() {
   return (
-    <CaseLayout>
+    <CaseLayout slug="beliv">
       <CaseHeader
         eyebrow="caso 04 · beliv"
         title="Beliv: de un sprint de 3 días a una app validada y desarrollada"
