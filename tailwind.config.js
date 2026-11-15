@@ -8,15 +8,12 @@ module.exports = {
     extend: {
       colors: {
         ink: "#221D18",
-        ink2: "#3D342A",
-        ink3: "#4D3532",
         paper: "#F7F1E4",
         paperSoft: "#EEE3CD",
         surface: "#FFFDF8",
         line: "#E4DBC8",
         lineLight: "#E0D3B8",
         signal: "#3D5AFE",
-        signalSoft: "#5B72FF",
         // Versiones para texto: los acentos originales no llegan a 4.5:1
         // (WCAG AA) sobre el papel. Úsalas siempre que el color sea texto.
         signalInk: "#2F45D0",
@@ -26,10 +23,8 @@ module.exports = {
         amber: "#FFB020",
         mint: "#0EA5A0",
         rose: "#F43F5E",
-        sunset: "#FD9047",
         rust: "#9A4536",
         sage: "#3D5A56",
-        espresso: "#4D3532",
         muted: "#6B6259",
         mutedLight: "#6E6457",
       },

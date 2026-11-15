@@ -13,7 +13,7 @@ export const metadata = pageMetadata({
 
 export default function DesignSystemCase() {
   return (
-    <CaseLayout>
+    <CaseLayout slug="design-system">
       <CaseHeader
         eyebrow="caso 01 · design system"
         title="89 componentes, un solo lenguaje: el primer Design System de BICE VIDA"

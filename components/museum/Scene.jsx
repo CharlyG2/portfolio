@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useTexture, MeshReflectorMaterial, RoundedBox, ContactShadows } from "@react-three/drei";
@@ -31,20 +31,48 @@ function useCroppedTexture(src, aspect) {
   }, [tex, aspect]);
 }
 
+// Las cartelas usan las mismas fuentes del sitio (Fraunces e IBM Plex Mono,
+// cargadas por next/font). Se leen de las variables CSS y se espera a que
+// estén listas antes de dibujar; mientras tanto se usa Georgia / Courier.
+const FALLBACK_FONTS = { serif: "Georgia, 'Times New Roman', serif", mono: "'Courier New', monospace", ready: false };
+const FontContext = createContext(FALLBACK_FONTS);
+
+function useSiteFonts() {
+  const [fonts, setFonts] = useState(FALLBACK_FONTS);
+  useEffect(() => {
+    const css = getComputedStyle(document.documentElement);
+    const serif = css.getPropertyValue("--font-serif").trim();
+    const mono = css.getPropertyValue("--font-mono").trim();
+    if (!serif || !mono || !document.fonts) return;
+    let alive = true;
+    Promise.all([
+      document.fonts.load(`600 72px ${serif}`),
+      document.fonts.load(`500 46px ${mono}`),
+    ])
+      .then(() => alive && setFonts({ serif, mono, ready: true }))
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return fonts;
+}
+
 // Textura de texto dibujada en canvas: placas, títulos y el manifiesto.
 function useTextTexture(draw, deps, w = 1024, h = 512) {
+  const fonts = useContext(FontContext);
   return useMemo(() => {
     const canvas = document.createElement("canvas");
     canvas.width = w;
     canvas.height = h;
     const ctx = canvas.getContext("2d");
-    draw(ctx, w, h);
+    draw(ctx, w, h, fonts);
     const t = new THREE.CanvasTexture(canvas);
     t.colorSpace = THREE.SRGBColorSpace;
     t.anisotropy = 8;
     return t;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps);
+  }, [...deps, fonts]);
 }
 
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
@@ -123,17 +151,17 @@ function Artwork({ src, w, h, position, rotY = 0, frame = FRAME_DARK, mat = 0.12
 
 function Plaque({ position, rotY = 0, title, subtitle, lang }) {
   const tex = useTextTexture(
-    (ctx, w, h) => {
+    (ctx, w, h, f) => {
       ctx.fillStyle = "#FBF8F2";
       ctx.fillRect(0, 0, w, h);
       ctx.strokeStyle = "#D8CDBB";
       ctx.lineWidth = 6;
       ctx.strokeRect(3, 3, w - 6, h - 6);
       ctx.fillStyle = "#1A1511";
-      ctx.font = "700 72px Georgia, 'Times New Roman', serif";
+      ctx.font = `600 70px ${f.serif}`;
       wrapText(ctx, title, 48, 115, w - 96, 82);
       ctx.fillStyle = "#6E2A1F";
-      ctx.font = "700 46px 'Courier New', monospace";
+      ctx.font = `500 42px ${f.mono}`;
       wrapText(ctx, subtitle, 48, h - 60, w - 96, 46);
     },
     [title, subtitle, lang]
@@ -307,14 +335,14 @@ function ManifestoWall({ lang, hovered, ...handlers }) {
 
 function ManifestoCard({ index, text, lang, hovered }) {
   const tex = useTextTexture(
-    (ctx, w, h) => {
+    (ctx, w, h, f) => {
       ctx.fillStyle = "#221D18";
       ctx.fillRect(0, 0, w, h);
       ctx.fillStyle = "#D9735F";
-      ctx.font = "700 120px Georgia, serif";
+      ctx.font = `600 120px ${f.serif}`;
       ctx.fillText(`0${index + 1}`, 60, 170);
       ctx.fillStyle = "#F7F1E4";
-      ctx.font = "600 70px Georgia, serif";
+      ctx.font = `500 68px ${f.serif}`;
       wrapText(ctx, text, 60, 330, w - 120, 84);
     },
     [text, lang],
@@ -345,15 +373,16 @@ function ManifestoCard({ index, text, lang, hovered }) {
 
 function WallTitle({ lang }) {
   const tex = useTextTexture(
-    (ctx, w, h) => {
+    (ctx, w, h, f) => {
       ctx.clearRect(0, 0, w, h);
       ctx.fillStyle = "#221D18";
       ctx.textAlign = "center";
-      ctx.font = "600 150px Georgia, 'Times New Roman', serif";
+      ctx.font = `500 150px ${f.serif}`;
       ctx.fillText("Charly Gourves", w / 2, 160);
       // rojo oscuro y en negrita: el rust original se perdía sobre el muro
       ctx.fillStyle = "#6E2A1F";
-      ctx.font = "700 72px 'Courier New', monospace";
+      ctx.font = `500 64px ${f.mono}`;
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "10px";
       ctx.fillText("AI PRODUCT DESIGNER", w / 2, 262);
     },
     [lang],
@@ -482,7 +511,8 @@ function Room() {
   );
 }
 
-export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }) {
+export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, isMobile }) {
+  const fonts = useSiteFonts();
   const bind = (id) => ({
     onPointerOver: (e) => {
       e.stopPropagation();
@@ -500,7 +530,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
   });
 
   return (
-    <>
+    <FontContext.Provider value={fonts}>
       <color attach="background" args={["#1a1613"]} />
       <fog attach="fog" args={["#1a1613", 16, 30]} />
       <ambientLight intensity={0.5} />
@@ -508,7 +538,8 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
       <directionalLight position={[4, 8, 6]} intensity={0.25} />
 
       <Room />
-      <WallTitle lang={lang} />
+      {/* en celular el nombre ya está en la cabecera y el letrero quedaba tapado */}
+      {!isMobile && <WallTitle lang={lang} />}
 
       {/* Sala 1: muro principal */}
       <Artwork
@@ -602,6 +633,6 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts }
       <Bench position={[-3.3, 0, 0.9]} />
       <Bench position={[3.3, 0, 0.9]} />
       <ContactShadows position={[0, 0.005, 2]} scale={[16, 20]} resolution={1024} far={2.5} blur={2.2} opacity={0.55} color="#1a120c" />
-    </>
+    </FontContext.Provider>
   );
 }

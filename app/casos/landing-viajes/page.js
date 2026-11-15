@@ -12,7 +12,7 @@ export const metadata = pageMetadata({
 
 export default function ViajesCase() {
   return (
-    <CaseLayout>
+    <CaseLayout slug="landing-viajes">
       <CaseHeader
         eyebrow="caso 02 · landing viajes"
         title="Unificar dos seguros de viaje en una sola experiencia"

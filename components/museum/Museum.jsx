@@ -52,35 +52,42 @@ function useIsMobile() {
   return mobile;
 }
 
-function PillButton({ children, onClick, href, download, active, accent }) {
-  const cls = `shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs md:text-sm font-medium border transition-colors ${
+// Botones del museo: vidrio oscuro con texto claro, para que se lean igual
+// sobre el muro claro y sobre el piso oscuro. El principal va en menta,
+// el mismo acento de la portada.
+const MINT = "#5FE3D0";
+const GLASS = "bg-[#14110e]/70 backdrop-blur-md border-white/15 text-paper";
+
+function PillButton({ children, onClick, href, download, active, accent, label }) {
+  const cls = `shrink-0 whitespace-nowrap inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 min-h-[38px] text-xs md:text-sm font-medium border transition-colors ${
     accent
-      ? "bg-ink text-paper border-ink hover:bg-[#3a3128]"
+      ? "bg-[#5FE3D0] text-[#10201d] border-[#5FE3D0] hover:bg-[#8FE9DA] hover:border-[#8FE9DA]"
       : active
-      ? "bg-paper text-ink border-ink"
-      : "bg-paper/85 backdrop-blur text-ink border-ink/15 hover:border-ink/50"
+      ? "bg-paper text-ink border-paper"
+      : `${GLASS} hover:bg-[#14110e]/90 hover:border-white/40`
   }`;
+  const a11y = label ? { "aria-label": label } : {};
   if (href) {
     if (href.startsWith("mailto:")) {
       return (
-        <a href={href} className={cls}>
+        <a href={href} className={cls} {...a11y}>
           {children}
         </a>
       );
     }
     const external = href.endsWith(".pdf");
     return external ? (
-      <a href={href} className={cls} target="_blank" rel="noopener noreferrer" download={download}>
+      <a href={href} className={cls} target="_blank" rel="noopener noreferrer" download={download} {...a11y}>
         {children}
       </a>
     ) : (
-      <Link href={href} className={cls}>
+      <Link href={href} className={cls} {...a11y}>
         {children}
       </Link>
     );
   }
   return (
-    <button type="button" onClick={onClick} className={cls}>
+    <button type="button" onClick={onClick} className={cls} aria-pressed={active} {...a11y}>
       {children}
     </button>
   );
@@ -155,7 +162,7 @@ export default function Museum() {
         onPointerMissed={() => setSelected(null)}
       >
         <Suspense fallback={null}>
-          <Scene lang={lang} hoveredId={hoveredId} setHoveredId={setHoveredId} onSelect={setSelected} texts={texts} />
+          <Scene lang={lang} hoveredId={hoveredId} setHoveredId={setHoveredId} onSelect={setSelected} texts={texts} isMobile={isMobile} />
         </Suspense>
         <CameraControls
           ref={controls}
@@ -173,10 +180,10 @@ export default function Museum() {
 
       {/* Cabecera: marca a la izquierda, controles en una sola fila */}
       <header className="absolute top-0 left-0 right-0 z-20 p-3 md:p-6 flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-4 pointer-events-none">
-        <div className="pointer-events-auto self-start flex items-center gap-2.5 rounded-full bg-[#14110e]/70 backdrop-blur border border-white/10 pl-3 pr-4 py-1.5 text-paper">
-          <span className="w-2 h-2 rounded-full bg-[#5FE3D0] shadow-[0_0_10px_#5FE3D0]" aria-hidden="true" />
+        <div className={`pointer-events-auto self-start flex items-center gap-2.5 rounded-full border ${GLASS} pl-3 pr-4 py-2`}>
+          <span className="w-2 h-2 rounded-full" style={{ background: MINT, boxShadow: `0 0 10px ${MINT}` }} aria-hidden="true" />
           <span className="font-serif text-sm md:text-base leading-none">Charly Gourves</span>
-          <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.16em] text-[#8FE9DA] leading-none">
+          <span className="hidden sm:inline font-mono text-[10px] md:text-[11px] uppercase tracking-[0.16em] text-[#8FE9DA] leading-none">
             {PROFILE.role[lang]}
           </span>
         </div>
@@ -184,13 +191,13 @@ export default function Museum() {
           className="pointer-events-auto flex flex-nowrap md:flex-wrap md:justify-end gap-2 overflow-x-auto -mx-3 px-3 md:mx-0 md:px-0 pb-1 md:pb-0 [scrollbar-width:none]"
           aria-label="Controles del museo"
         >
-          <div className="shrink-0 inline-flex rounded-full border border-ink/15 bg-paper/85 backdrop-blur overflow-hidden text-xs md:text-sm font-medium">
+          <div className={`shrink-0 inline-flex rounded-full border ${GLASS} p-0.5 text-xs md:text-sm font-medium`} role="group" aria-label="Idioma">
             {["es", "en"].map((l) => (
               <button
                 key={l}
                 type="button"
                 onClick={() => setLang(l)}
-                className={`px-3 py-2 uppercase ${lang === l ? "bg-ink text-paper" : "text-ink/60 hover:text-ink"}`}
+                className={`rounded-full px-3 py-1.5 uppercase transition-colors ${lang === l ? "bg-paper text-ink" : "text-paper/70 hover:text-paper"}`}
                 aria-pressed={lang === l}
               >
                 {l}
@@ -202,21 +209,21 @@ export default function Museum() {
               {t.overview}
             </PillButton>
           )}
-          <PillButton href="/express" accent>
+          <PillButton href="/express">
             {t.express}
           </PillButton>
           <PillButton href={CV_HREF} download>
             ↓ {t.cv}
           </PillButton>
-          <PillButton href={`mailto:${PROFILE.email}`}>
+          <PillButton href={`mailto:${PROFILE.email}`} accent>
             {t.contact}
           </PillButton>
-          <PillButton onClick={() => setShowHelp((v) => !v)} active={showHelp}>
+          <PillButton onClick={() => setShowHelp((v) => !v)} active={showHelp} label={t.helpLabel}>
             ?
           </PillButton>
         </nav>
         {showHelp && (
-          <p className="pointer-events-auto max-w-sm rounded-xl bg-ink text-paper text-sm leading-relaxed px-4 py-3 shadow-lg md:absolute md:right-6 md:top-20">
+          <p className="pointer-events-auto max-w-sm rounded-xl bg-[#14110e]/90 backdrop-blur-md border border-white/15 text-paper text-sm leading-relaxed px-4 py-3 shadow-lg md:absolute md:right-6 md:top-20">
             {t.help}
           </p>
         )}
@@ -232,11 +239,11 @@ export default function Museum() {
           <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#E08A74]">{t.kicker}</p>
           <p className="font-serif text-paper leading-[0.95] mt-3 text-[38px] sm:text-5xl md:text-6xl xl:text-7xl">
             {t.heroTitle}
-            <span className="block italic text-[#5FE3D0]">{t.heroAccent}</span>
+            <span className="block italic" style={{ color: MINT }}>{t.heroAccent}</span>
           </p>
           <p className="mt-4 md:mt-5 max-w-xl text-sm md:text-base text-paper/75 leading-relaxed">{t.heroSub}</p>
           <p className="mt-3 inline-flex items-center gap-2 text-xs md:text-sm text-paper/80">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#5FE3D0]" aria-hidden="true" />
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: MINT }} aria-hidden="true" />
             {PROFILE.availability[lang]} · {PROFILE.location[lang]}
           </p>
         </div>
@@ -244,7 +251,7 @@ export default function Museum() {
 
       {/* Etiqueta de la obra bajo el cursor */}
       {hovered && !selected && (
-        <div className="hidden md:block absolute left-1/2 -translate-x-1/2 bottom-28 z-20 pointer-events-none rounded-full bg-ink text-paper text-sm px-4 py-2 shadow-lg">
+        <div className="hidden md:block absolute left-1/2 -translate-x-1/2 bottom-28 z-20 pointer-events-none rounded-full bg-[#14110e]/85 backdrop-blur-md border border-white/15 text-paper text-sm px-4 py-2 shadow-lg">
           {hovered[lang].title}
         </div>
       )}
@@ -264,7 +271,7 @@ export default function Museum() {
               <button
                 type="button"
                 onClick={() => setSelected(null)}
-                className="text-ink/50 hover:text-ink text-lg leading-none -mt-1"
+                className="-mt-2 -mr-2 w-9 h-9 inline-flex items-center justify-center rounded-full text-ink/60 hover:text-ink hover:bg-ink/5 text-xl leading-none"
                 aria-label={t.close}
               >
                 ×
@@ -298,22 +305,28 @@ export default function Museum() {
           station && isMobile ? "bottom-[calc(48vh+20px)]" : "bottom-5 md:bottom-10"
         }`}
       >
-        <PillButton onClick={() => go(-1)}>← {isMobile ? "" : t.prev}</PillButton>
+        <PillButton onClick={() => go(-1)} label={t.prev}>
+          <span aria-hidden="true">←</span>
+          <span className="hidden md:inline">{t.prev}</span>
+        </PillButton>
         {!station && (
           <PillButton onClick={() => go(1)} accent>
             {t.start}
           </PillButton>
         )}
         {station && (
-          <span className="rounded-full bg-paper/85 backdrop-blur border border-ink/15 px-3 py-2 font-mono text-xs text-ink">
+          <span className={`rounded-full border ${GLASS} px-3 py-2 min-h-[38px] inline-flex items-center font-mono text-xs`} aria-live="polite">
             {index + 1} / {STATIONS.length}
           </span>
         )}
-        <PillButton onClick={() => go(1)}>{isMobile ? "" : t.next} →</PillButton>
+        <PillButton onClick={() => go(1)} label={t.next}>
+          <span className="hidden md:inline">{t.next}</span>
+          <span aria-hidden="true">→</span>
+        </PillButton>
       </div>
 
       {!selected && (
-        <p className="hidden md:block absolute right-6 bottom-10 z-10 max-w-[240px] text-right font-mono text-[11px] text-paper/80 pointer-events-none">
+        <p className="hidden md:block absolute right-6 bottom-10 z-10 max-w-[240px] text-right font-mono text-[11px] leading-relaxed text-paper/70 pointer-events-none">
           {t.hint}
         </p>
       )}

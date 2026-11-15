@@ -11,7 +11,7 @@ export default function MagneticLink({ href, children, className = "", target })
     const rect = ref.current.getBoundingClientRect();
     const relX = e.clientX - rect.left - rect.width / 2;
     const relY = e.clientY - rect.top - rect.height / 2;
-    setPos({ x: relX * 0.35, y: relY * 0.6 });
+    setPos({ x: relX * 0.25, y: relY * 0.4 });
   };
 
   return (
@@ -19,6 +19,7 @@ export default function MagneticLink({ href, children, className = "", target })
       ref={ref}
       href={href}
       target={target}
+      rel={target === "_blank" ? "noopener noreferrer" : undefined}
       className={className}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setPos({ x: 0, y: 0 })}

@@ -9,8 +9,8 @@ export default function Home() {
       <div className="sr-only">
         <h1>Charly Gourves — AI Product Designer</h1>
         <p>
-          AI Product Designer con más de 8 años de experiencia, diseñando productos con IA
-          (chatbots, usuarios sintéticos) y Design Systems. Disponible para trabajar en
+          AI Product Designer y especialista en Design Systems, con más de 8 años en producto
+          digital. Disponible para trabajar en
           Santiago, modalidad híbrida.
         </p>
         <ul>

@@ -43,7 +43,7 @@ const SYNTH_COMPARE = [
 
 export default function FunnelCase() {
   return (
-    <CaseLayout>
+    <CaseLayout slug="funnel-csi">
       <CaseHeader
         eyebrow="caso 03 · funnel csi"
         title="De 10 a 8 pasos: menos fricción, más contratación"

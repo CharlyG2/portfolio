@@ -2,12 +2,12 @@ import Reveal from "./Reveal";
 
 export default function Resume() {
   return (
-    <section id="cv" className="py-16 md:py-20 border-t border-line bg-paperSoft/60">
+    <section id="cv" className="py-16 md:py-20 border-t border-line bg-paperSoft">
       <div className="max-w-content mx-auto px-6 md:px-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <Reveal>
-          <p className="text-sm text-muted max-w-md">
-            Mi experiencia, resultados y formación en un PDF de una
-            página.
+          <p className="eyebrow text-rust mb-2">cv</p>
+          <p className="font-display text-xl md:text-2xl text-ink max-w-md leading-snug">
+            Mi experiencia, resultados y formación en un PDF de una página.
           </p>
         </Reveal>
         <Reveal delay={0.1}>
@@ -15,9 +15,9 @@ export default function Resume() {
             href="/files/charly-gourves-cv.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest px-5 py-3 rounded-full border border-rust text-rust hover:bg-rust hover:text-white transition-colors shrink-0"
+            className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-sm font-medium text-paper hover:bg-rust transition-colors shrink-0"
           >
-            Descargar CV ↓
+            Descargar CV <span aria-hidden="true">↓</span>
           </a>
         </Reveal>
       </div>
