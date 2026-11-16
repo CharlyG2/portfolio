@@ -1,6 +1,7 @@
 import { Space_Grotesk, Inter, IBM_Plex_Mono, Anton, Caveat, Fraunces } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
+import MotionProvider from "@/components/MotionProvider";
 
 const serif = Fraunces({
   subsets: ["latin"],
@@ -70,7 +71,7 @@ export default function RootLayout({ children }) {
     <html lang="es" className={`${display.variable} ${body.variable} ${mono.variable} ${impact.variable} ${hand.variable} ${serif.variable}`}>
       <body className="font-body antialiased">
         <CustomCursor />
-        {children}
+        <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
   );

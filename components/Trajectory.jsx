@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import Reveal from "./Reveal";
 
 const roles = [
@@ -49,7 +49,9 @@ export default function Trajectory() {
     target: ref,
     offset: ["start 0.8", "end 0.5"],
   });
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  // El resorte suaviza la línea: sigue al scroll con un poco de inercia en
+  // vez de saltar con cada tick de la rueda del mouse.
+  const lineScale = useSpring(scrollYProgress, { stiffness: 120, damping: 26, mass: 0.4 });
 
   return (
     <section id="trayectoria" className="py-24 md:py-32 border-t border-line">
@@ -77,13 +79,13 @@ export default function Trajectory() {
           <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-line" />
           {/* animated fill, draws in as you scroll */}
           <motion.div
-            className="absolute left-0 top-0 w-[2px] bg-rust origin-top"
-            style={{ height: lineHeight }}
+            className="absolute left-0 top-0 bottom-0 w-[2px] bg-rust origin-top"
+            style={{ scaleY: lineScale }}
           />
 
           <div className="space-y-14 md:space-y-16">
             {roles.map((r, i) => (
-              <Reveal key={r.period} delay={i * 0.05}>
+              <Reveal key={r.period} delay={0.04} y={16}>
                 <div className="relative">
                   <span
                     className={`absolute -left-[38px] md:-left-[46px] top-1 w-3.5 h-3.5 rounded-full ring-4 ring-paper ${

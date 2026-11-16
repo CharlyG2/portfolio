@@ -1,6 +1,6 @@
 "use client";
 
-import Reveal from "./Reveal";
+import Reveal, { RevealGroup } from "./Reveal";
 
 // Solo 2 colores — los de la paleta de marca, alternados. Antes había 6
 // colores random (azul, verde, ámbar, rosa, naranja) sin relación con el
@@ -60,18 +60,18 @@ export default function HowIThink() {
           </h2>
         </Reveal>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {steps.map((s, i) => (
-            <Reveal key={s.n} delay={i * 0.05}>
+        <RevealGroup className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {steps.map((s) => (
+            <Reveal key={s.n} className="h-full">
               <div
-                className="rounded-2xl border p-6 h-full"
+                className="group rounded-2xl border p-6 h-full transition-[transform,box-shadow,border-color] duration-slow ease-out-expo hover:-translate-y-1 hover:shadow-[0_18px_40px_-24px_rgba(34,29,24,0.35)]"
                 style={{
                   borderColor: `${s.color}40`,
                   background: "#FFFFFF",
                 }}
               >
                 <span
-                  className="font-impact text-4xl"
+                  className="inline-block font-impact text-4xl transition-transform duration-slow ease-out-expo origin-bottom-left group-hover:scale-110"
                   style={{ color: s.color }}
                 >
                   {s.n}
@@ -85,7 +85,7 @@ export default function HowIThink() {
               </div>
             </Reveal>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   );

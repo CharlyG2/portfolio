@@ -33,7 +33,7 @@ export default function Nav() {
           </a>
           <a
             href={`mailto:${PROFILE.email}`}
-            className="rounded-full bg-ink text-paper px-4 py-2 normal-case tracking-normal font-body text-sm font-medium hover:bg-rust transition-colors"
+            className="press rounded-full bg-ink text-paper px-4 py-2 normal-case tracking-normal font-body text-sm font-medium hover:bg-rust"
           >
             Contacto
           </a>

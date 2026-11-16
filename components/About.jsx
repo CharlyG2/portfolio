@@ -6,7 +6,7 @@ export default function About() {
     <section id="sobre-mi" className="py-24 md:py-32 border-t border-line">
       <div className="max-w-content mx-auto px-6 md:px-10 grid md:grid-cols-[0.55fr_1fr] gap-10 md:gap-12 items-start">
         <Reveal>
-          <div className="relative w-40 h-52 md:w-48 md:h-64 rounded-2xl overflow-hidden border-4 border-white shadow-xl rotate-[-2deg]">
+          <div className="relative w-40 h-52 md:w-48 md:h-64 rounded-2xl overflow-hidden border-4 border-white shadow-xl rotate-[-2deg] transition-transform duration-slow ease-out-expo hover:rotate-0 hover:-translate-y-1">
             <Image
               src="/images/charly-photo.jpeg"
               alt="Charly Gourves"

@@ -40,7 +40,7 @@ export default function TopNav() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50"
+      className="fixed top-0 left-0 right-0 z-50 animate-fade-in [animation-delay:250ms]"
       style={{
         background: "rgba(34,29,24,0.92)",
         backdropFilter: "blur(8px)",
@@ -73,7 +73,7 @@ export default function TopNav() {
                 {l.label}
                 <span
                   aria-hidden="true"
-                  className="absolute left-0 right-0 -bottom-[3px] h-[2px] transition-transform duration-300 origin-left"
+                  className="absolute left-0 right-0 -bottom-[3px] h-[2px] transition-transform duration-slow ease-out-expo origin-left"
                   style={{ background: "#AC5142", transform: isActive ? "scaleX(1)" : "scaleX(0)" }}
                 />
               </a>
