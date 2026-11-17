@@ -267,54 +267,89 @@ function Artwork({ src, w, h, position, rotY = 0, frame = FRAME_DARK, mat = 0.12
   );
 }
 
-// Cartela de museo: de qué se trata, dónde se hizo y el resultado en grande.
-// Antes era una tarjeta chica con el título en gris que no se leía.
-function Plaque({ position, rotY = 0, title, subtitle, stat, statLabel, note, color = "#6E2A1F", scale = 1, lang }) {
+// Cartela de museo: número de obra, título, una línea fina de color y la
+// técnica en cursiva. Papel fino separado del muro con una sombra suave; el
+// alto se ajusta al texto para que no quede espacio vacío.
+function Plaque({ position, rotY = 0, title, number, stat, statLabel, note, color = "#6E2A1F", scale = 1, lang }) {
+  const W = 860;
   const tex = useTextTexture(
-    (ctx, w, h, f) => {
-      ctx.fillStyle = "#FBF8F2";
-      ctx.fillRect(0, 0, w, h);
-      ctx.fillStyle = color;
-      ctx.fillRect(0, 0, 14, h);
-      ctx.fillStyle = "#6E2A1F";
-      ctx.font = `500 36px ${f.mono}`;
-      if ("letterSpacing" in ctx) ctx.letterSpacing = "4px";
-      ctx.fillText(subtitle.toUpperCase(), 64, 88);
+    (ctx, w, _h, f) => {
+      const P = 58;
+      const maxW = w - P * 2;
+      const lines = (text, font, width) => {
+        ctx.font = font;
+        const out = [];
+        let line = "";
+        for (const word of text.split(" ")) {
+          const t = line ? `${line} ${word}` : word;
+          if (ctx.measureText(t).width > width && line) {
+            out.push(line);
+            line = word;
+          } else line = t;
+        }
+        out.push(line);
+        return out;
+      };
+      const titleFont = `600 60px ${f.serif}`;
+      const noteFont = `italic 400 34px ${f.serif}`;
+      const tl = lines(title, titleFont, maxW);
+      const nl = note ? lines(note, noteFont, maxW) : [];
+      // alto según el contenido
+      let H = P + 24 + 30 + tl.length * 70 + 30 + 4;
+      H += stat ? 30 + 96 : nl.length ? 30 + nl.length * 44 : 0;
+      H += P - 10;
+      ctx.canvas.height = Math.round(H);
+      ctx.fillStyle = "#F7F2E9";
+      ctx.fillRect(0, 0, w, H);
+      let y = P + 22;
+      ctx.fillStyle = "#8E3B2C";
+      ctx.font = `600 25px ${f.sans}`;
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "6px";
+      ctx.fillText(number, P, y);
       if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+      y += 30 + 56;
       ctx.fillStyle = "#1A1511";
-      ctx.font = `600 74px ${f.serif}`;
-      wrapText(ctx, title, 64, 190, w - 110, 84);
+      ctx.font = titleFont;
+      tl.forEach((l, k) => ctx.fillText(l, P, y + k * 70));
+      y += (tl.length - 1) * 70 + 30;
+      ctx.fillStyle = color;
+      ctx.fillRect(P, y, 56, 4);
+      y += 4;
       if (stat) {
-        ctx.fillStyle = color;
-        ctx.font = `600 150px ${f.serif}`;
-        ctx.fillText(stat, 60, h - 56);
+        y += 30 + 80;
+        ctx.font = `600 96px ${f.serif}`;
+        ctx.fillText(stat, P - 4, y);
         const sw = ctx.measureText(stat).width;
         ctx.fillStyle = "#3d342c";
-        ctx.font = `500 34px ${f.mono}`;
-        wrapText(ctx, statLabel || "", 60 + sw + 30, h - 138, w - 110 - sw - 30, 42);
-      } else if (note) {
-        // como en una cartela de museo: técnica y colección, sin repetir la
-        // cifra que ya está en grande sobre el muro
-        ctx.fillStyle = color;
-        ctx.fillRect(64, h - 190, 90, 6);
-        ctx.fillStyle = "#3d342c";
-        ctx.font = `italic 400 40px ${f.serif}`;
-        wrapText(ctx, note, 64, h - 120, w - 120, 50);
+        const ll = lines(statLabel || "", `500 28px ${f.sans}`, maxW - sw - 28);
+        ll.slice(0, 2).forEach((l, k) => ctx.fillText(l, P + sw + 24, y - 44 + k * 38 - (ll.length > 1 ? 0 : -18)));
+      } else if (nl.length) {
+        y += 30 + 30;
+        ctx.fillStyle = "#4a4038";
+        ctx.font = noteFont;
+        nl.forEach((l, k) => ctx.fillText(l, P, y + k * 44));
       }
     },
-    [title, subtitle, stat, statLabel, note, color, lang],
-    1040,
-    640
+    [title, number, stat, statLabel, note, color, lang],
+    W,
+    600
   );
   const dim = useDimmed(0.07);
+  const pw = 1.05;
+  const ph = (pw * (tex.image?.height || 420)) / W;
   return (
     <group position={position} rotation={[0, rotY, 0]} scale={scale}>
-      <mesh>
-        <boxGeometry args={[1.3, 0.8, 0.025]} />
-        <meshStandardMaterial color="#cdbfa8" roughness={0.6} />
+      {/* sombra suave sobre el muro */}
+      <mesh position={[0.012, -0.018, -0.004]}>
+        <planeGeometry args={[pw + 0.03, ph + 0.03]} />
+        <meshBasicMaterial color="#000000" transparent opacity={0.13} depthWrite={false} />
       </mesh>
-      <mesh ref={dim} position={[0, 0, 0.0135]}>
-        <planeGeometry args={[1.3, 0.8]} />
+      <mesh>
+        <boxGeometry args={[pw, ph, 0.006]} />
+        <meshStandardMaterial color="#e2d9c9" roughness={0.7} />
+      </mesh>
+      <mesh ref={dim} position={[0, 0, 0.0035]}>
+        <planeGeometry args={[pw, ph]} />
         {/* sin sombreado: la cartela se lee igual dentro y fuera del foco */}
         <meshBasicMaterial map={tex} toneMapped={false} />
       </mesh>
@@ -1060,6 +1095,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
 
   const st = Object.fromEntries(STATIONS.map((x) => [x.id, x]));
   const plaque = (id, extra) => ({
+    number: `N.º ${String(STATIONS.findIndex((x) => x.id === id) + 1).padStart(2, "0")}`,
     title: texts[id].title,
     stat: st[id].stat,
     statLabel: texts[id].statLabel,
@@ -1094,13 +1130,13 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
         hovered={hoveredId === "landing-viajes"}
         {...bind("landing-viajes")}
       />
-      <Plaque position={[3.05, 1.5, -7.95]} {...plaque("landing-viajes", { subtitle: "BICE VIDA · Landing" })} />
+      <Plaque position={[3.05, 1.5, -7.95]} {...plaque("landing-viajes", {})} />
       <Spot position={[0, 5.8, -5.2]} target={[0, 2.85, -8]} intensity={2.9} angle={0.5} />
       <Stanchions />
 
       {/* Sala central: escultura del Design System */}
       <SystemSculpture hovered={hoveredId === "design-system"} {...bind("design-system")} />
-      <Plaque position={[0, 0.5, -1.73]} scale={0.62} {...plaque("design-system", { subtitle: "BICE VIDA · Design System", stat: null, note: texts["design-system"].technique })} />
+      <Plaque position={[0, 0.5, -1.73]} scale={0.62} {...plaque("design-system", { stat: null, note: texts["design-system"].technique })} />
       <Spot position={[0, 5.8, -0.6]} target={[0, 1.5, -2.5]} intensity={2.7} angle={0.38} />
 
       {/* Muro del fondo, derecha: láminas reales del Design System */}
@@ -1136,7 +1172,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
       />
       <WallText position={[-7.94, 4.5, -3.0]} rotY={Math.PI / 2} w={3.6} h={1.05} {...V.funnel} color="#C2410C" lang={lang} />
       <SyntheticBoard position={[-7.92, 2.95, -6.45]} rotY={Math.PI / 2} lang={lang} hovered={hoveredId === "funnel-csi"} {...bind("funnel-csi")} />
-      <Plaque position={[-7.95, 1.4, -6.45]} rotY={Math.PI / 2} {...plaque("funnel-csi", { subtitle: "BICE VIDA · Funnel", stat: null, note: texts["funnel-csi"].technique })} />
+      <Plaque position={[-7.95, 1.4, -6.45]} rotY={Math.PI / 2} {...plaque("funnel-csi", { stat: null, note: texts["funnel-csi"].technique })} />
       <group {...bind("funnel-csi")}>
         <FunnelSculpture hovered={hoveredId === "funnel-csi"} />
       </group>
@@ -1163,7 +1199,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
         />
       ))}
       <WallText position={[7.94, 4.42, -3.0]} rotY={-Math.PI / 2} w={3.9} h={1.1} {...V.beliv} color="#C8203F" lang={lang} />
-      <Plaque position={[7.95, 1.4, -0.15]} rotY={-Math.PI / 2} {...plaque("beliv", { subtitle: "Beliv · App de bienestar", stat: null, note: texts.beliv.technique })} />
+      <Plaque position={[7.95, 1.4, -0.15]} rotY={-Math.PI / 2} {...plaque("beliv", { stat: null, note: texts.beliv.technique })} />
       <Spot position={[5.6, 5.8, -3]} target={[8, 2.5, -3]} intensity={2.7} angle={0.5} />
 
       {/* Sala 5: muro del fondo, chatbot con sus pantallas reales */}
@@ -1191,7 +1227,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
         />
       ))}
       <WallText position={[-5.0, 4.66, -7.94]} w={4.4} h={1.2} {...V.chatbot} color="#6D3FE0" lang={lang} />
-      <Plaque position={[-5.85, 1.45, -7.95]} {...plaque("chatbot", { subtitle: "BICE VIDA · IA", stat: null, note: texts.chatbot.technique })} />
+      <Plaque position={[-5.85, 1.45, -7.95]} {...plaque("chatbot", { stat: null, note: texts.chatbot.technique })} />
       <Spot position={[-5.0, 5.8, -5.3]} target={[-5.0, 3.0, -8]} intensity={2.7} angle={0.48} />
 
       {/* Sala 4: manifiesto */}
@@ -1210,7 +1246,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
         hovered={hoveredId === "artista"}
         {...bind("artista")}
       />
-      <Plaque position={[-7.95, 1.18, 3.2]} rotY={Math.PI / 2} {...plaque("artista", { subtitle: "Santiago, Chile", stat: null, note: texts.artista.technique })} />
+      <Plaque position={[-7.95, 1.18, 3.2]} rotY={Math.PI / 2} {...plaque("artista", { stat: null, note: texts.artista.technique })} />
       <Spot position={[-5.6, 5.8, 3.2]} target={[-8, 2.7, 3.2]} intensity={2.5} angle={0.36} />
 
       {/* par de bancas simétricas, paralelas al muro principal y alineadas con
