@@ -30,6 +30,13 @@ export default function Footer() {
             </span>
           </MagneticLink>
           <MagneticLink
+            href={PROFILE.whatsapp}
+            target="_blank"
+            className={`${LINK} border border-paper/25 text-paper hover:border-paper hover:bg-paper/10`}
+          >
+            {PROFILE.phone}
+          </MagneticLink>
+          <MagneticLink
             href={PROFILE.linkedin}
             target="_blank"
             className={`${LINK} border border-paper/25 text-paper hover:border-paper hover:bg-paper/10`}

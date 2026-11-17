@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { chatLive, funnelLive, uploaderLive, plansLive, scrollAt } from "./live";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useTexture, MeshReflectorMaterial, RoundedBox, ContactShadows } from "@react-three/drei";
@@ -237,14 +238,74 @@ function Spot({ position, target, intensity = 2.2, angle = 0.42, color = "#ffecc
 }
 
 // Marco con passe-partout. `rotY` orienta el cuadro según el muro.
-function Artwork({ src, w, h, position, rotY = 0, frame = FRAME_DARK, mat = 0.12, hovered, ...handlers }) {
+// Obra viva: capa dibujada en canvas sobre la captura que se anima mientras
+// la obra está activa (mouse encima o ficha abierta). Comparte el mismo
+// atenuado que la pantalla, así que se apaga y se enciende con la sala.
+function LiveOverlay({ w, h, image, active, live, lang }) {
+  const L = useContext(LightsContext);
+  const fonts = useContext(FontContext);
+  const dim = useDimmed(0.5, 0.925);
+  const imgW = image?.width || 1024;
+  const imgH = image?.height || 768;
+  const k = Math.min(1.25, 1400 / imgW);
+  const { ctx, tex } = useMemo(() => {
+    const c = document.createElement("canvas");
+    c.width = Math.round(imgW * k);
+    c.height = Math.round(imgH * k);
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = 8;
+    return { ctx: c.getContext("2d"), tex: t };
+  }, [imgW, imgH, k]);
+  useEffect(() => () => tex.dispose(), [tex]);
+  const st = useRef({ t: 0, a: 0 });
+  useFrame((_, dt) => {
+    const mesh = dim.current;
+    if (!mesh) return;
+    const s = st.current;
+    const on = active && !L.current.reduce;
+    s.a = THREE.MathUtils.clamp(s.a + (on ? dt / 0.2 : -dt / 0.35), 0, 1);
+    if (on) s.t += Math.min(dt, 0.1);
+    else if (s.a === 0) s.t = 0;
+    mesh.visible = s.a > 0;
+    if (!mesh.visible) return;
+    mesh.material.opacity = s.a;
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.clearRect(0, 0, imgW, imgH);
+    ctx.textBaseline = "alphabetic";
+    live.draw(ctx, s.t % live.period, { image, fonts, lang });
+    tex.needsUpdate = true;
+  });
+  return (
+    <mesh ref={dim} position={[0, 0, 0.058]} visible={false}>
+      <planeGeometry args={[w, h]} />
+      <meshBasicMaterial map={tex} transparent depthWrite={false} />
+    </mesh>
+  );
+}
+
+function Artwork({ src, w, h, position, rotY = 0, frame = FRAME_DARK, mat = 0.12, hovered, active, live, scroll, lang, ...handlers }) {
   const tex = useCroppedTexture(src, w / h);
+  const L = useContext(LightsContext);
   const group = useRef();
   const screen = useDimmed(0.5, 0.925);
+  // páginas largas: se recorren de arriba abajo mientras la obra está activa
+  const sc = useRef({ t: 0, p: 0 });
+  const top = 1 - tex.repeat.y;
+  const viewports = 1 / tex.repeat.y;
   useFrame((_, dt) => {
     if (!group.current) return;
     const s = hovered ? 1.025 : 1;
     group.current.scale.lerp(new THREE.Vector3(s, s, 1), Math.min(1, dt * 8));
+    if (scroll && viewports > 1.05) {
+      const S = sc.current;
+      const on = active && !L.current.reduce;
+      if (on) S.t += Math.min(dt, 0.1);
+      else if (S.p < 0.002) S.t = 0;
+      const target = on ? scrollAt(S.t, viewports) : 0;
+      S.p += (target - S.p) * Math.min(1, dt * (on ? 10 : 4));
+      tex.offset.y = top * (1 - S.p);
+    }
   });
   const fw = w + mat * 2 + 0.16;
   const fh = h + mat * 2 + 0.16;
@@ -263,6 +324,7 @@ function Artwork({ src, w, h, position, rotY = 0, frame = FRAME_DARK, mat = 0.12
         {/* sin luz propia: la captura se ve nítida y con sus colores reales */}
         <meshBasicMaterial map={tex} color="#ececec" />
       </mesh>
+      {live && <LiveOverlay w={w} h={h} image={tex.image} active={active} live={live} lang={lang} />}
     </group>
   );
 }
@@ -357,74 +419,6 @@ function Plaque({ position, rotY = 0, title, number, stat, statLabel, note, colo
   );
 }
 
-// Gráfica de sala en vinilo sobre el muro, como en los museos: el resultado
-// clave en grande, legible desde la entrada, y una línea que lo explica.
-function WallText({ position, rotY = 0, w = 4, h = 1, eyebrow, big, label, items = [], color = "#221D18", lang }) {
-  const W = 2048;
-  const H = Math.round((W * h) / w);
-  const tex = useTextTexture(
-    (ctx, cw, ch, f) => {
-      ctx.clearRect(0, 0, cw, ch);
-      ctx.textBaseline = "alphabetic";
-      const fit = (text, weight, family, max, maxW) => {
-        let size = max;
-        ctx.font = `${weight} ${size}px ${family}`;
-        while (ctx.measureText(text).width > maxW && size > 10) {
-          size -= 2;
-          ctx.font = `${weight} ${size}px ${family}`;
-        }
-        return size;
-      };
-      // 1. qué caso es
-      ctx.fillStyle = color;
-      if ("letterSpacing" in ctx) ctx.letterSpacing = `${Math.round(ch * 0.012)}px`;
-      fit(eyebrow, 600, f.sans, Math.round(ch * 0.07), cw - 20);
-      ctx.fillText(eyebrow, 6, ch * 0.09);
-      if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
-      // 2. la cifra, enorme
-      ctx.font = `600 ${Math.round(ch * 0.5)}px ${f.serif}`;
-      const bw = ctx.measureText(big).width;
-      ctx.fillText(big, 0, ch * 0.56);
-      // 3. qué significa, junto a la cifra y en dos líneas cortas
-      ctx.fillStyle = "#1c1814";
-      const lines = label.split("\n");
-      const lx = bw + ch * 0.07;
-      const ls = Math.min(...lines.map((l) => fit(l, 600, f.sans, Math.round(ch * 0.085), cw - lx - 10)));
-      ctx.font = `600 ${ls}px ${f.sans}`;
-      lines.forEach((l, k) => ctx.fillText(l, lx, ch * 0.56 - (lines.length - 1 - k) * ls * 1.25));
-      // 4. cifras de apoyo, separadas por una línea fina
-      if (items.length) {
-        ctx.fillStyle = "rgba(28,24,20,0.28)";
-        ctx.fillRect(4, ch * 0.66, cw - 8, Math.max(2, ch * 0.005));
-        const colW = (cw - 8) / items.length;
-        items.forEach(([n, t], k) => {
-          const x = 4 + k * colW;
-          ctx.fillStyle = color;
-          ctx.font = `600 ${Math.round(ch * 0.16)}px ${f.serif}`;
-          ctx.fillText(n, x, ch * 0.88);
-          const nw = ctx.measureText(n).width;
-          ctx.fillStyle = "#2a231d";
-          const ts = fit(t, 500, f.sans, Math.round(ch * 0.068), colW - nw - ch * 0.08);
-          ctx.font = `500 ${ts}px ${f.sans}`;
-          ctx.fillText(t, x + nw + ch * 0.04, ch * 0.86);
-        });
-      }
-    },
-    [eyebrow, big, label, items.map((x) => x.join()).join("|"), color, lang],
-    W,
-    H
-  );
-  const dim = useDimmed(0.06);
-  return (
-    <mesh ref={dim} position={position} rotation={[0, rotY, 0]}>
-      <planeGeometry args={[w, h]} />
-      <meshBasicMaterial map={tex} transparent toneMapped={false} depthWrite={false} />
-    </mesh>
-  );
-}
-
-// Muro de usuarios sintéticos: los 10 perfiles que recorrieron el funnel.
-// Son las mismas esferas menta que bajan por la escultura.
 function SyntheticBoard({ position, rotY = 0, lang, hovered, ...handlers }) {
   const tex = useTextTexture(
     (ctx, w, h, f) => {
@@ -1066,7 +1060,8 @@ function Room() {
   );
 }
 
-export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, isMobile, lightsOn = true, focus = false }) {
+export default function Scene({ lang, hoveredId, selectedId, setHoveredId, onSelect, texts, isMobile, lightsOn = true, focus = false }) {
+  const on = (id) => hoveredId === id || selectedId === id;
   const fonts = useSiteFonts();
   const lights = useRef({ on: true, level: 1, changedAt: -100, reduce: false });
   useEffect(() => {
@@ -1103,7 +1098,6 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
     lang,
     ...extra,
   });
-  const V = VINYL[lang] || VINYL.es;
 
   return (
     <LightsContext.Provider value={lights}>
@@ -1122,7 +1116,9 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
 
       {/* Sala 1: muro principal */}
       <Artwork
-        src="/images/museo/viaje-landing-unificada.jpg"
+        src="/images/museo/viaje-landing-scroll.jpg"
+        scroll
+        active={on("landing-viajes")}
         w={4.2}
         h={3.15}
         position={[0, 2.85, -7.92]}
@@ -1150,6 +1146,9 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
         />
         <Artwork
           src="/images/museo/ds-estados.jpg"
+          live={uploaderLive}
+          active={on("design-system")}
+          lang={lang}
           w={0.76}
           h={1.24}
           mat={0.1}
@@ -1157,12 +1156,13 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           hovered={hoveredId === "design-system"}
         />
       </group>
-      <WallText position={[5.35, 4.62, -7.94]} w={4.1} h={1.2} {...V.ds} color="#3D5AFE" lang={lang} />
       <Spot position={[5.4, 5.8, -5.4]} target={[5.4, 3.2, -8]} intensity={2.4} angle={0.5} />
 
       {/* Sala 2: muro izquierdo, funnel CSI */}
       <Artwork
         src="/images/museo/csi-planes.jpg"
+        live={plansLive}
+        active={on("funnel-csi")}
         w={3}
         h={2.25}
         position={[-7.92, 2.55, -3.0]}
@@ -1170,7 +1170,6 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
         hovered={hoveredId === "funnel-csi"}
         {...bind("funnel-csi")}
       />
-      <WallText position={[-7.94, 4.5, -3.0]} rotY={Math.PI / 2} w={3.6} h={1.05} {...V.funnel} color="#C2410C" lang={lang} />
       <SyntheticBoard position={[-7.92, 2.95, -6.45]} rotY={Math.PI / 2} lang={lang} hovered={hoveredId === "funnel-csi"} {...bind("funnel-csi")} />
       <Plaque position={[-7.95, 1.4, -6.45]} rotY={Math.PI / 2} {...plaque("funnel-csi", { stat: null, note: texts["funnel-csi"].technique })} />
       <group {...bind("funnel-csi")}>
@@ -1182,9 +1181,9 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
 
       {/* Sala 3: tríptico Beliv */}
       {[
-        ["/images/museo/beliv-home.jpg", -4.3],
-        ["/images/museo/beliv-score.jpg", -3],
-        ["/images/museo/beliv-salud.jpg", -1.7],
+        ["/images/museo/beliv-home-scroll.jpg", -4.3],
+        ["/images/museo/beliv-score-scroll.jpg", -3],
+        ["/images/museo/beliv-salud-scroll.jpg", -1.7],
       ].map(([src, z]) => (
         <Artwork
           key={src}
@@ -1193,18 +1192,22 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           h={2.0}
           mat={0.07}
           position={[7.92, 2.6, z]}
+          scroll
+          active={on("beliv")}
           rotY={-Math.PI / 2}
           hovered={hoveredId === "beliv"}
           {...bind("beliv")}
         />
       ))}
-      <WallText position={[7.94, 4.42, -3.0]} rotY={-Math.PI / 2} w={3.9} h={1.1} {...V.beliv} color="#C8203F" lang={lang} />
       <Plaque position={[7.95, 1.4, -0.15]} rotY={-Math.PI / 2} {...plaque("beliv", { stat: null, note: texts.beliv.technique })} />
       <Spot position={[5.6, 5.8, -3]} target={[8, 2.5, -3]} intensity={2.7} angle={0.5} />
 
       {/* Sala 5: muro del fondo, chatbot con sus pantallas reales */}
       <Artwork
         src="/images/museo/chatbot-chat.jpg"
+        live={chatLive}
+        active={on("chatbot")}
+        lang={lang}
         w={2.3}
         h={1.27}
         position={[-5.85, 3.05, -7.92]}
@@ -1222,11 +1225,13 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           h={0.63}
           mat={0.08}
           position={[-3.45, y, -7.92]}
+          live={src.includes("embudo") ? funnelLive : undefined}
+          active={on("chatbot")}
+          lang={lang}
           hovered={hoveredId === "chatbot"}
           {...bind("chatbot")}
         />
       ))}
-      <WallText position={[-5.0, 4.66, -7.94]} w={4.4} h={1.2} {...V.chatbot} color="#6D3FE0" lang={lang} />
       <Plaque position={[-5.85, 1.45, -7.95]} {...plaque("chatbot", { stat: null, note: texts.chatbot.technique })} />
       <Spot position={[-5.0, 5.8, -5.3]} target={[-5.0, 3.0, -8]} intensity={2.7} angle={0.48} />
 
@@ -1265,18 +1270,4 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
   );
 }
 
-// Textos de los vinilos de cada sala (cifras confirmadas por Charly).
-const VINYL = {
-  es: {
-    chatbot: { eyebrow: "CHATBOT CON IA", big: "90%", label: "de las conversaciones\nlas resuelve el bot", items: [["−20%", "llamadas al call center"], ["−66%", "preguntas repetidas"]] },
-    ds: { eyebrow: "DESIGN SYSTEM", big: "10", label: "células de producto\nlo consumen", items: [["~90%", "de lo que construyen se apoya en él"]] },
-    funnel: { eyebrow: "FUNNEL DE CONTRATACIÓN", big: "−12%", label: "de abandono\nal contratar", items: [["10 → 8", "pasos"], ["10", "usuarios sintéticos"]] },
-    beliv: { eyebrow: "DESIGN SPRINT", big: "3 días", label: "de la idea\na la app", items: [["8+", "pantallas, probadas y desarrolladas"]] },
-  },
-  en: {
-    chatbot: { eyebrow: "AI CHATBOT", big: "90%", label: "of conversations\nresolved by the bot", items: [["−20%", "call center calls"], ["−66%", "repeated questions"]] },
-    ds: { eyebrow: "DESIGN SYSTEM", big: "10", label: "product squads\nbuild on it", items: [["~90%", "of what they ship relies on it"]] },
-    funnel: { eyebrow: "SIGN-UP FUNNEL", big: "−12%", label: "drop-off\nat sign-up", items: [["10 → 8", "steps"], ["10", "synthetic users"]] },
-    beliv: { eyebrow: "DESIGN SPRINT", big: "3 days", label: "from idea\nto app", items: [["8+", "screens, tested and built"]] },
-  },
-};
+

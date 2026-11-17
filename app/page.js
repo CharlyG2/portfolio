@@ -21,6 +21,8 @@ export default function Home() {
           <li><Link href="/casos/chatbot">Chatbot con IA: asistente virtual con 1.058 conversaciones en un mes</Link></li>
           <li><Link href="/express">Portafolio en versión rápida</Link></li>
           <li><a href="mailto:gourvestoro@gmail.com">gourvestoro@gmail.com</a></li>
+          <li><a href="https://wa.me/56948530754">+56 9 4853 0754</a></li>
+          <li><a href="https://linkedin.com/in/charlygourves">linkedin.com/in/charlygourves</a></li>
         </ul>
       </div>
       <MuseumLoader />
