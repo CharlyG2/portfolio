@@ -30,7 +30,7 @@ function Step({ label, tone = "default" }) {
   };
   return (
     <div
-      className={`shrink-0 w-[110px] h-[64px] rounded-lg border ${toneClasses[tone]} bg-white flex items-center justify-center text-center text-[10px] px-2 font-mono leading-tight`}
+      className={`shrink-0 w-full md:w-[110px] min-h-[56px] md:h-[64px] rounded-lg border ${toneClasses[tone]} bg-white flex items-center justify-center text-center text-[11px] md:text-[10px] px-2 py-2 font-mono leading-tight`}
     >
       {label}
     </div>
@@ -39,11 +39,12 @@ function Step({ label, tone = "default" }) {
 
 export default function FunnelDiagram() {
   return (
-    <div className="rounded-2xl border border-line bg-paperSoft p-6 md:p-8 overflow-x-auto">
+    <div className="rounded-2xl border border-line bg-paperSoft p-5 md:p-8 md:overflow-x-auto">
       <p className="font-mono text-[10px] uppercase tracking-widest text-mutedLight mb-4">
         antes — 10 pasos
       </p>
-      <div className="flex gap-2 mb-8 min-w-max">
+      {/* en celular los pasos bajan en dos columnas, sin scroll lateral escondido */}
+      <div className="grid grid-cols-2 md:flex gap-2 mb-8 md:min-w-max">
         {before.map((s, i) => (
           <Step
             key={i}
@@ -56,7 +57,7 @@ export default function FunnelDiagram() {
       <p className="font-mono text-[10px] uppercase tracking-widest text-mutedLight mb-4">
         después — 8 pasos
       </p>
-      <div className="flex gap-2 min-w-max">
+      <div className="grid grid-cols-2 md:flex gap-2 md:min-w-max">
         {after.map((s, i) => (
           <Step key={i} label={s.label} tone={s.merged ? "merged" : "default"} />
         ))}

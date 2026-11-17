@@ -1075,6 +1075,9 @@ export default function Scene({ lang, hoveredId, selectedId, setHoveredId, onSel
   const bind = (id) => ({
     onPointerOver: (e) => {
       e.stopPropagation();
+      // con el dedo no hay "hover": si se marcara, la obra quedaba agrandada
+      // y animándose después de cerrar la ficha
+      if (e.pointerType === "touch") return;
       setHoveredId(id);
       document.body.style.cursor = "pointer";
     },
@@ -1264,7 +1267,7 @@ export default function Scene({ lang, hoveredId, selectedId, setHoveredId, onSel
         <Visitor key={v.color} {...v} hidden={focus} />
       ))}
 
-      <ContactShadows position={[0, 0.005, 2]} scale={[16, 20]} resolution={1024} far={2.5} blur={2.2} opacity={0.6} color="#1a120c" />
+      <ContactShadows position={[0, 0.005, 2]} scale={[16, 20]} resolution={isMobile ? 512 : 1024} far={2.5} blur={2.2} opacity={0.6} color="#1a120c" />
     </FontContext.Provider>
     </LightsContext.Provider>
   );

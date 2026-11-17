@@ -56,26 +56,29 @@ export default function TopNav() {
           CG
         </Link>
 
-        <nav className="flex items-center gap-4 md:gap-9">
+        <nav className="flex items-center gap-1 md:gap-7 -mr-2 md:mr-0">
           {LINKS.map((l) => {
             const isActive = active === l.href;
             return (
               <a
                 key={l.href}
                 href={l.href}
-                className={`relative py-1 text-[10px] md:text-[12px] transition-colors duration-300 ${isActive ? "text-paper" : "text-[#c9beac] hover:text-paper"}`}
+                className={`inline-flex items-center min-h-[44px] px-2 text-[11px] md:text-[12px] transition-colors duration-300 ${isActive ? "text-paper" : "text-[#c9beac] hover:text-paper"}`}
                 style={{
                   fontFamily: "var(--font-mono), monospace",
                   letterSpacing: "0.06em",
                   textDecoration: "none",
                 }}
               >
+                {/* área táctil de 44px en celular; el subrayado sigue pegado al texto */}
+                <span className="relative">
                 {l.label}
                 <span
                   aria-hidden="true"
                   className="absolute left-0 right-0 -bottom-[3px] h-[2px] transition-transform duration-slow ease-out-expo origin-left"
                   style={{ background: "#AC5142", transform: isActive ? "scaleX(1)" : "scaleX(0)" }}
                 />
+                </span>
               </a>
             );
           })}

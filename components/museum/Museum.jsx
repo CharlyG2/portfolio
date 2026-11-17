@@ -67,7 +67,7 @@ const MINT = "#5FE3D0";
 const GLASS = "bg-[#14110e]/70 backdrop-blur-md border-white/15 text-paper";
 
 function PillButton({ children, onClick, href, download, active, accent, label }) {
-  const cls = `press shrink-0 whitespace-nowrap inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 min-h-[38px] text-xs md:text-sm font-medium border ${
+  const cls = `press shrink-0 whitespace-nowrap inline-flex items-center justify-center gap-1.5 rounded-full px-3.5 md:px-4 py-2 min-h-[40px] text-xs md:text-sm font-medium border ${
     accent
       ? "bg-[#5FE3D0] text-[#10201d] border-[#5FE3D0] hover:bg-[#8FE9DA] hover:border-[#8FE9DA]"
       : active
@@ -161,14 +161,24 @@ export default function Museum() {
       const s = STATIONS.find((x) => x.id === id);
       const v = s ? s.view : isMobile ? OVERVIEW_MOBILE : OVERVIEW;
       let pos = v.pos;
+      let target = v.target;
       if (s && isMobile) {
-        // en celular la cámara se aleja un poco para que la obra quepa
-        const dir = v.pos.map((p, i) => p - v.target[i]);
-        pos = v.pos.map((p, i) => p + dir[i] * 0.45);
+        if (s.viewMobile) {
+          ({ pos, target } = s.viewMobile);
+        } else {
+          // en celular la cámara se aleja un poco para que la obra quepa y
+          // mira levemente hacia abajo: así la obra queda en la mitad de
+          // arriba, sobre la ficha, sin bajar la cámara (antes se bajaba
+          // con un offset y se terminaba viendo el techo)
+          const dir = v.pos.map((p, i) => p - v.target[i]);
+          pos = v.pos.map((p, i) => p + dir[i] * 0.45);
+          const dist = Math.hypot(pos[0] - v.target[0], pos[2] - v.target[2]);
+          target = [v.target[0], v.target[1] - dist * 0.23, v.target[2]];
+        }
       }
-      c.setLookAt(...pos, ...v.target, !reduce);
+      c.setLookAt(...pos, ...target, !reduce);
       // con el panel abierto en escritorio, la obra se corre a la izquierda
-      c.setFocalOffset(s && !isMobile ? 0.9 : 0, s && isMobile ? -1.1 : 0, 0, !reduce);
+      c.setFocalOffset(s && !isMobile ? 0.9 : 0, 0, 0, !reduce);
     },
     [isMobile]
   );
@@ -217,10 +227,46 @@ export default function Museum() {
 
   const hovered = STATIONS.find((s) => s.id === hoveredId);
 
+  const langToggle = (pillId) => (
+          <div className={`shrink-0 inline-flex rounded-full border ${GLASS} p-0.5 text-xs md:text-sm font-medium`} role="group" aria-label="Idioma">
+            {["es", "en"].map((l) => (
+              <button
+                key={l}
+                type="button"
+                onClick={() => setLang(l)}
+                className={`relative rounded-full px-2.5 md:px-3 py-1.5 min-h-[34px] uppercase transition-colors duration-base ${lang === l ? "text-ink" : "text-paper/70 hover:text-paper"}`}
+                aria-pressed={lang === l}
+              >
+                {/* la pastilla clara se desliza entre ES y EN */}
+                {lang === l && (
+                  <motion.span
+                    layoutId={pillId}
+                    className="absolute inset-0 rounded-full bg-paper"
+                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                    aria-hidden="true"
+                  />
+                )}
+                <span className="relative">{l}</span>
+              </button>
+            ))}
+          </div>
+  );
+  const lightsBtn = (
+    <PillButton onClick={() => setLightsOn((v) => !v)} active={!lightsOn} label={lightsOn ? t.lightsOff : t.lightsOn}>
+      <BulbIcon on={lightsOn} />
+      <span className="hidden md:inline">{lightsOn ? t.lightsOff : t.lightsOn}</span>
+    </PillButton>
+  );
+  const helpBtn = (
+    <PillButton onClick={() => setShowHelp((v) => !v)} active={showHelp} label={t.helpLabel}>
+      ?
+    </PillButton>
+  );
+
   return (
     <div className="fixed inset-0 bg-[#1a1613] overflow-hidden select-none">
       <Canvas
-        dpr={[1, 1.75]}
+        dpr={isMobile ? [1, 1.5] : [1, 1.75]}
         camera={{ position: OVERVIEW.pos, fov: 50, near: 0.1, far: 80 }}
         gl={{ antialias: true }}
         onPointerMissed={() => setSelected(null)}
@@ -254,7 +300,10 @@ export default function Museum() {
 
       {/* Cabecera: marca a la izquierda, controles en una sola fila */}
       <header className="absolute top-0 left-0 right-0 z-20 p-3 md:p-6 flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-4 pointer-events-none">
-        <div className={`${enterCls} pointer-events-auto self-start flex items-center gap-2.5 rounded-full border ${GLASS} pl-3 pr-4 py-2`} style={d(250)}>
+        {/* en celular la ampolleta y la ayuda suben a la fila de la marca: abajo
+            no cabían y quedaban escondidas fuera de la pantalla */}
+        <div className="flex items-center justify-between gap-1.5 md:contents">
+        <div className={`${enterCls} pointer-events-auto self-start flex items-center gap-2 md:gap-2.5 whitespace-nowrap rounded-full border ${GLASS} pl-3 pr-3.5 md:pr-4 py-2 min-h-[40px]`} style={d(250)}>
           <span className="w-2 h-2 rounded-full" style={{ background: MINT, boxShadow: `0 0 10px ${MINT}` }} aria-hidden="true" />
           <span className="font-serif text-sm md:text-base leading-none">Charly Gourves</span>
           {/* el cargo se muestra recién al visitar una obra: en la portada ya
@@ -263,35 +312,20 @@ export default function Museum() {
             {PROFILE.role[lang]}
           </span>
         </div>
+        <div className={`${enterCls} pointer-events-auto flex gap-1.5 md:hidden`} style={d(300)}>
+          {langToggle("lang-pill-m")}
+          {lightsBtn}
+          {helpBtn}
+        </div>
+        </div>
         <nav
           className={`${enterCls} pointer-events-auto flex flex-nowrap md:flex-wrap md:justify-end gap-2 overflow-x-auto -mx-3 px-3 md:mx-0 md:px-0 pb-1 md:pb-0 [scrollbar-width:none]`}
           style={d(370)}
           aria-label="Controles del museo"
         >
-          <div className={`shrink-0 inline-flex rounded-full border ${GLASS} p-0.5 text-xs md:text-sm font-medium`} role="group" aria-label="Idioma">
-            {["es", "en"].map((l) => (
-              <button
-                key={l}
-                type="button"
-                onClick={() => setLang(l)}
-                className={`relative rounded-full px-3 py-1.5 uppercase transition-colors duration-base ${lang === l ? "text-ink" : "text-paper/70 hover:text-paper"}`}
-                aria-pressed={lang === l}
-              >
-                {/* la pastilla clara se desliza entre ES y EN */}
-                {lang === l && (
-                  <motion.span
-                    layoutId="lang-pill"
-                    className="absolute inset-0 rounded-full bg-paper"
-                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                    aria-hidden="true"
-                  />
-                )}
-                <span className="relative">{l}</span>
-              </button>
-            ))}
-          </div>
+          <span className="hidden md:contents">{langToggle("lang-pill")}</span>
           {selected && (
-            <span className="shrink-0 inline-flex animate-pop-in">
+            <span className="shrink-0 hidden md:inline-flex animate-pop-in">
               <PillButton onClick={() => setSelected(null)}>
                 {t.overview}
               </PillButton>
@@ -306,13 +340,10 @@ export default function Museum() {
           <PillButton href={`mailto:${PROFILE.email}`} accent>
             {t.contact}
           </PillButton>
-          <PillButton onClick={() => setLightsOn((v) => !v)} active={!lightsOn} label={lightsOn ? t.lightsOff : t.lightsOn}>
-            <BulbIcon on={lightsOn} />
-            <span className="hidden sm:inline">{lightsOn ? t.lightsOff : t.lightsOn}</span>
-          </PillButton>
-          <PillButton onClick={() => setShowHelp((v) => !v)} active={showHelp} label={t.helpLabel}>
-            ?
-          </PillButton>
+          <span className="hidden md:contents">
+            {lightsBtn}
+            {helpBtn}
+          </span>
         </nav>
         <AnimatePresence>
           {showHelp && (
@@ -336,7 +367,9 @@ export default function Museum() {
           selected ? "opacity-0 translate-y-4" : "opacity-100"
         }`}
       >
-        <div className="bg-gradient-to-t from-[#14110e] via-[#14110e]/80 to-transparent pt-20 md:pt-32 pb-24 md:pb-28 px-5 md:px-12">
+        {/* en celular el degradé sube más y es más denso: el texto quedaba
+            encima del muro iluminado y el pedestal, con poco contraste */}
+        <div className="bg-[linear-gradient(to_top,#14110e_0%,#14110e_45%,rgba(20,17,14,0.88)_72%,transparent_100%)] md:bg-none md:bg-gradient-to-t md:from-[#14110e] md:via-[#14110e]/80 md:to-transparent pt-24 md:pt-32 pb-24 md:pb-28 px-5 md:px-12 [text-shadow:0_1px_10px_rgba(10,8,6,0.55)] md:[text-shadow:none]">
           <p className={`${enterCls} font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#E08A74]`} style={d(400)}>{t.kicker}</p>
           <p className="font-serif text-paper leading-[0.95] mt-3 text-[38px] sm:text-5xl md:text-6xl xl:text-7xl">
             <span className={`${enterCls} block`} style={d(490)}>{t.heroTitle}</span>
@@ -408,13 +441,14 @@ export default function Museum() {
       {/* Ficha de la obra */}
       <aside
         className={`absolute z-20 bg-[#FBF8F2] text-ink shadow-2xl border border-ink/10 transition-[opacity,transform] ease-out-expo
-          inset-x-3 bottom-3 rounded-2xl max-h-[48vh] overflow-y-auto
-          md:inset-x-auto md:right-6 md:top-1/2 md:bottom-auto md:w-[380px] md:max-h-[80vh]
+          inset-x-3 bottom-3 rounded-2xl overflow-hidden
+          md:inset-x-auto md:right-6 md:top-1/2 md:bottom-auto md:w-[380px]
           ${station ? "duration-700 opacity-100 translate-y-0 md:translate-x-0 md:-translate-y-1/2" : "duration-base opacity-0 translate-y-8 md:translate-y-[-50%] md:translate-x-6 pointer-events-none"}`}
         aria-live="polite"
         aria-hidden={!station}
         {...(!station ? { inert: "" } : {})}
       >
+        <div className="max-h-[48vh] md:max-h-[80vh] overflow-y-auto overscroll-contain">
         {shown && (
           <div key={shown.id} className={`p-6 md:p-7 ${station ? "animate-swap [animation-delay:80ms]" : ""}`}>
             <div className="flex items-start justify-between gap-4">
@@ -467,6 +501,7 @@ export default function Museum() {
             </Link>
           </div>
         )}
+        </div>
       </aside>
 
       {/* Recorrido */}

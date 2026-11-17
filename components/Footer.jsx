@@ -58,7 +58,7 @@ export default function Footer() {
             href="/files/charly-gourves-cv.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-paper underline underline-offset-4"
+            className="inline-flex items-center min-h-[44px] hover:text-paper underline underline-offset-4"
           >
             Descargar CV (PDF)
           </a>
