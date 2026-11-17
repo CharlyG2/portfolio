@@ -14,7 +14,7 @@ export default function Home() {
           Santiago, modalidad híbrida.
         </p>
         <ul>
-          <li><Link href="/casos/design-system">Design System de BICE VIDA: 89 componentes en producción</Link></li>
+          <li><Link href="/casos/design-system">Design System de BICE VIDA: la base que consumen 10 células de producto</Link></li>
           <li><Link href="/casos/landing-viajes">Landing de seguros de viaje: +16% de visitas</Link></li>
           <li><Link href="/casos/funnel-csi">Funnel de contratación CSI: −12% de abandono, validado con usuarios sintéticos generados con IA</Link></li>
           <li><Link href="/casos/beliv">Beliv: app de bienestar en un Design Sprint de 3 días</Link></li>

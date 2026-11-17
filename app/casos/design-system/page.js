@@ -7,7 +7,7 @@ import SystemGraph from "@/components/SystemGraph";
 export const metadata = pageMetadata({
   title: "El Design System de BICE VIDA — Charly Gourves",
   description:
-    "El Design System de BICE VIDA: 89 componentes en producción, usados por 10 células de producto.",
+    "El primer Design System de BICE VIDA: tokens de color, componentes primitivos y compuestos que hoy consumen 10 células de producto en app y web.",
   path: "/casos/design-system",
 });
 
@@ -16,13 +16,12 @@ export default function DesignSystemCase() {
     <CaseLayout slug="design-system">
       <CaseHeader
         eyebrow="caso 01 · design system"
-        title="89 componentes, un solo lenguaje: el primer Design System de BICE VIDA"
-        tldr="BICE VIDA nunca había tenido un lenguaje de diseño compartido entre equipos. Propuse la metodología (diseño atómico), definí las reglas de entrada y salida junto al equipo de desarrollo, y hoy el sistema tiene 89 componentes en producción entre app y web, y es la base de trabajo de 10 células de producto."
+        title="Un solo lenguaje para 10 equipos: el primer Design System de BICE VIDA"
+        tldr="BICE VIDA nunca había tenido un lenguaje de diseño compartido entre equipos. Propuse la metodología (diseño atómico), definí las reglas de entrada y salida junto al equipo de desarrollo y lo construí desde la base: tokens de color, componentes primitivos y los componentes compuestos que se arman con ellos, en Figma y Storybook. Hoy lo consumen 10 células de producto, en app y web."
         stats={[
-          { n: "118", l: "componentes diseñados (Figma)" },
-          { n: "89", l: "componentes en producción (Storybook)" },
-          { n: "10", l: "células de producto trabajando con el sistema" },
-          { n: "90%", l: "del trabajo de esas células se apoya en el DS" },
+          { n: "10", l: "células de producto consumen el sistema" },
+          { n: "~90%", l: "de lo que construyen se apoya en el DS" },
+          { n: "2", l: "canales, app y web, con el mismo lenguaje" },
         ]}
         meta="Rol: Product Designer, a cargo del Design System · Equipo: 10 células con desarrolladores, PO, agilistas y leads"
       />

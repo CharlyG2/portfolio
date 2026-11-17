@@ -675,7 +675,8 @@ function Pedestal({ position, w = 1.1, h = 1.1, d = 1.1 }) {
   );
 }
 
-// Escultura del Design System: 89 piezas, una por componente, en espiral.
+// Escultura del Design System: piezas de colores (tokens, componentes
+// primitivos y compuestos) que suben en espiral.
 function SystemSculpture({ hovered, ...handlers }) {
   const ref = useRef();
   const spin = useRef();
@@ -1232,13 +1233,13 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
 const VINYL = {
   es: {
     chatbot: { eyebrow: "CHATBOT CON IA", big: "90%", label: "de las conversaciones\nlas resuelve el bot", items: [["−20%", "llamadas al call center"], ["−66%", "preguntas repetidas"]] },
-    ds: { eyebrow: "DESIGN SYSTEM", big: "89", label: "componentes\nen producción", items: [["10", "células de producto lo usan"]] },
+    ds: { eyebrow: "DESIGN SYSTEM", big: "10", label: "células de producto\nlo consumen", items: [["~90%", "de lo que construyen se apoya en él"]] },
     funnel: { eyebrow: "FUNNEL DE CONTRATACIÓN", big: "−12%", label: "de abandono\nal contratar", items: [["10 → 8", "pasos"], ["10", "usuarios sintéticos"]] },
     beliv: { eyebrow: "DESIGN SPRINT", big: "3 días", label: "de la idea\na la app", items: [["8+", "pantallas, probadas y desarrolladas"]] },
   },
   en: {
     chatbot: { eyebrow: "AI CHATBOT", big: "90%", label: "of conversations\nresolved by the bot", items: [["−20%", "call center calls"], ["−66%", "repeated questions"]] },
-    ds: { eyebrow: "DESIGN SYSTEM", big: "89", label: "components\nin production", items: [["10", "product squads use it"]] },
+    ds: { eyebrow: "DESIGN SYSTEM", big: "10", label: "product squads\nbuild on it", items: [["~90%", "of what they ship relies on it"]] },
     funnel: { eyebrow: "SIGN-UP FUNNEL", big: "−12%", label: "drop-off\nat sign-up", items: [["10 → 8", "steps"], ["10", "synthetic users"]] },
     beliv: { eyebrow: "DESIGN SPRINT", big: "3 days", label: "from idea\nto app", items: [["8+", "screens, tested and built"]] },
   },
