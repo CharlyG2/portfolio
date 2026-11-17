@@ -269,7 +269,7 @@ function Artwork({ src, w, h, position, rotY = 0, frame = FRAME_DARK, mat = 0.12
 
 // Cartela de museo: de qué se trata, dónde se hizo y el resultado en grande.
 // Antes era una tarjeta chica con el título en gris que no se leía.
-function Plaque({ position, rotY = 0, title, subtitle, stat, statLabel, color = "#6E2A1F", scale = 1, lang }) {
+function Plaque({ position, rotY = 0, title, subtitle, stat, statLabel, note, color = "#6E2A1F", scale = 1, lang }) {
   const tex = useTextTexture(
     (ctx, w, h, f) => {
       ctx.fillStyle = "#FBF8F2";
@@ -292,9 +292,17 @@ function Plaque({ position, rotY = 0, title, subtitle, stat, statLabel, color = 
         ctx.fillStyle = "#3d342c";
         ctx.font = `500 34px ${f.mono}`;
         wrapText(ctx, statLabel || "", 60 + sw + 30, h - 138, w - 110 - sw - 30, 42);
+      } else if (note) {
+        // como en una cartela de museo: técnica y colección, sin repetir la
+        // cifra que ya está en grande sobre el muro
+        ctx.fillStyle = color;
+        ctx.fillRect(64, h - 190, 90, 6);
+        ctx.fillStyle = "#3d342c";
+        ctx.font = `italic 400 40px ${f.serif}`;
+        wrapText(ctx, note, 64, h - 120, w - 120, 50);
       }
     },
-    [title, subtitle, stat, statLabel, color, lang],
+    [title, subtitle, stat, statLabel, note, color, lang],
     1040,
     640
   );
@@ -316,31 +324,58 @@ function Plaque({ position, rotY = 0, title, subtitle, stat, statLabel, color = 
 
 // Gráfica de sala en vinilo sobre el muro, como en los museos: el resultado
 // clave en grande, legible desde la entrada, y una línea que lo explica.
-function WallText({ position, rotY = 0, w = 4, h = 0.8, big, small, color = "#221D18", lang }) {
+function WallText({ position, rotY = 0, w = 4, h = 1, eyebrow, big, label, items = [], color = "#221D18", lang }) {
   const W = 2048;
   const H = Math.round((W * h) / w);
   const tex = useTextTexture(
     (ctx, cw, ch, f) => {
       ctx.clearRect(0, 0, cw, ch);
-      ctx.fillStyle = color;
-      let size = ch * 0.86;
-      ctx.font = `600 ${size}px ${f.serif}`;
-      const bw = ctx.measureText(big).width;
       ctx.textBaseline = "alphabetic";
-      ctx.fillText(big, 8, ch * 0.8);
-      // texto chico en la sans del sitio, sólido y oscuro: la mono fina se
-      // veía borrosa y "sucia" sobre el muro
+      const fit = (text, weight, family, max, maxW) => {
+        let size = max;
+        ctx.font = `${weight} ${size}px ${family}`;
+        while (ctx.measureText(text).width > maxW && size > 10) {
+          size -= 2;
+          ctx.font = `${weight} ${size}px ${family}`;
+        }
+        return size;
+      };
+      // 1. qué caso es
+      ctx.fillStyle = color;
+      if ("letterSpacing" in ctx) ctx.letterSpacing = `${Math.round(ch * 0.012)}px`;
+      fit(eyebrow, 600, f.sans, Math.round(ch * 0.07), cw - 20);
+      ctx.fillText(eyebrow, 6, ch * 0.09);
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+      // 2. la cifra, enorme
+      ctx.font = `600 ${Math.round(ch * 0.5)}px ${f.serif}`;
+      const bw = ctx.measureText(big).width;
+      ctx.fillText(big, 0, ch * 0.56);
+      // 3. qué significa, junto a la cifra y en dos líneas cortas
       ctx.fillStyle = "#1c1814";
-      const lines = small.split("\n");
-      const x = bw + 64;
-      ctx.font = `500 100px ${f.sans}`;
-      const longest = Math.max(...lines.map((l) => ctx.measureText(l).width));
-      const fs = Math.min(Math.round(ch * 0.17), Math.floor(((cw - x - 12) / longest) * 100));
-      ctx.font = `500 ${fs}px ${f.sans}`;
-      const startY = ch * 0.8 - (lines.length - 1) * fs * 1.35 - fs * 0.15;
-      lines.forEach((l, i) => ctx.fillText(l, x, startY + i * fs * 1.35));
+      const lines = label.split("\n");
+      const lx = bw + ch * 0.07;
+      const ls = Math.min(...lines.map((l) => fit(l, 600, f.sans, Math.round(ch * 0.085), cw - lx - 10)));
+      ctx.font = `600 ${ls}px ${f.sans}`;
+      lines.forEach((l, k) => ctx.fillText(l, lx, ch * 0.56 - (lines.length - 1 - k) * ls * 1.25));
+      // 4. cifras de apoyo, separadas por una línea fina
+      if (items.length) {
+        ctx.fillStyle = "rgba(28,24,20,0.28)";
+        ctx.fillRect(4, ch * 0.66, cw - 8, Math.max(2, ch * 0.005));
+        const colW = (cw - 8) / items.length;
+        items.forEach(([n, t], k) => {
+          const x = 4 + k * colW;
+          ctx.fillStyle = color;
+          ctx.font = `600 ${Math.round(ch * 0.16)}px ${f.serif}`;
+          ctx.fillText(n, x, ch * 0.88);
+          const nw = ctx.measureText(n).width;
+          ctx.fillStyle = "#2a231d";
+          const ts = fit(t, 500, f.sans, Math.round(ch * 0.068), colW - nw - ch * 0.08);
+          ctx.font = `500 ${ts}px ${f.sans}`;
+          ctx.fillText(t, x + nw + ch * 0.04, ch * 0.86);
+        });
+      }
     },
-    [big, small, color, lang],
+    [eyebrow, big, label, items.map((x) => x.join()).join("|"), color, lang],
     W,
     H
   );
@@ -833,13 +868,9 @@ function WallTitle({ lang }) {
       ctx.clearRect(0, 0, w, h);
       ctx.fillStyle = "#221D18";
       ctx.textAlign = "center";
-      ctx.font = `500 150px ${f.serif}`;
-      ctx.fillText("Charly Gourves", w / 2, 160);
-      // rojo oscuro y en negrita: el rust original se perdía sobre el muro
-      ctx.fillStyle = "#6E2A1F";
-      ctx.font = `500 64px ${f.mono}`;
-      if ("letterSpacing" in ctx) ctx.letterSpacing = "10px";
-      ctx.fillText("AI PRODUCT DESIGNER", w / 2, 262);
+      // solo el nombre: el cargo ya está en grande en la portada
+      ctx.font = `500 170px ${f.serif}`;
+      ctx.fillText("Charly Gourves", w / 2, 190);
     },
     [lang],
     2048,
@@ -1068,7 +1099,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
 
       {/* Sala central: escultura del Design System */}
       <SystemSculpture hovered={hoveredId === "design-system"} {...bind("design-system")} />
-      <Plaque position={[0, 0.5, -1.73]} scale={0.62} {...plaque("design-system", { subtitle: "BICE VIDA · Design System" })} />
+      <Plaque position={[0, 0.5, -1.73]} scale={0.62} {...plaque("design-system", { subtitle: "BICE VIDA · Design System", stat: null, note: texts["design-system"].technique })} />
       <Spot position={[0, 5.8, -0.6]} target={[0, 1.5, -2.5]} intensity={2.7} angle={0.38} />
 
       {/* Muro del fondo, derecha: láminas reales del Design System */}
@@ -1089,7 +1120,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           hovered={hoveredId === "design-system"}
         />
       </group>
-      <WallText position={[5.35, 4.5, -7.94]} w={4.1} h={0.78} big="89" small={V.ds} color="#3D5AFE" lang={lang} />
+      <WallText position={[5.35, 4.62, -7.94]} w={4.1} h={1.2} {...V.ds} color="#3D5AFE" lang={lang} />
       <Spot position={[5.4, 5.8, -5.4]} target={[5.4, 3.2, -8]} intensity={2.4} angle={0.5} />
 
       {/* Sala 2: muro izquierdo, funnel CSI */}
@@ -1102,9 +1133,9 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
         hovered={hoveredId === "funnel-csi"}
         {...bind("funnel-csi")}
       />
-      <WallText position={[-7.94, 4.25, -3.0]} rotY={Math.PI / 2} w={3.6} h={0.72} big="−12%" small={V.funnel} color="#C2410C" lang={lang} />
+      <WallText position={[-7.94, 4.5, -3.0]} rotY={Math.PI / 2} w={3.6} h={1.05} {...V.funnel} color="#C2410C" lang={lang} />
       <SyntheticBoard position={[-7.92, 2.95, -6.45]} rotY={Math.PI / 2} lang={lang} hovered={hoveredId === "funnel-csi"} {...bind("funnel-csi")} />
-      <Plaque position={[-7.95, 1.4, -6.45]} rotY={Math.PI / 2} {...plaque("funnel-csi", { subtitle: "BICE VIDA · Funnel" })} />
+      <Plaque position={[-7.95, 1.4, -6.45]} rotY={Math.PI / 2} {...plaque("funnel-csi", { subtitle: "BICE VIDA · Funnel", stat: null, note: texts["funnel-csi"].technique })} />
       <group {...bind("funnel-csi")}>
         <FunnelSculpture hovered={hoveredId === "funnel-csi"} />
       </group>
@@ -1130,8 +1161,8 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           {...bind("beliv")}
         />
       ))}
-      <WallText position={[7.94, 4.2, -3.0]} rotY={-Math.PI / 2} w={3.9} h={0.72} big={V.belivBig} small={V.beliv} color="#C8203F" lang={lang} />
-      <Plaque position={[7.95, 1.4, -0.15]} rotY={-Math.PI / 2} {...plaque("beliv", { subtitle: "Beliv · Design Sprint" })} />
+      <WallText position={[7.94, 4.42, -3.0]} rotY={-Math.PI / 2} w={3.9} h={1.1} {...V.beliv} color="#C8203F" lang={lang} />
+      <Plaque position={[7.95, 1.4, -0.15]} rotY={-Math.PI / 2} {...plaque("beliv", { subtitle: "Beliv · App de bienestar", stat: null, note: texts.beliv.technique })} />
       <Spot position={[5.6, 5.8, -3]} target={[8, 2.5, -3]} intensity={2.7} angle={0.5} />
 
       {/* Sala 5: muro del fondo, chatbot con sus pantallas reales */}
@@ -1158,8 +1189,8 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           {...bind("chatbot")}
         />
       ))}
-      <WallText position={[-5.0, 4.5, -7.94]} w={4.4} h={0.78} big="90%" small={V.chatbot} color="#6D3FE0" lang={lang} />
-      <Plaque position={[-5.85, 1.45, -7.95]} {...plaque("chatbot", { subtitle: "BICE VIDA · IA" })} />
+      <WallText position={[-5.0, 4.66, -7.94]} w={4.4} h={1.2} {...V.chatbot} color="#6D3FE0" lang={lang} />
+      <Plaque position={[-5.85, 1.45, -7.95]} {...plaque("chatbot", { subtitle: "BICE VIDA · IA", stat: null, note: texts.chatbot.technique })} />
       <Spot position={[-5.0, 5.8, -5.3]} target={[-5.0, 3.0, -8]} intensity={2.7} angle={0.48} />
 
       {/* Sala 4: manifiesto */}
@@ -1178,7 +1209,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
         hovered={hoveredId === "artista"}
         {...bind("artista")}
       />
-      <Plaque position={[-7.95, 1.18, 3.2]} rotY={Math.PI / 2} {...plaque("artista", { subtitle: "Santiago, Chile", stat: "8+", statLabel: V.years })} />
+      <Plaque position={[-7.95, 1.18, 3.2]} rotY={Math.PI / 2} {...plaque("artista", { subtitle: "Santiago, Chile", stat: null, note: texts.artista.technique })} />
       <Spot position={[-5.6, 5.8, 3.2]} target={[-8, 2.7, 3.2]} intensity={2.5} angle={0.36} />
 
       {/* par de bancas simétricas, paralelas al muro principal y alineadas con
@@ -1200,19 +1231,15 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
 // Textos de los vinilos de cada sala (cifras confirmadas por Charly).
 const VINYL = {
   es: {
-    chatbot: "de las conversaciones las resuelve el bot\n−20% llamadas al call center\n−66% preguntas repetidas",
-    ds: "componentes en producción\n10 células de producto lo usan\n~90% de lo que construyen",
-    funnel: "abandono en la contratación\nde 10 a 8 pasos\nvalidado con usuarios sintéticos",
-    belivBig: "3 días",
-    beliv: "Design Sprint que lideré\n8+ pantallas\nprobada y desarrollada",
-    years: "años diseñando producto digital",
+    chatbot: { eyebrow: "CHATBOT CON IA", big: "90%", label: "de las conversaciones\nlas resuelve el bot", items: [["−20%", "llamadas al call center"], ["−66%", "preguntas repetidas"]] },
+    ds: { eyebrow: "DESIGN SYSTEM", big: "89", label: "componentes\nen producción", items: [["10", "células de producto lo usan"]] },
+    funnel: { eyebrow: "FUNNEL DE CONTRATACIÓN", big: "−12%", label: "de abandono\nal contratar", items: [["10 → 8", "pasos"], ["10", "usuarios sintéticos"]] },
+    beliv: { eyebrow: "DESIGN SPRINT", big: "3 días", label: "de la idea\na la app", items: [["8+", "pantallas, probadas y desarrolladas"]] },
   },
   en: {
-    chatbot: "of conversations resolved by the bot\n−20% call center calls\n−66% repeated questions",
-    ds: "components in production\nused by 10 product squads\n~90% of what they build",
-    funnel: "drop-off in sign-up\nfrom 10 to 8 steps\nvalidated with synthetic users",
-    belivBig: "3 days",
-    beliv: "Design Sprint I led\n8+ screens\ntested and built",
-    years: "years designing digital products",
+    chatbot: { eyebrow: "AI CHATBOT", big: "90%", label: "of conversations\nresolved by the bot", items: [["−20%", "call center calls"], ["−66%", "repeated questions"]] },
+    ds: { eyebrow: "DESIGN SYSTEM", big: "89", label: "components\nin production", items: [["10", "product squads use it"]] },
+    funnel: { eyebrow: "SIGN-UP FUNNEL", big: "−12%", label: "drop-off\nat sign-up", items: [["10 → 8", "steps"], ["10", "synthetic users"]] },
+    beliv: { eyebrow: "DESIGN SPRINT", big: "3 days", label: "from idea\nto app", items: [["8+", "screens, tested and built"]] },
   },
 };

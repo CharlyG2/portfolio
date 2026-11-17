@@ -246,7 +246,9 @@ export default function Museum() {
         <div className={`${enterCls} pointer-events-auto self-start flex items-center gap-2.5 rounded-full border ${GLASS} pl-3 pr-4 py-2`} style={d(250)}>
           <span className="w-2 h-2 rounded-full" style={{ background: MINT, boxShadow: `0 0 10px ${MINT}` }} aria-hidden="true" />
           <span className="font-serif text-sm md:text-base leading-none">Charly Gourves</span>
-          <span className="hidden sm:inline font-mono text-[10px] md:text-[11px] uppercase tracking-[0.16em] text-[#8FE9DA] leading-none">
+          {/* el cargo se muestra recién al visitar una obra: en la portada ya
+              está en grande y se leía tres veces */}
+          <span className={`${selected ? "hidden sm:inline" : "hidden"} font-mono text-[10px] md:text-[11px] uppercase tracking-[0.16em] text-[#8FE9DA] leading-none`}>
             {PROFILE.role[lang]}
           </span>
         </div>
@@ -399,14 +401,32 @@ export default function Museum() {
             <h2 className="font-serif text-2xl md:text-3xl leading-tight mt-3">{shown[lang].title}</h2>
             <p className="font-serif italic text-sm text-muted mt-2">{shown[lang].technique}</p>
             <div className="h-px bg-ink/10 my-5" />
-            <p className="text-[15px] leading-relaxed text-ink/80">{shown[lang].text}</p>
-            {shown.stat && (
-              <div className="mt-5 flex items-baseline gap-3">
-                <span className="font-impact text-5xl leading-none" style={{ color: shown.color }}>
-                  {shown.stat}
-                </span>
-                <span className="text-xs text-muted">{shown[lang].statLabel}</span>
-              </div>
+            {shown[lang].story ? (
+              // Problema → qué hice → resultado: se lee de un vistazo
+              <dl className="space-y-4">
+                {[
+                  [t.problem, shown[lang].story.problem],
+                  [t.did, shown[lang].story.did],
+                ].map(([k, v]) => (
+                  <div key={k}>
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">{k}</dt>
+                    <dd className="mt-1 text-[15px] leading-snug text-ink/85">{v}</dd>
+                  </div>
+                ))}
+                <div>
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">{t.result}</dt>
+                  <dd className="mt-1.5 flex items-baseline gap-3">
+                    {shown.stat && (
+                      <span className="font-impact text-5xl leading-none shrink-0" style={{ color: shown.color }}>
+                        {shown.stat}
+                      </span>
+                    )}
+                    <span className="text-[15px] leading-snug text-ink/85">{shown[lang].story.result}</span>
+                  </dd>
+                </div>
+              </dl>
+            ) : (
+              <p className="text-[15px] leading-relaxed text-ink/80">{shown[lang].text}</p>
             )}
             <Link
               href={shown.href}
