@@ -101,11 +101,27 @@ function PillButton({ children, onClick, href, download, active, accent, label }
   );
 }
 
+// Ampolleta del interruptor: rellena y con brillo cuando la sala está prendida.
+function BulbIcon({ on }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="shrink-0">
+      <path
+        d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2V16h5v-.2c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+        fill={on ? "#FFD98A" : "none"}
+      />
+    </svg>
+  );
+}
+
 export default function Museum() {
   const [lang, setLang] = useState("es");
   const [selected, setSelected] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
   const [showHelp, setShowHelp] = useState(false);
+  const [lightsOn, setLightsOn] = useState(true);
   // la portada y los controles entran recién cuando se va el telón de carga
   const [ready, setReady] = useState(false);
   const onLoaded = useCallback(() => setReady(true), []);
@@ -183,6 +199,7 @@ export default function Museum() {
       if (e.key === "ArrowRight") go(1);
       if (e.key === "ArrowLeft") go(-1);
       if (e.key === "Escape") setSelected(null);
+      if ((e.key === "l" || e.key === "L") && !e.metaKey && !e.ctrlKey) setLightsOn((v) => !v);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -199,7 +216,16 @@ export default function Museum() {
         onPointerMissed={() => setSelected(null)}
       >
         <Suspense fallback={null}>
-          <Scene lang={lang} hoveredId={hoveredId} setHoveredId={setHoveredId} onSelect={setSelected} texts={texts} isMobile={isMobile} />
+          <Scene
+            lang={lang}
+            hoveredId={hoveredId}
+            setHoveredId={setHoveredId}
+            onSelect={setSelected}
+            texts={texts}
+            isMobile={isMobile}
+            lightsOn={lightsOn}
+            focus={!!selected}
+          />
         </Suspense>
         <CameraControls
           ref={controls}
@@ -267,6 +293,10 @@ export default function Museum() {
           <PillButton href={`mailto:${PROFILE.email}`} accent>
             {t.contact}
           </PillButton>
+          <PillButton onClick={() => setLightsOn((v) => !v)} active={!lightsOn} label={lightsOn ? t.lightsOff : t.lightsOn}>
+            <BulbIcon on={lightsOn} />
+            <span className="hidden sm:inline">{lightsOn ? t.lightsOff : t.lightsOn}</span>
+          </PillButton>
           <PillButton onClick={() => setShowHelp((v) => !v)} active={showHelp} label={t.helpLabel}>
             ?
           </PillButton>
@@ -305,6 +335,24 @@ export default function Museum() {
             {PROFILE.availability[lang]} · {PROFILE.location[lang]}
           </p>
         </div>
+      </div>
+
+      {/* Aviso de la linterna con las luces apagadas */}
+      <div className="absolute inset-x-0 top-24 md:top-24 z-20 flex justify-center pointer-events-none px-4">
+        <AnimatePresence>
+          {!lightsOn && (
+            <motion.p
+              key="flash"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6, transition: { duration: DUR.fast } }}
+              transition={{ duration: DUR.base, ease: EASE }}
+              className="rounded-full bg-[#14110e]/85 backdrop-blur-md border border-white/15 text-paper text-xs md:text-sm px-4 py-2 shadow-lg text-center"
+            >
+              {isMobile ? t.flashMobile : t.flash}
+            </motion.p>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Etiqueta de la obra bajo el cursor */}

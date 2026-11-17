@@ -35,7 +35,7 @@ function useCroppedTexture(src, aspect) {
 // Las cartelas usan las mismas fuentes del sitio (Fraunces e IBM Plex Mono,
 // cargadas por next/font). Se leen de las variables CSS y se espera a que
 // estén listas antes de dibujar; mientras tanto se usa Georgia / Courier.
-const FALLBACK_FONTS = { serif: "Georgia, 'Times New Roman', serif", mono: "'Courier New', monospace", ready: false };
+const FALLBACK_FONTS = { serif: "Georgia, 'Times New Roman', serif", mono: "'Courier New', monospace", sans: "Helvetica, Arial, sans-serif", ready: false };
 const FontContext = createContext(FALLBACK_FONTS);
 
 function useSiteFonts() {
@@ -44,13 +44,15 @@ function useSiteFonts() {
     const css = getComputedStyle(document.documentElement);
     const serif = css.getPropertyValue("--font-serif").trim();
     const mono = css.getPropertyValue("--font-mono").trim();
+    const sans = css.getPropertyValue("--font-body").trim() || FALLBACK_FONTS.sans;
     if (!serif || !mono || !document.fonts) return;
     let alive = true;
     Promise.all([
       document.fonts.load(`600 72px ${serif}`),
       document.fonts.load(`500 46px ${mono}`),
+      document.fonts.load(`500 46px ${sans}`),
     ])
-      .then(() => alive && setFonts({ serif, mono, ready: true }))
+      .then(() => alive && setFonts({ serif, mono, sans, ready: true }))
       .catch(() => {});
     return () => {
       alive = false;
@@ -92,16 +94,126 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   ctx.fillText(line, x, y);
 }
 
+// ---------------------------------------------------------------------------
+// Interruptor de luces. El estado vive en un ref compartido (sin re-render):
+// cada luz y cada material lo leen en su propio useFrame.
+//   level: 0 (apagado) → 1 (encendido), con una transición suave.
+//   changedAt: cuándo se tocó el interruptor, para encender foco por foco.
+const LightsContext = createContext({ current: { on: true, level: 1, changedAt: -100, reduce: false } });
+const now = () => performance.now() / 1000;
+
+function LightsDriver() {
+  const L = useContext(LightsContext);
+  useFrame((_, dt) => {
+    const s = L.current;
+    const target = s.on ? 1 : 0;
+    if (s.reduce) s.level = target;
+    else s.level += Math.sign(target - s.level) * Math.min(Math.abs(target - s.level), dt / (s.on ? 1.4 : 0.7));
+  });
+  return null;
+}
+
+// Factor de un foco: al apagar se van en cascada; al prender parpadean un
+// instante antes de quedar fijos, como focos de verdad.
+function spotFactor(s, order) {
+  const t = now() - s.changedAt;
+  if (s.reduce) return s.on ? 1 : 0;
+  if (!s.on) return 1 - THREE.MathUtils.clamp((t - order * 0.05) / 0.12, 0, 1);
+  const k = (t - 0.25 - order * 0.11) / 0.3;
+  if (k <= 0) return 0;
+  if (k >= 1) return 1;
+  return Math.sin(k * 40 + order) > -0.2 ? 0.25 + 0.75 * k : 0.05;
+}
+
+// Material sin sombreado que igual se oscurece cuando se apagan las luces
+// (cartelas, vinilos). `min` es cuánto brilla a oscuras.
+function useDimmed(min, base = 1) {
+  const L = useContext(LightsContext);
+  const ref = useRef();
+  const pos = useMemo(() => new THREE.Vector3(), []);
+  useFrame(() => {
+    const mesh = ref.current;
+    if (!mesh) return;
+    const s = L.current;
+    let lit = s.level;
+    // a oscuras, lo que alumbra la linterna se ve con su color real
+    if (lit < 1 && s.flashDir) {
+      mesh.getWorldPosition(pos).sub(s.flashPos).normalize();
+      const beam = THREE.MathUtils.smoothstep(pos.dot(s.flashDir), 0.955, 0.99);
+      lit = Math.max(lit, beam);
+    }
+    mesh.material.color.setScalar(base * (min + (1 - min) * lit));
+  });
+  return ref;
+}
+
+function SceneLights() {
+  const L = useContext(LightsContext);
+  const amb = useRef();
+  const hemi = useRef();
+  const dir = useRef();
+  useFrame(() => {
+    const k = 0.06 + 0.94 * L.current.level;
+    if (amb.current) amb.current.intensity = 0.36 * k;
+    if (hemi.current) hemi.current.intensity = 0.62 * k;
+    if (dir.current) dir.current.intensity = 0.2 * k;
+  });
+  return (
+    <>
+      <ambientLight ref={amb} intensity={0.36} />
+      <hemisphereLight ref={hemi} args={["#fff3df", "#3a2e25", 0.62]} />
+      <directionalLight ref={dir} position={[4, 8, 6]} intensity={0.2} />
+    </>
+  );
+}
+
+// Linterna: con las luces apagadas, un foco sale de la cámara hacia el cursor.
+function Flashlight() {
+  const L = useContext(LightsContext);
+  const light = useRef();
+  const target = useMemo(() => new THREE.Object3D(), []);
+  useFrame(({ camera, pointer, raycaster }) => {
+    if (!light.current) return;
+    const off = 1 - L.current.level;
+    light.current.intensity = off * 9;
+    light.current.visible = off > 0.01;
+    if (!light.current.visible) return;
+    raycaster.setFromCamera(pointer, camera);
+    L.current.flashPos = camera.position;
+    L.current.flashDir = raycaster.ray.direction;
+    light.current.position.copy(camera.position);
+    target.position.copy(camera.position).addScaledVector(raycaster.ray.direction, 10);
+    target.updateMatrixWorld();
+  });
+  return (
+    <>
+      <primitive object={target} />
+      <spotLight ref={light} target={target} angle={0.26} penumbra={0.75} decay={0} distance={30} color="#fff1d6" intensity={0} />
+    </>
+  );
+}
+
 function Spot({ position, target, intensity = 2.2, angle = 0.42, color = "#ffeccc" }) {
+  const L = useContext(LightsContext);
   const targetObj = useMemo(() => new THREE.Object3D(), []);
+  const light = useRef();
+  const bulb = useRef();
+  // orden de encendido: barrido de izquierda a derecha y de fondo a frente
+  const order = (position[0] + 8) / 2.4 + (position[2] + 8) / 8;
   useEffect(() => {
     targetObj.position.set(...target);
     targetObj.updateMatrixWorld();
   }, [targetObj, target]);
+  useFrame(() => {
+    const f = spotFactor(L.current, order);
+    if (light.current) light.current.intensity = intensity * 1.5 * f;
+    if (bulb.current) bulb.current.color.setRGB(0.12 + 0.88 * f, 0.1 + 0.83 * f, 0.08 + 0.72 * f);
+  });
   return (
     <>
       <primitive object={targetObj} />
       <spotLight
+        ref={light}
         position={position}
         target={targetObj}
         intensity={intensity * 1.5}
@@ -111,10 +223,14 @@ function Spot({ position, target, intensity = 2.2, angle = 0.42, color = "#ffecc
         distance={14}
         color={color}
       />
-      {/* lámpara de riel en el techo */}
+      {/* lámpara de riel en el techo, con su ampolleta encendida */}
       <mesh position={position}>
         <cylinderGeometry args={[0.09, 0.13, 0.32, 16]} />
         <meshStandardMaterial color="#1c1712" metalness={0.6} roughness={0.35} />
+      </mesh>
+      <mesh position={[position[0], position[1] - 0.161, position[2]]} rotation={[Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.11, 20]} />
+        <meshBasicMaterial ref={bulb} color="#fff0d0" toneMapped={false} side={THREE.DoubleSide} />
       </mesh>
     </>
   );
@@ -124,6 +240,7 @@ function Spot({ position, target, intensity = 2.2, angle = 0.42, color = "#ffecc
 function Artwork({ src, w, h, position, rotY = 0, frame = FRAME_DARK, mat = 0.12, hovered, ...handlers }) {
   const tex = useCroppedTexture(src, w / h);
   const group = useRef();
+  const screen = useDimmed(0.5, 0.925);
   useFrame((_, dt) => {
     if (!group.current) return;
     const s = hovered ? 1.025 : 1;
@@ -141,7 +258,7 @@ function Artwork({ src, w, h, position, rotY = 0, frame = FRAME_DARK, mat = 0.12
         <planeGeometry args={[w + mat * 2, h + mat * 2]} />
         <meshStandardMaterial color="#FBF8F2" roughness={0.9} />
       </mesh>
-      <mesh position={[0, 0, 0.056]}>
+      <mesh ref={screen} position={[0, 0, 0.056]}>
         <planeGeometry args={[w, h]} />
         {/* sin luz propia: la captura se ve nítida y con sus colores reales */}
         <meshBasicMaterial map={tex} color="#ececec" />
@@ -181,13 +298,14 @@ function Plaque({ position, rotY = 0, title, subtitle, stat, statLabel, color = 
     1040,
     640
   );
+  const dim = useDimmed(0.07);
   return (
     <group position={position} rotation={[0, rotY, 0]} scale={scale}>
       <mesh>
         <boxGeometry args={[1.3, 0.8, 0.025]} />
         <meshStandardMaterial color="#cdbfa8" roughness={0.6} />
       </mesh>
-      <mesh position={[0, 0, 0.0135]}>
+      <mesh ref={dim} position={[0, 0, 0.0135]}>
         <planeGeometry args={[1.3, 0.8]} />
         {/* sin sombreado: la cartela se lee igual dentro y fuera del foco */}
         <meshBasicMaterial map={tex} toneMapped={false} />
@@ -210,14 +328,15 @@ function WallText({ position, rotY = 0, w = 4, h = 0.8, big, small, color = "#22
       const bw = ctx.measureText(big).width;
       ctx.textBaseline = "alphabetic";
       ctx.fillText(big, 8, ch * 0.8);
-      ctx.fillStyle = "#2a231d";
+      // texto chico en la sans del sitio, sólido y oscuro: la mono fina se
+      // veía borrosa y "sucia" sobre el muro
+      ctx.fillStyle = "#1c1814";
       const lines = small.split("\n");
-      const x = bw + 60;
-      // la línea más larga define el tamaño, así nunca se sale del muro
-      ctx.font = `500 100px ${f.mono}`;
+      const x = bw + 64;
+      ctx.font = `500 100px ${f.sans}`;
       const longest = Math.max(...lines.map((l) => ctx.measureText(l).width));
-      const fs = Math.min(Math.round(ch * 0.15), Math.floor(((cw - x - 12) / longest) * 100));
-      ctx.font = `500 ${fs}px ${f.mono}`;
+      const fs = Math.min(Math.round(ch * 0.17), Math.floor(((cw - x - 12) / longest) * 100));
+      ctx.font = `500 ${fs}px ${f.sans}`;
       const startY = ch * 0.8 - (lines.length - 1) * fs * 1.35 - fs * 0.15;
       lines.forEach((l, i) => ctx.fillText(l, x, startY + i * fs * 1.35));
     },
@@ -225,8 +344,9 @@ function WallText({ position, rotY = 0, w = 4, h = 0.8, big, small, color = "#22
     W,
     H
   );
+  const dim = useDimmed(0.06);
   return (
-    <mesh position={position} rotation={[0, rotY, 0]}>
+    <mesh ref={dim} position={position} rotation={[0, rotY, 0]}>
       <planeGeometry args={[w, h]} />
       <meshBasicMaterial map={tex} transparent toneMapped={false} depthWrite={false} />
     </mesh>
@@ -288,6 +408,7 @@ function SyntheticBoard({ position, rotY = 0, lang, hovered, ...handlers }) {
     1180
   );
   const ref = useRef();
+  const dim = useDimmed(0.35);
   useFrame((_, dt) => {
     if (!ref.current) return;
     const s = hovered ? 1.02 : 1;
@@ -301,7 +422,7 @@ function SyntheticBoard({ position, rotY = 0, lang, hovered, ...handlers }) {
         <boxGeometry args={[w + 0.08, h + 0.08, 0.06]} />
         <meshStandardMaterial color={FRAME_DARK} roughness={0.5} />
       </mesh>
-      <mesh position={[0, 0, 0.031]}>
+      <mesh ref={dim} position={[0, 0, 0.031]}>
         <planeGeometry args={[w, h]} />
         <meshBasicMaterial map={tex} toneMapped={false} />
       </mesh>
@@ -309,33 +430,160 @@ function SyntheticBoard({ position, rotY = 0, lang, hovered, ...handlers }) {
   );
 }
 
-// Visitantes: figuras de galería, mate y sin rasgos, para que la sala no se
-// sienta vacía y dé escala a las obras.
-function Visitor({ position, rotY = 0, color = "#B9AE9F", lean = 0 }) {
+// Visitantes: figuras de galería, mate y sin rasgos. Recorren la sala, se
+// detienen frente a las obras y miran. Al visitar una obra se desvanecen para
+// no tapar nada; con "reducir movimiento" se quedan quietos.
+const PI = Math.PI;
+const face = (from, to) => Math.atan2(to[0] - from[0], to[1] - from[1]);
+const VISITOR_PATHS = [
+  {
+    color: "#8E7F6E",
+    offset: 0,
+    path: [
+      { p: [-3.0, -5.6], look: PI, wait: 5 },
+      { p: [-4.2, -3.4] },
+      { p: [-4.9, 1.8], look: face([-4.9, 1.8], [-6.4, -0.6]), wait: 4 },
+      { p: [-1.6, 3.6] },
+      { p: [-1.4, -4.6], look: face([-1.4, -4.6], [0, -2.5]), wait: 3 },
+    ],
+  },
+  {
+    color: "#5D6B73",
+    offset: 9,
+    path: [
+      { p: [5.0, -5.6], look: PI, wait: 5 },
+      { p: [5.6, -2.4], look: PI / 2, wait: 4 },
+      { p: [5.2, 2.6], look: PI / 2, wait: 4 },
+      { p: [1.7, 4.4] },
+      { p: [1.8, -4.4], look: PI, wait: 3 },
+    ],
+  },
+  {
+    color: "#A6604F",
+    offset: 4,
+    path: [
+      { p: [-5.4, 4.4], look: -PI / 2, wait: 5 },
+      { p: [-2.0, 6.8] },
+      { p: [2.6, 6.2] },
+      { p: [4.8, 4.6], look: PI / 2, wait: 4 },
+      { p: [0.4, 3.6] },
+    ],
+  },
+];
+const WALK_SPEED = 0.55;
+
+function buildTimeline(path) {
+  const segs = [];
+  let t = 0;
+  path.forEach((wp, i) => {
+    const next = path[(i + 1) % path.length];
+    if (wp.wait) {
+      segs.push({ type: "wait", t0: t, t1: t + wp.wait, p: wp.p, look: wp.look });
+      t += wp.wait;
+    }
+    const d = Math.hypot(next.p[0] - wp.p[0], next.p[1] - wp.p[1]);
+    segs.push({ type: "walk", t0: t, t1: t + d / WALK_SPEED, a: wp.p, b: next.p, look: face(wp.p, next.p) });
+    t += d / WALK_SPEED;
+  });
+  return { segs, total: t };
+}
+
+function Visitor({ color, path, offset, hidden }) {
+  const L = useContext(LightsContext);
+  const root = useRef();
+  const body = useRef();
+  const legs = [useRef(), useRef()];
+  const arms = [useRef(), useRef()];
+  const mats = useRef([]);
+  const state = useRef({ yaw: 0, swing: 0, opacity: 1, init: false });
+  const { segs, total } = useMemo(() => buildTimeline(path), [path]);
+
+  useEffect(() => {
+    const list = [];
+    root.current?.traverse((o) => {
+      if (o.material) {
+        o.material.transparent = true;
+        list.push(o.material);
+      }
+    });
+    mats.current = list;
+  }, []);
+
+  useFrame(({ clock }, dt) => {
+    const g = root.current;
+    if (!g) return;
+    const st = state.current;
+    const reduce = L.current.reduce;
+    const t = reduce ? 0 : (clock.elapsedTime + offset) % total;
+    const seg = segs.find((x) => t >= x.t0 && t < x.t1) || segs[0];
+    let x, z, walking = false, phase = 0;
+    if (seg.type === "wait") {
+      [x, z] = seg.p;
+    } else {
+      const k = (t - seg.t0) / (seg.t1 - seg.t0);
+      // arranque y frenada suaves
+      const e = k * k * (3 - 2 * k);
+      x = seg.a[0] + (seg.b[0] - seg.a[0]) * e;
+      z = seg.a[1] + (seg.b[1] - seg.a[1]) * e;
+      walking = k > 0.04 && k < 0.96;
+      phase = (t - seg.t0) * WALK_SPEED * 5.2;
+    }
+    g.position.set(x, 0, z);
+    // giro hacia donde camina o hacia la obra que mira
+    let target = seg.look ?? st.yaw;
+    let diff = Math.atan2(Math.sin(target - st.yaw), Math.cos(target - st.yaw));
+    st.yaw = st.init ? st.yaw + diff * Math.min(1, dt * 5) : target;
+    st.init = true;
+    g.rotation.y = st.yaw;
+    // ciclo de caminata: piernas y brazos opuestos, leve rebote
+    st.swing += ((walking ? 1 : 0) - st.swing) * Math.min(1, dt * 6);
+    const sw = Math.sin(phase) * 0.42 * st.swing;
+    if (legs[0].current) legs[0].current.rotation.x = sw;
+    if (legs[1].current) legs[1].current.rotation.x = -sw;
+    if (arms[0].current) arms[0].current.rotation.x = -sw * 0.8;
+    if (arms[1].current) arms[1].current.rotation.x = sw * 0.8;
+    if (body.current) body.current.position.y = 0.84 + Math.abs(Math.cos(phase)) * 0.025 * st.swing;
+    // se desvanecen mientras se visita una obra
+    st.opacity += ((hidden ? 0 : 1) - st.opacity) * Math.min(1, dt * 5);
+    g.visible = st.opacity > 0.02;
+    for (const m of mats.current) m.opacity = st.opacity;
+  });
+
+  const skin = "#d9cbb8";
   return (
-    <group position={position} rotation={[0, rotY, 0]}>
-      {[-0.09, 0.09].map((x) => (
-        <mesh key={x} position={[x, 0.42, 0]} castShadow>
-          <cylinderGeometry args={[0.065, 0.055, 0.84, 12]} />
-          <meshStandardMaterial color="#3a322b" roughness={0.8} />
-        </mesh>
+    <group ref={root}>
+      {[-0.09, 0.09].map((x, i) => (
+        <group key={x} ref={legs[i]} position={[x, 0.84, 0]}>
+          <mesh position={[0, -0.42, 0]} castShadow>
+            <cylinderGeometry args={[0.065, 0.055, 0.84, 12]} />
+            <meshStandardMaterial color="#3a322b" roughness={0.8} />
+          </mesh>
+        </group>
       ))}
-      <group rotation={[lean, 0, 0]} position={[0, 0.84, 0]}>
+      <group ref={body} position={[0, 0.84, 0]}>
         <mesh position={[0, 0.34, 0]} castShadow>
           <cylinderGeometry args={[0.19, 0.24, 0.68, 20]} />
           <meshStandardMaterial color={color} roughness={0.85} />
         </mesh>
         <mesh position={[0, 0.68, 0]} castShadow>
-          <sphereGeometry args={[0.19, 20, 12, 0, Math.PI * 2, 0, Math.PI / 2]} />
+          <sphereGeometry args={[0.19, 20, 12, 0, PI * 2, 0, PI / 2]} />
           <meshStandardMaterial color={color} roughness={0.85} />
         </mesh>
+        {[-0.235, 0.235].map((x, i) => (
+          <group key={x} ref={arms[i]} position={[x, 0.66, 0]}>
+            <mesh position={[0, -0.3, 0]} castShadow>
+              <cylinderGeometry args={[0.05, 0.045, 0.6, 10]} />
+              <meshStandardMaterial color={color} roughness={0.85} />
+            </mesh>
+          </group>
+        ))}
         <mesh position={[0, 0.8, 0]}>
           <cylinderGeometry args={[0.045, 0.05, 0.1, 12]} />
-          <meshStandardMaterial color="#d9cbb8" roughness={0.7} />
+          <meshStandardMaterial color={skin} roughness={0.7} />
         </mesh>
         <mesh position={[0, 0.95, 0]} castShadow>
           <sphereGeometry args={[0.105, 20, 16]} />
-          <meshStandardMaterial color="#d9cbb8" roughness={0.7} />
+          <meshStandardMaterial color={skin} roughness={0.7} />
         </mesh>
       </group>
     </group>
@@ -597,8 +845,9 @@ function WallTitle({ lang }) {
     2048,
     300
   );
+  const dim = useDimmed(0.06);
   return (
-    <mesh position={[0, 5.15, -7.94]}>
+    <mesh ref={dim} position={[0, 5.15, -7.94]}>
       <planeGeometry args={[6.8, 1]} />
       <meshBasicMaterial map={tex} transparent toneMapped={false} />
     </mesh>
@@ -647,6 +896,20 @@ function Stanchions({ z = -6.7, xs = [-2.4, 0, 2.4] }) {
         </mesh>
       ))}
     </group>
+  );
+}
+
+function Skylight({ z }) {
+  const L = useContext(LightsContext);
+  const ref = useRef();
+  const on = useMemo(() => new THREE.Color("#FFF3DC"), []);
+  const off = useMemo(() => new THREE.Color("#2a241e"), []);
+  useFrame(() => ref.current && ref.current.color.lerpColors(off, on, L.current.level));
+  return (
+    <mesh position={[0, 5.98, z]} rotation={[Math.PI / 2, 0, 0]}>
+      <planeGeometry args={[10, 1.1]} />
+      <meshBasicMaterial ref={ref} color="#FFF3DC" />
+    </mesh>
   );
 }
 
@@ -723,10 +986,7 @@ function Room() {
         <meshStandardMaterial color="#E6E0D6" roughness={1} />
       </mesh>
       {[-3.5, 0, 3.5, 7, 10.5].map((z) => (
-        <mesh key={z} position={[0, 5.98, z - 1]} rotation={[Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[10, 1.1]} />
-          <meshBasicMaterial color="#FFF3DC" />
-        </mesh>
+        <Skylight key={z} z={z - 1} />
       ))}
       {/* rieles de luz */}
       {[-5.6, 5.6].map((x) => (
@@ -739,8 +999,17 @@ function Room() {
   );
 }
 
-export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, isMobile }) {
+export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, isMobile, lightsOn = true, focus = false }) {
   const fonts = useSiteFonts();
+  const lights = useRef({ on: true, level: 1, changedAt: -100, reduce: false });
+  useEffect(() => {
+    lights.current.reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+  useEffect(() => {
+    if (lights.current.on === lightsOn) return;
+    lights.current.on = lightsOn;
+    lights.current.changedAt = now();
+  }, [lightsOn]);
   const bind = (id) => ({
     onPointerOver: (e) => {
       e.stopPropagation();
@@ -769,14 +1038,15 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
   const V = VINYL[lang] || VINYL.es;
 
   return (
+    <LightsContext.Provider value={lights}>
     <FontContext.Provider value={fonts}>
+      <LightsDriver />
+      <Flashlight />
       <color attach="background" args={["#1a1613"]} />
       <fog attach="fog" args={["#1a1613", 18, 32]} />
       {/* menos luz de relleno y focos más marcados: las obras brillan y la
           sala gana profundidad, en vez de verse pareja y gris */}
-      <ambientLight intensity={0.3} />
-      <hemisphereLight args={["#fff3df", "#3a2e25", 0.5]} />
-      <directionalLight position={[4, 8, 6]} intensity={0.2} />
+      <SceneLights />
 
       <Room />
       {/* en celular el nombre ya está en la cabecera y el letrero quedaba tapado */}
@@ -832,7 +1102,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
         hovered={hoveredId === "funnel-csi"}
         {...bind("funnel-csi")}
       />
-      <WallText position={[-7.94, 4.25, -3.0]} rotY={Math.PI / 2} w={3.6} h={0.72} big="−12%" small={V.funnel} color="#9A5A00" lang={lang} />
+      <WallText position={[-7.94, 4.25, -3.0]} rotY={Math.PI / 2} w={3.6} h={0.72} big="−12%" small={V.funnel} color="#C2410C" lang={lang} />
       <SyntheticBoard position={[-7.92, 2.95, -6.45]} rotY={Math.PI / 2} lang={lang} hovered={hoveredId === "funnel-csi"} {...bind("funnel-csi")} />
       <Plaque position={[-7.95, 1.4, -6.45]} rotY={Math.PI / 2} {...plaque("funnel-csi", { subtitle: "BICE VIDA · Funnel" })} />
       <group {...bind("funnel-csi")}>
@@ -860,7 +1130,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           {...bind("beliv")}
         />
       ))}
-      <WallText position={[7.94, 4.2, -3.0]} rotY={-Math.PI / 2} w={3.9} h={0.72} big={V.belivBig} small={V.beliv} color="#B8243F" lang={lang} />
+      <WallText position={[7.94, 4.2, -3.0]} rotY={-Math.PI / 2} w={3.9} h={0.72} big={V.belivBig} small={V.beliv} color="#C8203F" lang={lang} />
       <Plaque position={[7.95, 1.4, -0.15]} rotY={-Math.PI / 2} {...plaque("beliv", { subtitle: "Beliv · Design Sprint" })} />
       <Spot position={[5.6, 5.8, -3]} target={[8, 2.5, -3]} intensity={2.7} angle={0.5} />
 
@@ -888,7 +1158,7 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           {...bind("chatbot")}
         />
       ))}
-      <WallText position={[-5.0, 4.5, -7.94]} w={4.4} h={0.78} big="90%" small={V.chatbot} color="#7444E0" lang={lang} />
+      <WallText position={[-5.0, 4.5, -7.94]} w={4.4} h={0.78} big="90%" small={V.chatbot} color="#6D3FE0" lang={lang} />
       <Plaque position={[-5.85, 1.45, -7.95]} {...plaque("chatbot", { subtitle: "BICE VIDA · IA" })} />
       <Spot position={[-5.0, 5.8, -5.3]} target={[-5.0, 3.0, -8]} intensity={2.7} angle={0.48} />
 
@@ -916,13 +1186,14 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
       <Bench position={[-3.3, 0, 0.9]} />
       <Bench position={[3.3, 0, 0.9]} />
 
-      {/* visitantes: dan escala y vida, fuera de los encuadres de cada obra */}
-      <Visitor position={[-2.3, 0, -6.0]} rotY={0.5} color="#8E7F6E" />
-      <Visitor position={[5.2, 0, -5.6]} rotY={-0.2} color="#5D6B73" lean={0.05} />
-      <Visitor position={[4.9, 0, -0.6]} rotY={-1.2} color="#A6604F" />
+      {/* visitantes que recorren la sala */}
+      {VISITOR_PATHS.map((v) => (
+        <Visitor key={v.color} {...v} hidden={focus} />
+      ))}
 
       <ContactShadows position={[0, 0.005, 2]} scale={[16, 20]} resolution={1024} far={2.5} blur={2.2} opacity={0.6} color="#1a120c" />
     </FontContext.Provider>
+    </LightsContext.Provider>
   );
 }
 
