@@ -357,74 +357,6 @@ function Plaque({ position, rotY = 0, title, number, stat, statLabel, note, colo
   );
 }
 
-// Gráfica de sala en vinilo sobre el muro, como en los museos: el resultado
-// clave en grande, legible desde la entrada, y una línea que lo explica.
-function WallText({ position, rotY = 0, w = 4, h = 1, eyebrow, big, label, items = [], color = "#221D18", lang }) {
-  const W = 2048;
-  const H = Math.round((W * h) / w);
-  const tex = useTextTexture(
-    (ctx, cw, ch, f) => {
-      ctx.clearRect(0, 0, cw, ch);
-      ctx.textBaseline = "alphabetic";
-      const fit = (text, weight, family, max, maxW) => {
-        let size = max;
-        ctx.font = `${weight} ${size}px ${family}`;
-        while (ctx.measureText(text).width > maxW && size > 10) {
-          size -= 2;
-          ctx.font = `${weight} ${size}px ${family}`;
-        }
-        return size;
-      };
-      // 1. qué caso es
-      ctx.fillStyle = color;
-      if ("letterSpacing" in ctx) ctx.letterSpacing = `${Math.round(ch * 0.012)}px`;
-      fit(eyebrow, 600, f.sans, Math.round(ch * 0.07), cw - 20);
-      ctx.fillText(eyebrow, 6, ch * 0.09);
-      if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
-      // 2. la cifra, enorme
-      ctx.font = `600 ${Math.round(ch * 0.5)}px ${f.serif}`;
-      const bw = ctx.measureText(big).width;
-      ctx.fillText(big, 0, ch * 0.56);
-      // 3. qué significa, junto a la cifra y en dos líneas cortas
-      ctx.fillStyle = "#1c1814";
-      const lines = label.split("\n");
-      const lx = bw + ch * 0.07;
-      const ls = Math.min(...lines.map((l) => fit(l, 600, f.sans, Math.round(ch * 0.085), cw - lx - 10)));
-      ctx.font = `600 ${ls}px ${f.sans}`;
-      lines.forEach((l, k) => ctx.fillText(l, lx, ch * 0.56 - (lines.length - 1 - k) * ls * 1.25));
-      // 4. cifras de apoyo, separadas por una línea fina
-      if (items.length) {
-        ctx.fillStyle = "rgba(28,24,20,0.28)";
-        ctx.fillRect(4, ch * 0.66, cw - 8, Math.max(2, ch * 0.005));
-        const colW = (cw - 8) / items.length;
-        items.forEach(([n, t], k) => {
-          const x = 4 + k * colW;
-          ctx.fillStyle = color;
-          ctx.font = `600 ${Math.round(ch * 0.16)}px ${f.serif}`;
-          ctx.fillText(n, x, ch * 0.88);
-          const nw = ctx.measureText(n).width;
-          ctx.fillStyle = "#2a231d";
-          const ts = fit(t, 500, f.sans, Math.round(ch * 0.068), colW - nw - ch * 0.08);
-          ctx.font = `500 ${ts}px ${f.sans}`;
-          ctx.fillText(t, x + nw + ch * 0.04, ch * 0.86);
-        });
-      }
-    },
-    [eyebrow, big, label, items.map((x) => x.join()).join("|"), color, lang],
-    W,
-    H
-  );
-  const dim = useDimmed(0.06);
-  return (
-    <mesh ref={dim} position={position} rotation={[0, rotY, 0]}>
-      <planeGeometry args={[w, h]} />
-      <meshBasicMaterial map={tex} transparent toneMapped={false} depthWrite={false} />
-    </mesh>
-  );
-}
-
-// Muro de usuarios sintéticos: los 10 perfiles que recorrieron el funnel.
-// Son las mismas esferas menta que bajan por la escultura.
 function SyntheticBoard({ position, rotY = 0, lang, hovered, ...handlers }) {
   const tex = useTextTexture(
     (ctx, w, h, f) => {
@@ -1103,7 +1035,6 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
     lang,
     ...extra,
   });
-  const V = VINYL[lang] || VINYL.es;
 
   return (
     <LightsContext.Provider value={lights}>
@@ -1157,7 +1088,6 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           hovered={hoveredId === "design-system"}
         />
       </group>
-      <WallText position={[5.35, 4.62, -7.94]} w={4.1} h={1.2} {...V.ds} color="#3D5AFE" lang={lang} />
       <Spot position={[5.4, 5.8, -5.4]} target={[5.4, 3.2, -8]} intensity={2.4} angle={0.5} />
 
       {/* Sala 2: muro izquierdo, funnel CSI */}
@@ -1170,7 +1100,6 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
         hovered={hoveredId === "funnel-csi"}
         {...bind("funnel-csi")}
       />
-      <WallText position={[-7.94, 4.5, -3.0]} rotY={Math.PI / 2} w={3.6} h={1.05} {...V.funnel} color="#C2410C" lang={lang} />
       <SyntheticBoard position={[-7.92, 2.95, -6.45]} rotY={Math.PI / 2} lang={lang} hovered={hoveredId === "funnel-csi"} {...bind("funnel-csi")} />
       <Plaque position={[-7.95, 1.4, -6.45]} rotY={Math.PI / 2} {...plaque("funnel-csi", { stat: null, note: texts["funnel-csi"].technique })} />
       <group {...bind("funnel-csi")}>
@@ -1198,7 +1127,6 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           {...bind("beliv")}
         />
       ))}
-      <WallText position={[7.94, 4.42, -3.0]} rotY={-Math.PI / 2} w={3.9} h={1.1} {...V.beliv} color="#C8203F" lang={lang} />
       <Plaque position={[7.95, 1.4, -0.15]} rotY={-Math.PI / 2} {...plaque("beliv", { stat: null, note: texts.beliv.technique })} />
       <Spot position={[5.6, 5.8, -3]} target={[8, 2.5, -3]} intensity={2.7} angle={0.5} />
 
@@ -1226,7 +1154,6 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           {...bind("chatbot")}
         />
       ))}
-      <WallText position={[-5.0, 4.66, -7.94]} w={4.4} h={1.2} {...V.chatbot} color="#6D3FE0" lang={lang} />
       <Plaque position={[-5.85, 1.45, -7.95]} {...plaque("chatbot", { stat: null, note: texts.chatbot.technique })} />
       <Spot position={[-5.0, 5.8, -5.3]} target={[-5.0, 3.0, -8]} intensity={2.7} angle={0.48} />
 
@@ -1265,18 +1192,4 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
   );
 }
 
-// Textos de los vinilos de cada sala (cifras confirmadas por Charly).
-const VINYL = {
-  es: {
-    chatbot: { eyebrow: "CHATBOT CON IA", big: "90%", label: "de las conversaciones\nlas resuelve el bot", items: [["−20%", "llamadas al call center"], ["−66%", "preguntas repetidas"]] },
-    ds: { eyebrow: "DESIGN SYSTEM", big: "10", label: "células de producto\nlo consumen", items: [["~90%", "de lo que construyen se apoya en él"]] },
-    funnel: { eyebrow: "FUNNEL DE CONTRATACIÓN", big: "−12%", label: "de abandono\nal contratar", items: [["10 → 8", "pasos"], ["10", "usuarios sintéticos"]] },
-    beliv: { eyebrow: "DESIGN SPRINT", big: "3 días", label: "de la idea\na la app", items: [["8+", "pantallas, probadas y desarrolladas"]] },
-  },
-  en: {
-    chatbot: { eyebrow: "AI CHATBOT", big: "90%", label: "of conversations\nresolved by the bot", items: [["−20%", "call center calls"], ["−66%", "repeated questions"]] },
-    ds: { eyebrow: "DESIGN SYSTEM", big: "10", label: "product squads\nbuild on it", items: [["~90%", "of what they ship relies on it"]] },
-    funnel: { eyebrow: "SIGN-UP FUNNEL", big: "−12%", label: "drop-off\nat sign-up", items: [["10 → 8", "steps"], ["10", "synthetic users"]] },
-    beliv: { eyebrow: "DESIGN SPRINT", big: "3 days", label: "from idea\nto app", items: [["8+", "screens, tested and built"]] },
-  },
-};
+
