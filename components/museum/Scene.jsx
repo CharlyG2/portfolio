@@ -4,8 +4,9 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useTexture, MeshReflectorMaterial, RoundedBox, ContactShadows } from "@react-three/drei";
+import { STATIONS } from "@/lib/museum";
 
-const WALL = "#E9E2D6";
+const WALL = "#EEE8DD";
 const FRAME_DARK = "#1c1712";
 const FRAME_GOLD = "#B8925A";
 
@@ -149,30 +150,237 @@ function Artwork({ src, w, h, position, rotY = 0, frame = FRAME_DARK, mat = 0.12
   );
 }
 
-function Plaque({ position, rotY = 0, title, subtitle, lang }) {
+// Cartela de museo: de qué se trata, dónde se hizo y el resultado en grande.
+// Antes era una tarjeta chica con el título en gris que no se leía.
+function Plaque({ position, rotY = 0, title, subtitle, stat, statLabel, color = "#6E2A1F", scale = 1, lang }) {
   const tex = useTextTexture(
     (ctx, w, h, f) => {
       ctx.fillStyle = "#FBF8F2";
       ctx.fillRect(0, 0, w, h);
-      ctx.strokeStyle = "#D8CDBB";
-      ctx.lineWidth = 6;
-      ctx.strokeRect(3, 3, w - 6, h - 6);
-      ctx.fillStyle = "#1A1511";
-      ctx.font = `600 70px ${f.serif}`;
-      wrapText(ctx, title, 48, 115, w - 96, 82);
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, 14, h);
       ctx.fillStyle = "#6E2A1F";
-      ctx.font = `500 42px ${f.mono}`;
-      wrapText(ctx, subtitle, 48, h - 60, w - 96, 46);
+      ctx.font = `500 36px ${f.mono}`;
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "4px";
+      ctx.fillText(subtitle.toUpperCase(), 64, 88);
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+      ctx.fillStyle = "#1A1511";
+      ctx.font = `600 74px ${f.serif}`;
+      wrapText(ctx, title, 64, 190, w - 110, 84);
+      if (stat) {
+        ctx.fillStyle = color;
+        ctx.font = `600 150px ${f.serif}`;
+        ctx.fillText(stat, 60, h - 56);
+        const sw = ctx.measureText(stat).width;
+        ctx.fillStyle = "#3d342c";
+        ctx.font = `500 34px ${f.mono}`;
+        wrapText(ctx, statLabel || "", 60 + sw + 30, h - 138, w - 110 - sw - 30, 42);
+      }
     },
-    [title, subtitle, lang]
+    [title, subtitle, stat, statLabel, color, lang],
+    1040,
+    640
+  );
+  return (
+    <group position={position} rotation={[0, rotY, 0]} scale={scale}>
+      <mesh>
+        <boxGeometry args={[1.3, 0.8, 0.025]} />
+        <meshStandardMaterial color="#cdbfa8" roughness={0.6} />
+      </mesh>
+      <mesh position={[0, 0, 0.0135]}>
+        <planeGeometry args={[1.3, 0.8]} />
+        {/* sin sombreado: la cartela se lee igual dentro y fuera del foco */}
+        <meshBasicMaterial map={tex} toneMapped={false} />
+      </mesh>
+    </group>
+  );
+}
+
+// Gráfica de sala en vinilo sobre el muro, como en los museos: el resultado
+// clave en grande, legible desde la entrada, y una línea que lo explica.
+function WallText({ position, rotY = 0, w = 4, h = 0.8, big, small, color = "#221D18", lang }) {
+  const W = 2048;
+  const H = Math.round((W * h) / w);
+  const tex = useTextTexture(
+    (ctx, cw, ch, f) => {
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.fillStyle = color;
+      let size = ch * 0.86;
+      ctx.font = `600 ${size}px ${f.serif}`;
+      const bw = ctx.measureText(big).width;
+      ctx.textBaseline = "alphabetic";
+      ctx.fillText(big, 8, ch * 0.8);
+      ctx.fillStyle = "#2a231d";
+      const lines = small.split("\n");
+      const x = bw + 60;
+      // la línea más larga define el tamaño, así nunca se sale del muro
+      ctx.font = `500 100px ${f.mono}`;
+      const longest = Math.max(...lines.map((l) => ctx.measureText(l).width));
+      const fs = Math.min(Math.round(ch * 0.15), Math.floor(((cw - x - 12) / longest) * 100));
+      ctx.font = `500 ${fs}px ${f.mono}`;
+      const startY = ch * 0.8 - (lines.length - 1) * fs * 1.35 - fs * 0.15;
+      lines.forEach((l, i) => ctx.fillText(l, x, startY + i * fs * 1.35));
+    },
+    [big, small, color, lang],
+    W,
+    H
   );
   return (
     <mesh position={position} rotation={[0, rotY, 0]}>
-      <planeGeometry args={[1.1, 0.55]} />
-      {/* sin sombreado: la cartela se lee igual dentro y fuera del foco */}
-      <meshBasicMaterial map={tex} color="#fbf6ec" />
+      <planeGeometry args={[w, h]} />
+      <meshBasicMaterial map={tex} transparent toneMapped={false} depthWrite={false} />
     </mesh>
   );
+}
+
+// Muro de usuarios sintéticos: los 10 perfiles que recorrieron el funnel.
+// Son las mismas esferas menta que bajan por la escultura.
+function SyntheticBoard({ position, rotY = 0, lang, hovered, ...handlers }) {
+  const tex = useTextTexture(
+    (ctx, w, h, f) => {
+      ctx.fillStyle = "#221D18";
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = "#5FE3D0";
+      ctx.font = `500 34px ${f.mono}`;
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "6px";
+      ctx.fillText(lang === "en" ? "AI RESEARCH LAB" : "LABORATORIO DE IA", 70, 100);
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+      ctx.fillStyle = "#F7F1E4";
+      ctx.font = `600 96px ${f.serif}`;
+      ctx.fillText(lang === "en" ? "10 synthetic users" : "10 usuarios sintéticos", 70, 210);
+      ctx.fillStyle = "#c9bfb0";
+      ctx.font = `500 34px ${f.mono}`;
+      ctx.fillText(
+        lang === "en" ? "Product archetypes × age ranges · built with Claude + Cursor" : "Arquetipos de producto × rangos de edad · Claude + Cursor",
+        70,
+        272
+      );
+      // grilla de 2 × 5 retratos
+      const cols = 5;
+      const cw = 300;
+      const chh = 360;
+      const gap = 40;
+      const x0 = (w - (cols * cw + (cols - 1) * gap)) / 2;
+      const y0 = 340;
+      for (let i = 0; i < 10; i++) {
+        const cx = x0 + (i % cols) * (cw + gap);
+        const cy = y0 + Math.floor(i / cols) * (chh + gap);
+        ctx.fillStyle = "#2f2822";
+        ctx.fillRect(cx, cy, cw, chh);
+        // silueta
+        const hue = ["#5FE3D0", "#8FE9DA", "#3fbfae"][i % 3];
+        ctx.fillStyle = hue;
+        ctx.beginPath();
+        ctx.arc(cx + cw / 2, cy + 120, 56, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(cx + cw / 2, cy + 290, 100, 92, 0, Math.PI, 0);
+        ctx.fill();
+        ctx.fillStyle = "#F7F1E4";
+        ctx.font = `500 30px ${f.mono}`;
+        ctx.textAlign = "center";
+        ctx.fillText(`IA · ${String(i + 1).padStart(2, "0")}`, cx + cw / 2, cy + 338);
+        ctx.textAlign = "left";
+      }
+    },
+    [lang],
+    1800,
+    1180
+  );
+  const ref = useRef();
+  useFrame((_, dt) => {
+    if (!ref.current) return;
+    const s = hovered ? 1.02 : 1;
+    ref.current.scale.lerp(new THREE.Vector3(s, s, 1), Math.min(1, dt * 8));
+  });
+  const w = 2.3;
+  const h = (w * 1180) / 1800;
+  return (
+    <group ref={ref} position={position} rotation={[0, rotY, 0]} {...handlers}>
+      <mesh castShadow>
+        <boxGeometry args={[w + 0.08, h + 0.08, 0.06]} />
+        <meshStandardMaterial color={FRAME_DARK} roughness={0.5} />
+      </mesh>
+      <mesh position={[0, 0, 0.031]}>
+        <planeGeometry args={[w, h]} />
+        <meshBasicMaterial map={tex} toneMapped={false} />
+      </mesh>
+    </group>
+  );
+}
+
+// Visitantes: figuras de galería, mate y sin rasgos, para que la sala no se
+// sienta vacía y dé escala a las obras.
+function Visitor({ position, rotY = 0, color = "#B9AE9F", lean = 0 }) {
+  return (
+    <group position={position} rotation={[0, rotY, 0]}>
+      {[-0.09, 0.09].map((x) => (
+        <mesh key={x} position={[x, 0.42, 0]} castShadow>
+          <cylinderGeometry args={[0.065, 0.055, 0.84, 12]} />
+          <meshStandardMaterial color="#3a322b" roughness={0.8} />
+        </mesh>
+      ))}
+      <group rotation={[lean, 0, 0]} position={[0, 0.84, 0]}>
+        <mesh position={[0, 0.34, 0]} castShadow>
+          <cylinderGeometry args={[0.19, 0.24, 0.68, 20]} />
+          <meshStandardMaterial color={color} roughness={0.85} />
+        </mesh>
+        <mesh position={[0, 0.68, 0]} castShadow>
+          <sphereGeometry args={[0.19, 20, 12, 0, Math.PI * 2, 0, Math.PI / 2]} />
+          <meshStandardMaterial color={color} roughness={0.85} />
+        </mesh>
+        <mesh position={[0, 0.8, 0]}>
+          <cylinderGeometry args={[0.045, 0.05, 0.1, 12]} />
+          <meshStandardMaterial color="#d9cbb8" roughness={0.7} />
+        </mesh>
+        <mesh position={[0, 0.95, 0]} castShadow>
+          <sphereGeometry args={[0.105, 20, 16]} />
+          <meshStandardMaterial color="#d9cbb8" roughness={0.7} />
+        </mesh>
+      </group>
+    </group>
+  );
+}
+
+// Piso de roble en tablas, dibujado en canvas (sin imágenes extra que bajar).
+function useWoodTexture() {
+  return useMemo(() => {
+    const c = document.createElement("canvas");
+    c.width = 1024;
+    c.height = 1024;
+    const ctx = c.getContext("2d");
+    const rows = 8;
+    const ph = c.height / rows;
+    let seed = 7;
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    for (let r = 0; r < rows; r++) {
+      let x = -rnd() * 400;
+      while (x < c.width) {
+        const len = 380 + rnd() * 420;
+        const l = 44 + rnd() * 10;
+        ctx.fillStyle = `hsl(${28 + rnd() * 6}, ${32 + rnd() * 8}%, ${l}%)`;
+        ctx.fillRect(x, r * ph, len, ph);
+        // vetas
+        ctx.globalAlpha = 0.08;
+        for (let g = 0; g < 9; g++) {
+          ctx.fillStyle = rnd() > 0.5 ? "#2a1a0e" : "#fff2dc";
+          ctx.fillRect(x, r * ph + rnd() * ph, len, 1 + rnd() * 2);
+        }
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = "rgba(30,18,10,0.55)";
+        ctx.fillRect(x, r * ph, 2, ph);
+        x += len;
+      }
+      ctx.fillStyle = "rgba(30,18,10,0.6)";
+      ctx.fillRect(0, r * ph, c.width, 2);
+    }
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.repeat.set(6, 12);
+    t.anisotropy = 8;
+    return t;
+  }, []);
 }
 
 function Pedestal({ position, w = 1.1, h = 1.1, d = 1.1 }) {
@@ -443,6 +651,7 @@ function Stanchions({ z = -6.7, xs = [-2.4, 0, 2.4] }) {
 }
 
 function Room() {
+  const wood = useWoodTexture();
   return (
     <group>
       {/* piso pulido */}
@@ -457,8 +666,9 @@ function Room() {
           depthScale={1}
           minDepthThreshold={0.4}
           maxDepthThreshold={1.2}
-          color="#7a6a5c"
-          metalness={0.25}
+          map={wood}
+          color="#c9b49c"
+          metalness={0.2}
         />
       </mesh>
       {/* muros */}
@@ -487,6 +697,24 @@ function Room() {
         <mesh key={i} position={p} rotation={[0, r, 0]}>
           <boxGeometry args={s} />
           <meshStandardMaterial color="#2a221b" />
+        </mesh>
+      ))}
+      {/* cornisa: separa muro y techo, da terminación */}
+      {[
+        [[0, 5.9, -7.95], [16, 0.2, 0.1], 0],
+        [[-7.95, 5.9, 4], [24, 0.2, 0.1], Math.PI / 2],
+        [[7.95, 5.9, 4], [24, 0.2, 0.1], Math.PI / 2],
+      ].map(([p, s, r], i) => (
+        <mesh key={i} position={p} rotation={[0, r, 0]}>
+          <boxGeometry args={s} />
+          <meshStandardMaterial color="#F6F1E8" roughness={0.8} />
+        </mesh>
+      ))}
+      {/* vigas del techo entre los tragaluces */}
+      {[-6.2, -2.75, 0.75, 4.25, 7.75, 11.25].map((z) => (
+        <mesh key={z} position={[0, 5.82, z]}>
+          <boxGeometry args={[16, 0.36, 0.3]} />
+          <meshStandardMaterial color="#E9E2D6" roughness={0.9} />
         </mesh>
       ))}
       {/* techo con tragaluz */}
@@ -529,13 +757,26 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
     },
   });
 
+  const st = Object.fromEntries(STATIONS.map((x) => [x.id, x]));
+  const plaque = (id, extra) => ({
+    title: texts[id].title,
+    stat: st[id].stat,
+    statLabel: texts[id].statLabel,
+    color: st[id].color,
+    lang,
+    ...extra,
+  });
+  const V = VINYL[lang] || VINYL.es;
+
   return (
     <FontContext.Provider value={fonts}>
       <color attach="background" args={["#1a1613"]} />
-      <fog attach="fog" args={["#1a1613", 16, 30]} />
-      <ambientLight intensity={0.5} />
-      <hemisphereLight args={["#fff3df", "#3a2e25", 0.7]} />
-      <directionalLight position={[4, 8, 6]} intensity={0.25} />
+      <fog attach="fog" args={["#1a1613", 18, 32]} />
+      {/* menos luz de relleno y focos más marcados: las obras brillan y la
+          sala gana profundidad, en vez de verse pareja y gris */}
+      <ambientLight intensity={0.3} />
+      <hemisphereLight args={["#fff3df", "#3a2e25", 0.5]} />
+      <directionalLight position={[4, 8, 6]} intensity={0.2} />
 
       <Room />
       {/* en celular el nombre ya está en la cabecera y el letrero quedaba tapado */}
@@ -551,30 +792,55 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
         hovered={hoveredId === "landing-viajes"}
         {...bind("landing-viajes")}
       />
-      <Plaque position={[2.9, 1.7, -7.95]} title={texts["landing-viajes"].title} subtitle="BICE VIDA · +16%" lang={lang} />
-      <Spot position={[0, 5.8, -5.2]} target={[0, 2.85, -8]} intensity={2.6} angle={0.5} />
+      <Plaque position={[3.05, 1.5, -7.95]} {...plaque("landing-viajes", { subtitle: "BICE VIDA · Landing" })} />
+      <Spot position={[0, 5.8, -5.2]} target={[0, 2.85, -8]} intensity={2.9} angle={0.5} />
       <Stanchions />
 
       {/* Sala central: escultura del Design System */}
       <SystemSculpture hovered={hoveredId === "design-system"} {...bind("design-system")} />
-      <Spot position={[0, 5.8, -1]} target={[0, 1.5, -2.5]} intensity={2.4} angle={0.38} />
+      <Plaque position={[0, 0.5, -1.73]} scale={0.62} {...plaque("design-system", { subtitle: "BICE VIDA · Design System" })} />
+      <Spot position={[0, 5.8, -0.6]} target={[0, 1.5, -2.5]} intensity={2.7} angle={0.38} />
+
+      {/* Muro del fondo, derecha: láminas reales del Design System */}
+      <group {...bind("design-system")}>
+        <Artwork
+          src="/images/museo/ds-anatomia.jpg"
+          w={1.9}
+          h={1.24}
+          position={[4.75, 3.0, -7.92]}
+          hovered={hoveredId === "design-system"}
+        />
+        <Artwork
+          src="/images/museo/ds-estados.jpg"
+          w={0.76}
+          h={1.24}
+          mat={0.1}
+          position={[6.6, 3.0, -7.92]}
+          hovered={hoveredId === "design-system"}
+        />
+      </group>
+      <WallText position={[5.35, 4.5, -7.94]} w={4.1} h={0.78} big="89" small={V.ds} color="#3D5AFE" lang={lang} />
+      <Spot position={[5.4, 5.8, -5.4]} target={[5.4, 3.2, -8]} intensity={2.4} angle={0.5} />
 
       {/* Sala 2: muro izquierdo, funnel CSI */}
       <Artwork
-        src="/images/museo/csi-landing.jpg"
+        src="/images/museo/csi-planes.jpg"
         w={3}
         h={2.25}
-        position={[-7.92, 2.7, -3.3]}
+        position={[-7.92, 2.55, -3.0]}
         rotY={Math.PI / 2}
         hovered={hoveredId === "funnel-csi"}
         {...bind("funnel-csi")}
       />
-      <Plaque position={[-7.95, 1.6, -5.55]} rotY={Math.PI / 2} title={texts["funnel-csi"].title} subtitle="BICE VIDA · −12%" lang={lang} />
+      <WallText position={[-7.94, 4.25, -3.0]} rotY={Math.PI / 2} w={3.6} h={0.72} big="−12%" small={V.funnel} color="#9A5A00" lang={lang} />
+      <SyntheticBoard position={[-7.92, 2.95, -6.45]} rotY={Math.PI / 2} lang={lang} hovered={hoveredId === "funnel-csi"} {...bind("funnel-csi")} />
+      <Plaque position={[-7.95, 1.4, -6.45]} rotY={Math.PI / 2} {...plaque("funnel-csi", { subtitle: "BICE VIDA · Funnel" })} />
       <group {...bind("funnel-csi")}>
         <FunnelSculpture hovered={hoveredId === "funnel-csi"} />
       </group>
-      <Spot position={[-5.6, 5.8, -3.3]} target={[-8, 2.6, -3.3]} intensity={2.4} />
-      <Spot position={[-5.6, 5.8, -0.6]} target={[-6.4, 1.6, -0.6]} intensity={1.4} angle={0.3} />
+      <Spot position={[-5.6, 5.8, -3.0]} target={[-8, 2.6, -3.0]} intensity={2.6} />
+      <Spot position={[-5.6, 5.8, -6.45]} target={[-8, 2.6, -6.45]} intensity={2.2} angle={0.42} />
+      <Spot position={[-5.6, 5.8, -0.6]} target={[-6.4, 1.6, -0.6]} intensity={1.6} angle={0.3} />
 
       {/* Sala 3: tríptico Beliv */}
       {[
@@ -594,24 +860,41 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           {...bind("beliv")}
         />
       ))}
-      <Plaque position={[7.95, 1.2, -0.4]} rotY={-Math.PI / 2} title={texts.beliv.title} subtitle="Design Sprint · 8+" lang={lang} />
-      <Spot position={[5.6, 5.8, -3]} target={[8, 2.5, -3]} intensity={2.4} angle={0.5} />
+      <WallText position={[7.94, 4.2, -3.0]} rotY={-Math.PI / 2} w={3.9} h={0.72} big={V.belivBig} small={V.beliv} color="#B8243F" lang={lang} />
+      <Plaque position={[7.95, 1.4, -0.15]} rotY={-Math.PI / 2} {...plaque("beliv", { subtitle: "Beliv · Design Sprint" })} />
+      <Spot position={[5.6, 5.8, -3]} target={[8, 2.5, -3]} intensity={2.7} angle={0.5} />
 
-      {/* Sala 5: muro del fondo, chatbot */}
+      {/* Sala 5: muro del fondo, chatbot con sus pantallas reales */}
       <Artwork
-        src="/images/museo/chatbot.jpg"
-        w={2.7}
-        h={1.5}
-        position={[-4.9, 2.75, -7.92]}
+        src="/images/museo/chatbot-chat.jpg"
+        w={2.3}
+        h={1.27}
+        position={[-5.85, 3.05, -7.92]}
         hovered={hoveredId === "chatbot"}
         {...bind("chatbot")}
       />
-      <Plaque position={[-4.9, 1.45, -7.95]} title={texts["chatbot"].title} subtitle="BICE VIDA · 1.058" lang={lang} />
-      <Spot position={[-4.9, 5.8, -5.2]} target={[-4.9, 2.75, -8]} intensity={2.4} angle={0.42} />
+      {[
+        ["/images/museo/chatbot-embudo.jpg", 3.55],
+        ["/images/museo/chatbot-conversaciones.jpg", 2.5],
+      ].map(([src, y]) => (
+        <Artwork
+          key={src}
+          src={src}
+          w={1.1}
+          h={0.63}
+          mat={0.08}
+          position={[-3.45, y, -7.92]}
+          hovered={hoveredId === "chatbot"}
+          {...bind("chatbot")}
+        />
+      ))}
+      <WallText position={[-5.0, 4.5, -7.94]} w={4.4} h={0.78} big="90%" small={V.chatbot} color="#7444E0" lang={lang} />
+      <Plaque position={[-5.85, 1.45, -7.95]} {...plaque("chatbot", { subtitle: "BICE VIDA · IA" })} />
+      <Spot position={[-5.0, 5.8, -5.3]} target={[-5.0, 3.0, -8]} intensity={2.7} angle={0.48} />
 
       {/* Sala 4: manifiesto */}
       <ManifestoWall lang={lang} hovered={hoveredId === "manifiesto"} {...bind("manifiesto")} />
-      <Spot position={[5.6, 5.8, 3.2]} target={[8, 2.4, 3.2]} intensity={2} angle={0.5} />
+      <Spot position={[5.6, 5.8, 3.2]} target={[8, 2.4, 3.2]} intensity={2.3} angle={0.5} />
 
       {/* Vestíbulo: retrato del artista */}
       <Artwork
@@ -625,14 +908,40 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
         hovered={hoveredId === "artista"}
         {...bind("artista")}
       />
-      <Plaque position={[-7.95, 1.45, 4.75]} rotY={Math.PI / 2} title={texts.artista.title} subtitle="Santiago, Chile" lang={lang} />
-      <Spot position={[-5.6, 5.8, 3.2]} target={[-8, 2.7, 3.2]} intensity={2.2} angle={0.36} />
+      <Plaque position={[-7.95, 1.18, 3.2]} rotY={Math.PI / 2} {...plaque("artista", { subtitle: "Santiago, Chile", stat: "8+", statLabel: V.years })} />
+      <Spot position={[-5.6, 5.8, 3.2]} target={[-8, 2.7, 3.2]} intensity={2.5} angle={0.36} />
 
       {/* par de bancas simétricas, paralelas al muro principal y alineadas con
           los pedestales: la sala se lee ordenada y el centro queda libre */}
       <Bench position={[-3.3, 0, 0.9]} />
       <Bench position={[3.3, 0, 0.9]} />
-      <ContactShadows position={[0, 0.005, 2]} scale={[16, 20]} resolution={1024} far={2.5} blur={2.2} opacity={0.55} color="#1a120c" />
+
+      {/* visitantes: dan escala y vida, fuera de los encuadres de cada obra */}
+      <Visitor position={[-2.3, 0, -6.0]} rotY={0.5} color="#8E7F6E" />
+      <Visitor position={[5.2, 0, -5.6]} rotY={-0.2} color="#5D6B73" lean={0.05} />
+      <Visitor position={[4.9, 0, -0.6]} rotY={-1.2} color="#A6604F" />
+
+      <ContactShadows position={[0, 0.005, 2]} scale={[16, 20]} resolution={1024} far={2.5} blur={2.2} opacity={0.6} color="#1a120c" />
     </FontContext.Provider>
   );
 }
+
+// Textos de los vinilos de cada sala (cifras confirmadas por Charly).
+const VINYL = {
+  es: {
+    chatbot: "de las conversaciones las resuelve el bot\n−20% llamadas al call center\n−66% preguntas repetidas",
+    ds: "componentes en producción\n10 células de producto lo usan\n~90% de lo que construyen",
+    funnel: "abandono en la contratación\nde 10 a 8 pasos\nvalidado con usuarios sintéticos",
+    belivBig: "3 días",
+    beliv: "Design Sprint que lideré\n8+ pantallas\nprobada y desarrollada",
+    years: "años diseñando producto digital",
+  },
+  en: {
+    chatbot: "of conversations resolved by the bot\n−20% call center calls\n−66% repeated questions",
+    ds: "components in production\nused by 10 product squads\n~90% of what they build",
+    funnel: "drop-off in sign-up\nfrom 10 to 8 steps\nvalidated with synthetic users",
+    belivBig: "3 days",
+    beliv: "Design Sprint I led\n8+ screens\ntested and built",
+    years: "years designing digital products",
+  },
+};
