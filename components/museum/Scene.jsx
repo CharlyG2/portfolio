@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { chatLive, funnelLive, uploaderLive, plansLive, scrollAt } from "./live";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useTexture, MeshReflectorMaterial, RoundedBox, ContactShadows } from "@react-three/drei";
@@ -237,14 +238,74 @@ function Spot({ position, target, intensity = 2.2, angle = 0.42, color = "#ffecc
 }
 
 // Marco con passe-partout. `rotY` orienta el cuadro según el muro.
-function Artwork({ src, w, h, position, rotY = 0, frame = FRAME_DARK, mat = 0.12, hovered, ...handlers }) {
+// Obra viva: capa dibujada en canvas sobre la captura que se anima mientras
+// la obra está activa (mouse encima o ficha abierta). Comparte el mismo
+// atenuado que la pantalla, así que se apaga y se enciende con la sala.
+function LiveOverlay({ w, h, image, active, live, lang }) {
+  const L = useContext(LightsContext);
+  const fonts = useContext(FontContext);
+  const dim = useDimmed(0.5, 0.925);
+  const imgW = image?.width || 1024;
+  const imgH = image?.height || 768;
+  const k = Math.min(1.25, 1400 / imgW);
+  const { ctx, tex } = useMemo(() => {
+    const c = document.createElement("canvas");
+    c.width = Math.round(imgW * k);
+    c.height = Math.round(imgH * k);
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = 8;
+    return { ctx: c.getContext("2d"), tex: t };
+  }, [imgW, imgH, k]);
+  useEffect(() => () => tex.dispose(), [tex]);
+  const st = useRef({ t: 0, a: 0 });
+  useFrame((_, dt) => {
+    const mesh = dim.current;
+    if (!mesh) return;
+    const s = st.current;
+    const on = active && !L.current.reduce;
+    s.a = THREE.MathUtils.clamp(s.a + (on ? dt / 0.2 : -dt / 0.35), 0, 1);
+    if (on) s.t += Math.min(dt, 0.1);
+    else if (s.a === 0) s.t = 0;
+    mesh.visible = s.a > 0;
+    if (!mesh.visible) return;
+    mesh.material.opacity = s.a;
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.clearRect(0, 0, imgW, imgH);
+    ctx.textBaseline = "alphabetic";
+    live.draw(ctx, s.t % live.period, { image, fonts, lang });
+    tex.needsUpdate = true;
+  });
+  return (
+    <mesh ref={dim} position={[0, 0, 0.058]} visible={false}>
+      <planeGeometry args={[w, h]} />
+      <meshBasicMaterial map={tex} transparent depthWrite={false} />
+    </mesh>
+  );
+}
+
+function Artwork({ src, w, h, position, rotY = 0, frame = FRAME_DARK, mat = 0.12, hovered, active, live, scroll, lang, ...handlers }) {
   const tex = useCroppedTexture(src, w / h);
+  const L = useContext(LightsContext);
   const group = useRef();
   const screen = useDimmed(0.5, 0.925);
+  // páginas largas: se recorren de arriba abajo mientras la obra está activa
+  const sc = useRef({ t: 0, p: 0 });
+  const top = 1 - tex.repeat.y;
+  const viewports = 1 / tex.repeat.y;
   useFrame((_, dt) => {
     if (!group.current) return;
     const s = hovered ? 1.025 : 1;
     group.current.scale.lerp(new THREE.Vector3(s, s, 1), Math.min(1, dt * 8));
+    if (scroll && viewports > 1.05) {
+      const S = sc.current;
+      const on = active && !L.current.reduce;
+      if (on) S.t += Math.min(dt, 0.1);
+      else if (S.p < 0.002) S.t = 0;
+      const target = on ? scrollAt(S.t, viewports) : 0;
+      S.p += (target - S.p) * Math.min(1, dt * (on ? 10 : 4));
+      tex.offset.y = top * (1 - S.p);
+    }
   });
   const fw = w + mat * 2 + 0.16;
   const fh = h + mat * 2 + 0.16;
@@ -263,6 +324,7 @@ function Artwork({ src, w, h, position, rotY = 0, frame = FRAME_DARK, mat = 0.12
         {/* sin luz propia: la captura se ve nítida y con sus colores reales */}
         <meshBasicMaterial map={tex} color="#ececec" />
       </mesh>
+      {live && <LiveOverlay w={w} h={h} image={tex.image} active={active} live={live} lang={lang} />}
     </group>
   );
 }
@@ -998,7 +1060,8 @@ function Room() {
   );
 }
 
-export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, isMobile, lightsOn = true, focus = false }) {
+export default function Scene({ lang, hoveredId, selectedId, setHoveredId, onSelect, texts, isMobile, lightsOn = true, focus = false }) {
+  const on = (id) => hoveredId === id || selectedId === id;
   const fonts = useSiteFonts();
   const lights = useRef({ on: true, level: 1, changedAt: -100, reduce: false });
   useEffect(() => {
@@ -1053,7 +1116,9 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
 
       {/* Sala 1: muro principal */}
       <Artwork
-        src="/images/museo/viaje-landing-unificada.jpg"
+        src="/images/museo/viaje-landing-scroll.jpg"
+        scroll
+        active={on("landing-viajes")}
         w={4.2}
         h={3.15}
         position={[0, 2.85, -7.92]}
@@ -1081,6 +1146,9 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
         />
         <Artwork
           src="/images/museo/ds-estados.jpg"
+          live={uploaderLive}
+          active={on("design-system")}
+          lang={lang}
           w={0.76}
           h={1.24}
           mat={0.1}
@@ -1093,6 +1161,8 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
       {/* Sala 2: muro izquierdo, funnel CSI */}
       <Artwork
         src="/images/museo/csi-planes.jpg"
+        live={plansLive}
+        active={on("funnel-csi")}
         w={3}
         h={2.25}
         position={[-7.92, 2.55, -3.0]}
@@ -1111,9 +1181,9 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
 
       {/* Sala 3: tríptico Beliv */}
       {[
-        ["/images/museo/beliv-home.jpg", -4.3],
-        ["/images/museo/beliv-score.jpg", -3],
-        ["/images/museo/beliv-salud.jpg", -1.7],
+        ["/images/museo/beliv-home-scroll.jpg", -4.3],
+        ["/images/museo/beliv-score-scroll.jpg", -3],
+        ["/images/museo/beliv-salud-scroll.jpg", -1.7],
       ].map(([src, z]) => (
         <Artwork
           key={src}
@@ -1122,6 +1192,8 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           h={2.0}
           mat={0.07}
           position={[7.92, 2.6, z]}
+          scroll
+          active={on("beliv")}
           rotY={-Math.PI / 2}
           hovered={hoveredId === "beliv"}
           {...bind("beliv")}
@@ -1133,6 +1205,9 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
       {/* Sala 5: muro del fondo, chatbot con sus pantallas reales */}
       <Artwork
         src="/images/museo/chatbot-chat.jpg"
+        live={chatLive}
+        active={on("chatbot")}
+        lang={lang}
         w={2.3}
         h={1.27}
         position={[-5.85, 3.05, -7.92]}
@@ -1150,6 +1225,9 @@ export default function Scene({ lang, hoveredId, setHoveredId, onSelect, texts, 
           h={0.63}
           mat={0.08}
           position={[-3.45, y, -7.92]}
+          live={src.includes("embudo") ? funnelLive : undefined}
+          active={on("chatbot")}
+          lang={lang}
           hovered={hoveredId === "chatbot"}
           {...bind("chatbot")}
         />

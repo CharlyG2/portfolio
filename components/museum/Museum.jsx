@@ -116,6 +116,16 @@ function BulbIcon({ on }) {
   );
 }
 
+// Íconos de contacto, del mismo trazo que la ampolleta.
+const icon = (d) => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
+    {d}
+  </svg>
+);
+const MailIcon = () => icon(<><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="m4 7 8 6 8-6" /></>);
+const PhoneIcon = () => icon(<path d="M6.6 3.5h2.6l1.4 4-2 1.3a12 12 0 0 0 6.6 6.6l1.3-2 4 1.4v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z" />);
+const InIcon = () => icon(<><rect x="3" y="3" width="18" height="18" rx="3" /><path d="M8 10.5V16M8 7.6v.1M12 16v-3.2a2.3 2.3 0 0 1 4.6 0V16M12 10.5V16" /></>);
+
 export default function Museum() {
   const [lang, setLang] = useState("es");
   const [selected, setSelected] = useState(null);
@@ -225,6 +235,7 @@ export default function Museum() {
             isMobile={isMobile}
             lightsOn={lightsOn}
             focus={!!selected}
+            selectedId={selected}
           />
         </Suspense>
         <CameraControls
@@ -336,6 +347,25 @@ export default function Museum() {
             <span className="w-1.5 h-1.5 rounded-full" style={{ background: MINT }} aria-hidden="true" />
             {PROFILE.availability[lang]} · {PROFILE.location[lang]}
           </p>
+          {/* contacto a la vista: correo, teléfono y LinkedIn sin tener que buscarlos */}
+          <ul className={`${enterCls} pointer-events-auto mt-4 flex flex-wrap gap-2`} style={d(840)} aria-label={t.contact}>
+            {[
+              { href: `mailto:${PROFILE.email}`, text: PROFILE.email, icon: <MailIcon /> },
+              { href: PROFILE.whatsapp, text: PROFILE.phone, icon: <PhoneIcon />, ext: true },
+              { href: PROFILE.linkedin, text: "LinkedIn", icon: <InIcon />, ext: true },
+            ].map((c) => (
+              <li key={c.href}>
+                <a
+                  href={c.href}
+                  {...(c.ext ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className={`press inline-flex items-center gap-2 rounded-full border ${GLASS} px-3.5 py-2 min-h-[38px] text-xs md:text-sm hover:bg-[#14110e]/90 hover:border-white/40`}
+                >
+                  <span className="text-[#8FE9DA]">{c.icon}</span>
+                  {c.text}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
