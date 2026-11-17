@@ -31,7 +31,7 @@ const cases = [
     slug: "landing-viajes",
     color: "mint",
     role: "Product Designer · BICE VIDA · Chile",
-    industries: "Insurtech · Travel",
+    industries: "Insurtech · Viajes",
     title: "Unificar dos seguros de viaje en una landing",
     impactStat: "+16%", impactLabel: "visitas",
     secondaryStat: "+2% contratación",
@@ -42,9 +42,9 @@ const cases = [
     slug: "funnel-csi",
     color: "amber",
     role: "Product Designer · BICE VIDA · Chile",
-    industries: "Insurtech · Health",
-    title: "Reducir el funnel de contratación CSI",
-    impactStat: "-12%", impactLabel: "abandono",
+    industries: "Insurtech · Salud",
+    title: "De 10 a 8 pasos en la contratación del seguro de salud",
+    impactStat: "−12%", impactLabel: "abandono",
     secondaryStat: "+2% contratación",
     tags: ["Funnel", "Usuarios sintéticos · IA", "Datos"],
     thumb: null,
@@ -54,10 +54,10 @@ const cases = [
     slug: "beliv",
     color: "rose",
     role: "Design Lead (sprint) · BICE VIDA · Chile",
-    industries: "Wellness · Mobile App",
+    industries: "Bienestar · App móvil",
     title: "Beliv: de un sprint de 3 días a una app desarrollada",
-    impactStat: "3 días", impactLabel: "de sprint, luego probada con usuarios y desarrollada",
-    tags: ["Mobile App", "Design Sprint", "Liderazgo"],
+    impactStat: "3 días", impactLabel: "de sprint, luego probada con usuarios y llevada a desarrollo",
+    tags: ["App móvil", "Design Sprint", "Liderazgo"],
     thumb: "/images/beliv-home.png",
   },
   {
@@ -145,8 +145,8 @@ export default function CaseIndex() {
         <Reveal>
           <p className="eyebrow text-rust mb-4">trabajo</p>
           <h2 className="font-display text-2xl md:text-3xl text-ink max-w-xl">
-            Cinco proyectos, cinco decisiones de negocio detrás de cada
-            pantalla.
+            Cinco proyectos reales: el problema de negocio, lo que hice y
+            el resultado.
           </h2>
         </Reveal>
 

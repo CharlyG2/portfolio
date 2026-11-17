@@ -15,7 +15,7 @@ export default function PortfolioCase() {
       <CaseHeader
         eyebrow="bonus · este portafolio"
         title="Este mismo portafolio, como caso de estudio"
-        tldr="Dirigí cada decisión de diseño — paleta, tipografía, estructura, copy, interacciones — e iteré con Claude para la implementación del código, usando Cursor para correrlo localmente y GitHub Desktop + Vercel para publicarlo."
+        tldr="Dirigí cada decisión de diseño (paleta, tipografía, estructura, copy e interacciones) e iteré con Claude para implementar el código, con Cursor para correrlo en local y GitHub Desktop + Vercel para publicarlo."
         stats={[
           { n: "5", l: "secciones rediseñadas por feedback real" },
           { n: "3", l: "herramientas en el flujo: Claude, Cursor, GitHub Desktop" },
@@ -23,12 +23,12 @@ export default function PortfolioCase() {
         ]}
       />
 
-      <CaseSection tag="contexto" title="Tenía el CV en PDF, pero eso no demuestra nada">
+      <CaseSection tag="contexto" title="Un PDF no alcanza para mostrar cómo trabajo">
         <p>
-          Un PDF no muestra cómo pienso ni cómo reacciono cuando algo no
-          funciona. Decidí construir el portafolio dirigiendo yo cada
-          decisión de diseño, usando IA para la implementación — un flujo
-          que de paso dice algo real sobre cómo trabajo hoy.
+          Un CV no muestra cómo pienso ni cómo reacciono cuando algo no
+          funciona. Por eso construí el portafolio dirigiendo cada decisión
+          de diseño y usando IA para la implementación: un flujo que, de
+          paso, muestra cómo trabajo hoy.
         </p>
       </CaseSection>
 
@@ -44,8 +44,8 @@ export default function PortfolioCase() {
         </p>
         <p>
           Varias direcciones se descartaron por completo cuando dejaron de
-          funcionar — incluyendo un momento donde prioricé efectos por
-          sobre claridad y tuve que revertir a una versión más simple antes
+          funcionar, incluido un momento en el que prioricé los efectos por
+          sobre la claridad y tuve que revertir a una versión más simple antes
           de seguir. Ese tipo de decisión también es parte del criterio de
           producto: saber cuándo un camino no está funcionando y cortar a
           tiempo.
@@ -65,11 +65,11 @@ export default function PortfolioCase() {
       <CaseSection tag="sistema" title="Un Design System chico, pero real">
         <p>
           El sitio tiene su propio sistema de tokens: una paleta de color
-          por caso de estudio (cada proyecto tiene su identidad visual
-          propia), una jerarquía tipográfica de cuatro familias con roles
-          claros (Anton para impacto, Space Grotesk para títulos, Inter
-          para cuerpo, IBM Plex Mono para datos), y componentes reutilizables
-          para cada caso — el mismo principio que documenté en el caso del
+          por caso de estudio (cada proyecto tiene su propia identidad
+          visual), una jerarquía tipográfica de cinco familias con roles
+          claros (Fraunces para el museo, Anton para impacto, Space Grotesk
+          para títulos, Inter para el cuerpo e IBM Plex Mono para datos) y
+          componentes reutilizables para cada caso. Es el mismo principio que documenté en el caso del
           Design System de BICE VIDA, aplicado acá a mi propio proyecto.
         </p>
       </CaseSection>
@@ -80,7 +80,7 @@ export default function PortfolioCase() {
           en BICE VIDA: la calidad de un producto no depende de quién
           escribe cada línea de código, depende de quién toma las
           decisiones correctas y sabe cuándo pedir un cambio. Ese fue mi
-          trabajo acá — y es, en el fondo, el mismo trabajo que hago todos
+          trabajo acá y es, en el fondo, el mismo trabajo que hago todos
           los días como Product Designer.
         </p>
       </CaseSection>

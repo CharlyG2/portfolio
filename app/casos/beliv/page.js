@@ -27,7 +27,7 @@ export default function BelivCase() {
       <CaseHeader
         eyebrow="caso 04 · beliv"
         title="Beliv: de un sprint de 3 días a una app validada y desarrollada"
-        tldr="BICE VIDA necesitaba una app de bienestar propia, rápido y con el menor costo posible. Lideré el equipo de diseño en un design sprint de 3 días: de la idea a las pantallas completas de onboarding, home, salud, social, gamificación y telesalud."
+        tldr="BICE VIDA necesitaba una app de bienestar propia, rápido y con el menor costo posible. Lideré el equipo de diseño en un Design Sprint de 3 días: de la idea a las pantallas completas de onboarding, home, salud, social, gamificación y telesalud."
         stats={[
           { n: "3", l: "días de sprint" },
           { n: "8+", l: "pantallas de producto diseñadas" },
@@ -39,8 +39,8 @@ export default function BelivCase() {
         <p>
           BICE VIDA quería ofrecer algo más allá de pólizas: una app propia
           de bienestar donde las personas pudieran cuidar su salud física,
-          mental y social en un mismo lugar — Beliv. El desafío no era solo
-          de diseño, era de tiempo y presupuesto: había que validar el
+          mental y social en un mismo lugar: Beliv. El desafío no era solo
+          de diseño, sino de tiempo y presupuesto: había que validar el
           concepto completo sin el costo de un desarrollo largo.
         </p>
       </CaseSection>
@@ -49,8 +49,8 @@ export default function BelivCase() {
         <p>
           La restricción definió el proceso completo: nada de iteraciones
           largas ni research extenso. El objetivo era llegar a pantallas
-          suficientemente sólidas como para decidir si el proyecto pasaba a
-          desarrollo — un sprint de diseño clásico, comprimido al máximo.
+          suficientemente sólidas para decidir si el proyecto pasaba a
+          desarrollo. Un sprint de diseño clásico, comprimido al máximo.
         </p>
       </CaseSection>
 
@@ -58,15 +58,15 @@ export default function BelivCase() {
         <p>
           En vez de un home genérico, la app se organiza en las categorías
           que realmente componen el bienestar de una persona: Salud, Vida
-          activa, Social y Beneficios — cada una con su propia sección
-          completa, no solo un acceso directo.
+          activa, Social y Beneficios, cada una con su propia sección
+          completa y no solo un acceso directo.
         </p>
         <p>
           El corazón del producto es el <strong>Beliv Score</strong>: un
           indicador único que combina salud preventiva, reflexión y vida
           activa en un solo número, pensado para dar una sensación de
-          progreso constante y motivar el uso diario — el mismo patrón que
-          usan apps de hábitos, aplicado a bienestar corporativo.
+          progreso constante y motivar el uso diario. Es el mismo patrón de
+          las apps de hábitos, aplicado al bienestar corporativo.
         </p>
         <MobileGallery images={screens} />
       </CaseSection>
@@ -76,8 +76,8 @@ export default function BelivCase() {
           Con solo 3 días, apoyarme en decisiones ya validadas del Design
           System de BICE VIDA (componentes, tipografía, patrones de tarjeta)
           fue lo que hizo posible cubrir tantas pantallas sin sacrificar
-          consistencia. Diseñar el sistema antes es lo que permitió que un
-          sprint así fuera viable.
+          consistencia. Tener el sistema listo de antemano hizo viable un
+          sprint así.
         </p>
       </CaseSection>
 
@@ -94,8 +94,8 @@ export default function BelivCase() {
         <p>
           Sin la presión de tiempo y costo, probablemente hubiéramos
           iterado mucho más el Beliv Score o la estructura del home. La
-          restricción obligó a decidir rápido con el criterio disponible —
-          una habilidad distinta a la de un proyecto sin límite de tiempo, y
+          restricción obligó a decidir rápido con el criterio disponible:
+          una habilidad distinta a la de un proyecto sin límite de tiempo, e
           igual de necesaria en producto real.
         </p>
       </CaseSection>

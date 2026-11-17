@@ -13,23 +13,23 @@ const stages = [
   },
   {
     title: "Datos cualitativos y cuantitativos",
-    text: "Cruzo analítica de comportamiento con la voz del cliente para encontrar dónde la gente se cae o tiene fricción.",
+    text: "Cruzo analítica de comportamiento con la voz del cliente para encontrar dónde la gente abandona o se traba.",
     tools: ["GA4", "Pendo", "Hotjar", "NPS", "ISN", "CES / CSAT", "Call center"],
   },
   {
     title: "Diseño end-to-end",
-    text: "Flujos de usuario, wireframes, prototipos y alta fidelidad para web y mobile, apoyado en el Design System.",
-    tools: ["Figma", "Storybook", "Design System"],
+    text: "Flujos, wireframes, prototipos y alta fidelidad para web y app sobre el Design System. Cuando hay que probar rápido, prototipo con IA.",
+    tools: ["Figma", "Storybook", "Claude", "Cursor"],
   },
   {
     title: "Validación",
-    text: "Pruebas de usabilidad y testeo de prototipos antes de pasar a desarrollo. Si la evidencia muestra otro camino, lo sigo.",
-    tools: ["Maze", "Lyssna", "Test moderado"],
+    text: "Tests de usabilidad y de prototipos, más usuarios sintéticos con IA para descartar ideas débiles antes de pasar a desarrollo.",
+    tools: ["Maze", "Lyssna", "Test moderado", "Usuarios sintéticos"],
   },
   {
     title: "Colaboración e implementación",
     text: "Trabajo por sprints con Product Owners, desarrolladores y stakeholders, y reviso indicadores con negocio para medir el impacto.",
-    tools: ["Jira", "Scrum", "Review de indicadores"],
+    tools: ["Jira", "Scrum", "Revisión de KPIs"],
   },
   {
     title: "Documentación",

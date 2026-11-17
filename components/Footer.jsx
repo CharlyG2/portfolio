@@ -15,8 +15,8 @@ export default function Footer() {
           Busco mi próximo equipo de producto.
         </Reveal>
         <Reveal as="p" className="mt-5 text-base md:text-lg text-paper/75 max-w-xl leading-relaxed">
-          Estoy disponible para roles de AI Product Designer, Product Designer y Design Systems
-          en Santiago, en modalidad híbrida o la que use tu equipo.
+          Estoy disponible para roles de AI Product Designer, Product Designer o Design Systems.
+          En Chile trabajo presencial, híbrido o remoto; desde otros países, en remoto.
           Escríbeme y conversemos.
         </Reveal>
         <Reveal className="mt-10 flex flex-wrap gap-3 font-mono text-sm">

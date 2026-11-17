@@ -9,16 +9,16 @@ export default function Home() {
       <div className="sr-only">
         <h1>Charly Gourves — AI Product Designer</h1>
         <p>
-          AI Product Designer y especialista en Design Systems, con más de 8 años en producto
-          digital. Disponible para trabajar en
-          Santiago, modalidad híbrida.
+          AI Product Designer y especialista en Design Systems, con más de 8 años diseñando
+          productos digitales. Disponible para trabajar en Chile (presencial, híbrido o remoto) y
+          en remoto desde otros países.
         </p>
         <ul>
           <li><Link href="/casos/design-system">Design System de BICE VIDA: la base que consumen 10 células de producto</Link></li>
           <li><Link href="/casos/landing-viajes">Landing de seguros de viaje: +16% de visitas</Link></li>
-          <li><Link href="/casos/funnel-csi">Funnel de contratación CSI: −12% de abandono, validado con usuarios sintéticos generados con IA</Link></li>
+          <li><Link href="/casos/funnel-csi">Funnel del seguro de salud: −12% de abandono, con variantes comparadas por usuarios sintéticos con IA</Link></li>
           <li><Link href="/casos/beliv">Beliv: app de bienestar en un Design Sprint de 3 días</Link></li>
-          <li><Link href="/casos/chatbot">Chatbot con IA: asistente virtual con 1.058 conversaciones en un mes</Link></li>
+          <li><Link href="/casos/chatbot">Chatbot con IA: 1.058 conversaciones en un mes, el 90% resueltas por el bot</Link></li>
           <li><Link href="/express">Portafolio en versión rápida</Link></li>
           <li><a href="mailto:gourvestoro@gmail.com">gourvestoro@gmail.com</a></li>
           <li><a href="https://wa.me/56948530754">+56 9 4853 0754</a></li>
