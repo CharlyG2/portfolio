@@ -32,7 +32,6 @@ module.exports = {
         display: ["var(--font-display)", "sans-serif"],
         impact: ["var(--font-impact)", "sans-serif"],
         serif: ["var(--font-serif)", "serif"],
-        hand: ["var(--font-hand)", "cursive"],
         body: ["var(--font-body)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
       },

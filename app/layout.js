@@ -1,4 +1,4 @@
-import { Space_Grotesk, Inter, IBM_Plex_Mono, Anton, Caveat, Fraunces } from "next/font/google";
+import { Space_Grotesk, Inter, IBM_Plex_Mono, Anton, Fraunces } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import MotionProvider from "@/components/MotionProvider";
@@ -20,12 +20,6 @@ const impact = Anton({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-impact",
-});
-
-const hand = Caveat({
-  subsets: ["latin"],
-  weight: ["500", "700"],
-  variable: "--font-hand",
 });
 
 const body = Inter({
@@ -68,7 +62,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" className={`${display.variable} ${body.variable} ${mono.variable} ${impact.variable} ${hand.variable} ${serif.variable}`}>
+    <html lang="es" className={`${display.variable} ${body.variable} ${mono.variable} ${impact.variable} ${serif.variable}`}>
       <body className="font-body antialiased">
         <CustomCursor />
         <MotionProvider>{children}</MotionProvider>
