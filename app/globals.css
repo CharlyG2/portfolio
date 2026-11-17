@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Sistema de movimiento — mismas curvas y duraciones que lib/motion.js */
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 180ms;
+  --dur-base: 320ms;
+  --dur-slow: 600ms;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -28,6 +38,36 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Entrada escalonada en CSS (corre antes de que cargue JavaScript, así la
+   portada de cada caso no espera a la hidratación). El retraso de cada
+   elemento va en la variable --d. */
+.enter {
+  animation: enter-up 900ms var(--ease-expo) backwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes enter-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Feedback al presionar: botones y links con forma de botón se hunden un
+   poco, como un botón físico. */
+.press {
+  transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+  transition-duration: var(--dur-base);
+  transition-timing-function: var(--ease-out);
+}
+.press:active {
+  transform: scale(0.97);
+  transition-duration: 90ms;
 }
 
 ::selection {

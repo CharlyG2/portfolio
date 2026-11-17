@@ -1,6 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { EASE } from "@/lib/motion";
+
+// Se arma cuando entra en pantalla (antes corría al cargar la página y ya
+// había terminado cuando uno llegaba a verlo).
+const VIEW = { once: true, margin: "0px 0px -15% 0px" };
 
 // Signature element: literal visualization of the atomic-design hierarchy
 // (átomo → molécula → organismo → plantilla → página) that Charly's own
@@ -44,8 +49,9 @@ export default function SystemGraph() {
               strokeOpacity="0.35"
               strokeWidth="1.5"
               initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 0.7, delay: 0.15 * i, ease: "easeOut" }}
+              viewport={VIEW}
+              whileInView={{ pathLength: 1 }}
+              transition={{ duration: 0.7, delay: 0.15 * i, ease: EASE }}
             />
           );
         })}
@@ -64,7 +70,8 @@ export default function SystemGraph() {
             r={3}
             fill="#8FA0FF"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
+            viewport={VIEW}
+            whileInView={{ opacity: 0.5 }}
             transition={{ duration: 0.5, delay: 0.5 + i * 0.1 }}
           />
         ))}
@@ -79,8 +86,9 @@ export default function SystemGraph() {
               stroke="#3D5AFE"
               strokeWidth="1.5"
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.15 * i + 0.1, ease: "backOut" }}
+              viewport={VIEW}
+              whileInView={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.15 * i + 0.1, type: "spring", stiffness: 260, damping: 16 }}
               style={{ transformOrigin: `${t.cx}px ${t.cy}px` }}
             />
             <motion.text
@@ -90,7 +98,8 @@ export default function SystemGraph() {
               className="fill-muted"
               style={{ fontFamily: "var(--font-mono)", fontSize: "10px", letterSpacing: "0.05em" }}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              viewport={VIEW}
+              whileInView={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.15 * i + 0.35 }}
             >
               {t.label}

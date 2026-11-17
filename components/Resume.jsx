@@ -15,9 +15,12 @@ export default function Resume() {
             href="/files/charly-gourves-cv.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-sm font-medium text-paper hover:bg-rust transition-colors shrink-0"
+            className="press group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-sm font-medium text-paper hover:bg-rust hover:shadow-[0_10px_24px_-12px_rgba(172,81,66,0.7)] shrink-0"
           >
-            Descargar CV <span aria-hidden="true">↓</span>
+            Descargar CV{" "}
+            <span aria-hidden="true" className="inline-block transition-transform duration-base group-hover:translate-y-0.5">
+              ↓
+            </span>
           </a>
         </Reveal>
       </div>

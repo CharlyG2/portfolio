@@ -1,6 +1,6 @@
 "use client";
 
-import Reveal from "./Reveal";
+import Reveal, { RevealGroup } from "./Reveal";
 
 // Qué hago en cada etapa del producto y con qué herramientas. Responde
 // directo a lo que piden las vacantes de Product Designer: discovery,
@@ -49,10 +49,10 @@ export default function HowIWork() {
           </h2>
         </Reveal>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {stages.map((s, i) => (
-            <Reveal key={s.title} delay={i * 0.05}>
-              <div className="rounded-2xl border border-line bg-white p-6 h-full flex flex-col">
+        <RevealGroup className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {stages.map((s) => (
+            <Reveal key={s.title} className="h-full">
+              <div className="rounded-2xl border border-line bg-white p-6 h-full flex flex-col hover:border-ink/25 transition-[transform,box-shadow,border-color] duration-slow ease-out-expo hover:-translate-y-1 hover:shadow-[0_18px_40px_-24px_rgba(34,29,24,0.35)]">
                 <h3 className="font-display text-xl text-ink mb-2">{s.title}</h3>
                 <p className="text-sm text-muted leading-relaxed mb-4">{s.text}</p>
                 <div className="flex flex-wrap gap-1.5 mt-auto">
@@ -68,7 +68,7 @@ export default function HowIWork() {
               </div>
             </Reveal>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   );

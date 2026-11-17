@@ -3,9 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import Reveal from "./Reveal";
-import { EASE } from "@/lib/motion";
+import { AnimatePresence, motion } from "framer-motion";
+import Reveal, { RevealGroup } from "./Reveal";
+import { EASE, DUR } from "@/lib/motion";
 
 const colorMap = {
   signal: { bg: "bg-signal", border: "border-signal/30", text: "text-signalInk", groupHover: "group-hover:text-signalInk", tag: "bg-signal/10 text-signalInk" },
@@ -20,9 +20,9 @@ const cases = [
     color: "signal",
     role: "Product Designer · BICE VIDA · Chile",
     industries: "Insurtech · Design Systems",
-    title: "89 componentes, un solo lenguaje: el Design System de BICE VIDA",
-    impactStat: "89", impactLabel: "componentes en producción",
-    secondaryStat: "10 células lo usan",
+    title: "Un solo lenguaje para 10 equipos: el Design System de BICE VIDA",
+    impactStat: "10", impactLabel: "células de producto lo consumen",
+    secondaryStat: "~90% de lo que construyen se apoya en él",
     tags: ["Design System", "Liderazgo de equipo", "Figma · Storybook"],
     thumb: "/images/csi-landing.png",
     proof: "component-states",
@@ -85,10 +85,24 @@ const bonusCase = {
 function StepsProof({ hovered }) {
   return (
     <p className="font-mono text-xs mt-1.5" aria-live="polite">
-      <span className={hovered ? "line-through text-mutedLight" : "text-muted"}>
+      <span
+        className={`transition-colors duration-base ${hovered ? "line-through decoration-amberInk/60 text-mutedLight" : "text-muted"}`}
+      >
         10 pasos
       </span>
-      {hovered && <span className="text-amberInk ml-1.5">→ 8 pasos</span>}
+      <AnimatePresence>
+        {hovered && (
+          <motion.span
+            className="inline-block text-amberInk ml-1.5"
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -4, transition: { duration: DUR.fast } }}
+            transition={{ duration: DUR.base, ease: EASE }}
+          >
+            → 8 pasos
+          </motion.span>
+        )}
+      </AnimatePresence>
     </p>
   );
 }
@@ -136,12 +150,12 @@ export default function CaseIndex() {
           </h2>
         </Reveal>
 
-        <div className="mt-12 divide-y divide-line border-y border-line">
+        <RevealGroup className="mt-12 divide-y divide-line border-y border-line">
           {cases.map((c, i) => {
             const colors = colorMap[c.color];
             const hovered = hoveredSlug === c.slug;
             return (
-              <Reveal key={c.slug} delay={i * 0.05}>
+              <Reveal key={c.slug}>
                 <Link
                   href={`/casos/${c.slug}`}
                   onMouseEnter={() => setHoveredSlug(c.slug)}
@@ -153,7 +167,7 @@ export default function CaseIndex() {
                       {c.role} <span className="mx-1">|</span> {c.industries}
                     </p>
                     <h3
-                      className={`font-display text-2xl md:text-3xl text-ink mb-4 transition-colors ${colors.groupHover}`}
+                      className={`font-display text-2xl md:text-3xl text-ink mb-4 transition-colors duration-base ${colors.groupHover}`}
                     >
                       {c.title}
                     </h3>
@@ -168,26 +182,32 @@ export default function CaseIndex() {
                         </span>
                       ))}
                     </div>
-                    <span className={`inline-block mt-3 font-mono text-xs ${colors.text}`}>
-                      Ver caso →
+                    <span className={`inline-flex items-center gap-1.5 mt-3 font-mono text-xs ${colors.text}`}>
+                      Ver caso
+                      <span
+                        aria-hidden="true"
+                        className="inline-block transition-transform duration-base group-hover:translate-x-1.5"
+                      >
+                        →
+                      </span>
                     </span>
                   </div>
 
                   <div className="flex items-center gap-6 justify-self-start md:justify-self-end">
                     {c.thumb && (
-                      <div className="hidden sm:block relative w-16 h-28 rounded-lg overflow-hidden border-2 border-white shadow-lg shrink-0">
+                      <div className="hidden sm:block relative w-16 h-28 rounded-lg overflow-hidden border-2 border-white shadow-lg shrink-0 transition-[transform,box-shadow] duration-slow ease-out-expo group-hover:-translate-y-1 group-hover:rotate-[-3deg] group-hover:shadow-xl">
                         <Image
                           src={c.thumb}
                           alt=""
                           fill
-                          className="object-cover object-top"
+                          className="object-cover object-top transition-transform duration-slow ease-out-expo group-hover:scale-[1.06]"
                           sizes="64px"
                         />
                       </div>
                     )}
                     <div className="text-left md:text-right shrink-0">
                       <div
-                        className="font-impact"
+                        className="font-impact transition-transform duration-slow ease-out-expo origin-left md:origin-right group-hover:scale-[1.04]"
                         style={{ fontSize: "clamp(2.2rem, 5vw, 3.2rem)" }}
                       >
                         <span className={colors.text}>{c.impactStat}</span>
@@ -210,13 +230,13 @@ export default function CaseIndex() {
               </Reveal>
             );
           })}
-        </div>
+        </RevealGroup>
 
         {/* bonus card — separada del grid principal, peso visual menor a propósito */}
         <Reveal delay={0.3}>
           <Link
             href={`/casos/${bonusCase.slug}`}
-            className="mt-8 flex items-center gap-4 rounded-xl border border-line px-5 py-4 hover:border-amber/40 transition-colors group max-w-xl"
+            className="press mt-8 flex items-center gap-4 rounded-xl border border-line px-5 py-4 hover:border-amber/50 hover:bg-surface group max-w-xl"
           >
             <span className="font-mono text-[10px] uppercase tracking-widest text-amberInk shrink-0">
               Bonus
@@ -224,7 +244,7 @@ export default function CaseIndex() {
             <span className="text-sm text-muted group-hover:text-ink transition-colors">
               {bonusCase.title.replace("Bonus: ", "")} — {bonusCase.description}
             </span>
-            <span className="ml-auto font-mono text-xs text-amberInk shrink-0">→</span>
+            <span className="ml-auto font-mono text-xs text-amberInk shrink-0 transition-transform duration-base group-hover:translate-x-1">→</span>
           </Link>
         </Reveal>
       </div>
