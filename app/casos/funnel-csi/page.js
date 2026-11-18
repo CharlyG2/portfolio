@@ -6,40 +6,93 @@ import WireframeFlow from "@/components/WireframeFlow";
 export const metadata = pageMetadata({
   title: "Reducir el funnel de contratación CSI — Charly Gourves",
   description:
-    "De 10 a 8 pasos en el funnel de contratación de un seguro de salud: analítica, entrevistas y un programa de usuarios sintéticos con IA para comparar variantes antes de construirlas. −12% de abandono.",
+    "De 10 a 8 pasos en el funnel de contratación de un seguro de salud: analítica, entrevistas y un generador propio de usuarios sintéticos hecho con Claude y Cursor. −12% de abandono.",
   path: "/casos/funnel-csi",
   image: "/images/museo/csi-landing.jpg",
 });
 
-const SYNTH_STEPS = [
+// Cómo funciona el generador: de los arquetipos del producto a usuarios
+// sintéticos, y de ahí a entrevistas moderadas con personas reales.
+const SYNTH_FLOW = [
   {
     n: "01",
-    t: "10 perfiles a partir de datos reales",
-    d: "Armé 10 usuarios sintéticos a partir de los arquetipos de cada producto y de los rangos de edad que ya conocíamos por GA4, Pendo y las entrevistas: qué buscan, qué les preocupa al contratar y qué tan cómodos se sienten con trámites digitales.",
+    t: "Arquetipos del producto",
+    d: "Los perfiles de usuario que ya tiene el producto, con sus rangos de edad.",
   },
   {
     n: "02",
-    t: "Recorrer el flujo paso a paso",
-    d: "Con un modelo de lenguaje, el programa le muestra a cada perfil el contenido de cada pantalla, en orden. En cada paso el usuario sintético dice si sigue o abandona, qué duda le aparece y qué dato no entiende por qué se lo piden.",
+    t: "Generador propio",
+    d: "Un programa que hice con Claude y Cursor: convierte cada arquetipo en usuarios sintéticos distintos.",
+    tool: "Claude + Cursor",
   },
   {
     n: "03",
-    t: "Comparar variantes lado a lado",
-    d: "Corrí el mismo grupo de perfiles por el flujo original de 10 pasos y por las variantes de 8 pasos. El resultado es una tabla por paso y por segmento: dónde se acumula la fricción y qué cambia entre una versión y otra.",
+    t: "10 usuarios sintéticos",
+    d: "Personas que ven el producto por primera vez, para comparar variantes rápido.",
+    users: true,
   },
   {
     n: "04",
-    t: "Llevar lo dudoso a personas reales",
-    d: "Los usuarios sintéticos no reemplazan a los reales. Sirven para descartar rápido las ideas débiles y llegar a las entrevistas y al test con las dos o tres preguntas que de verdad importan.",
+    t: "Entrevistas moderadas",
+    d: "Personas reales que confirman o corrigen lo que encontré.",
   },
 ];
 
-const SYNTH_COMPARE = [
-  { k: "Dónde aparece la primera duda fuerte", a: "Paso 4: datos bancarios antes de ver los planes", b: "Recién en el pago, cuando ya eligió plan" },
-  { k: "Datos que piden sin explicar por qué", a: "Contacto y datos personales en pantallas separadas", b: "Una sola pantalla con el motivo de cada dato" },
-  { k: "Segmento más afectado", a: "Personas con poca costumbre de contratar en línea", b: "La fricción baja en todos los segmentos" },
-  { k: "Qué se llevó a entrevistas", a: "¿Confías en dar tu cuenta bancaria tan temprano?", b: "¿Se entiende el plan antes de pagar?" },
-];
+// colores por arquetipo en la mini grilla de usuarios (3 arquetipos)
+const ARCHETYPE_TONES = ["bg-mint", "bg-signal", "bg-amber"];
+const USER_ARCHETYPES = [0, 0, 0, 0, 1, 1, 1, 2, 2, 2];
+
+function SynthFlow() {
+  return (
+    <div className="not-prose rounded-2xl border border-line bg-paperSoft p-3 sm:p-5">
+      <ol className="space-y-2">
+        {SYNTH_FLOW.map((s, i) => {
+          const dark = Boolean(s.tool);
+          return (
+            <li key={s.n} className="relative">
+              {/* conector entre pasos */}
+              {i < SYNTH_FLOW.length - 1 && (
+                <span aria-hidden="true" className="absolute left-[38px] sm:left-[42px] top-full h-2 w-px bg-mutedLight/50" />
+              )}
+              <div
+                className={`grid grid-cols-[auto_1fr] sm:grid-cols-[auto_1fr_auto] items-center gap-x-4 gap-y-3 rounded-xl p-4 sm:px-5 ${
+                  dark ? "bg-ink" : "border border-line bg-surface"
+                }`}
+              >
+                <span
+                  className={`flex h-11 w-11 items-center justify-center rounded-full font-mono text-xs ${
+                    dark ? "bg-[#5FE3D0] text-ink" : "border border-line bg-paper text-rust"
+                  }`}
+                >
+                  {s.n}
+                </span>
+                <div>
+                  <p className={`font-display text-base ${dark ? "text-paper" : "text-ink"}`}>{s.t}</p>
+                  <p className={`text-sm mt-1 leading-relaxed ${dark ? "text-[#D9D0C1]" : "text-muted"}`}>{s.d}</p>
+                </div>
+                {s.tool && (
+                  <p className="col-start-2 sm:col-start-3 justify-self-start rounded-full border border-[#5FE3D0]/50 px-3 py-1 font-mono text-[11px] text-[#5FE3D0] whitespace-nowrap">
+                    {s.tool}
+                  </p>
+                )}
+                {s.users && (
+                  <div className="col-start-2 sm:col-start-3 justify-self-start w-max grid grid-cols-5 gap-1.5" aria-hidden="true">
+                    {USER_ARCHETYPES.map((a, k) => (
+                      <span key={k} className={`h-4 w-4 rounded-full ${ARCHETYPE_TONES[a]}`} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+      <p className="mt-3 px-1 font-mono text-[11px] leading-relaxed text-mutedLight">
+        Cada color es un arquetipo: el generador arma varios usuarios distintos por cada uno.
+      </p>
+    </div>
+  );
+}
 
 export default function FunnelCase() {
   return (
@@ -47,7 +100,7 @@ export default function FunnelCase() {
       <CaseHeader
         eyebrow="caso 03 · funnel csi"
         title="De 10 a 8 pasos: menos fricción, más contratación"
-        tldr="El flujo de contratación del Seguro Complementario de Salud (CSI) tenía 10 pasos. Con analítica de abandono, entrevistas a unas 15 personas, un programa propio de usuarios sintéticos con IA para comparar variantes y dos leyes de UX como marco de decisión, lo reduje a 8: eliminé un paso, fusioné dos pantallas y reubiqué otra. Un mes después de implementado: −12% de abandono y +2% de contratación."
+        tldr="El flujo de contratación del Seguro Complementario de Salud (CSI) tenía 10 pasos. Con analítica de abandono, entrevistas a unas 15 personas, un generador propio de usuarios sintéticos (hecho con Claude y Cursor) para comparar variantes y dos leyes de UX como marco de decisión, lo reduje a 8: eliminé un paso, fusioné dos pantallas y reubiqué otra. Un mes después de implementado: −12% de abandono y +2% de contratación."
         stats={[
           { n: "10 → 8", l: "pasos en el flujo de contratación" },
           { n: "~15", l: "personas entrevistadas" },
@@ -55,7 +108,7 @@ export default function FunnelCase() {
           { n: "−12%", l: "tasa de abandono (primer mes)" },
           { n: "+2%", l: "contratación (relativo, primer mes)" },
         ]}
-        meta="Rol: Product Designer, de discovery a implementación · Equipo: desarrolladores, PO, agilistas, leads y stakeholders de negocio · Herramientas: GA4, Pendo, Hotjar, Figma, y Claude + Cursor para el programa de usuarios sintéticos"
+        meta="Rol: Product Designer, de discovery a implementación · Equipo: desarrolladores, PO, agilistas, leads y stakeholders de negocio · Herramientas: GA4, Pendo, Hotjar, Figma, y Claude + Cursor para el generador de usuarios sintéticos"
       />
 
       <CaseSection tag="contexto" title="Un flujo largo para un producto simple">
@@ -111,62 +164,27 @@ export default function FunnelCase() {
         </p>
       </CaseSection>
 
-      <CaseSection tag="ia · usuarios sintéticos" title="Un programa para probar el flujo antes de construirlo">
+      <CaseSection tag="ia · usuarios sintéticos" title="Un generador de usuarios sintéticos hecho por mí">
         <p>
-          Entrevistar es lento y cada variante del flujo cuesta un sprint de
-          desarrollo. Para no apostar a ciegas, construí con Claude y Cursor un
-          programa que genera <strong className="text-ink font-medium">usuarios sintéticos</strong> con
-          IA y los hace recorrer el funnel, para comparar el flujo original
-          con las versiones más cortas antes de diseñarlas en alta fidelidad.
+          Entrevistar toma tiempo, y conseguir personas que no conozcan el
+          producto toma todavía más. Para tener una primera lectura rápida,
+          creé con Claude y Cursor un programa que genera{" "}
+          <strong className="text-ink font-medium">usuarios sintéticos</strong> a
+          partir de los arquetipos de usuario del producto y sus rangos de
+          edad. Por eso puedo armar usuarios distintos para cada producto, en
+          vez de usar siempre los mismos.
         </p>
-        <ol className="not-prose grid sm:grid-cols-2 gap-4">
-          {SYNTH_STEPS.map((s) => (
-            <li key={s.n} className="rounded-xl border border-line bg-surface p-5">
-              <p className="font-mono text-xs text-rust">{s.n}</p>
-              <p className="font-display text-base text-ink mt-2">{s.t}</p>
-              <p className="text-sm text-muted mt-2 leading-relaxed">{s.d}</p>
-            </li>
-          ))}
-        </ol>
-        {/* en celular la tabla se lee como tarjetas: tres columnas no caben */}
-        <div className="not-prose sm:hidden space-y-3">
-          {SYNTH_COMPARE.map((r) => (
-            <dl key={r.k} className="rounded-xl border border-line p-4 text-sm">
-              <dt className="text-ink font-medium">{r.k}</dt>
-              <dd className="mt-3 font-mono text-[11px] uppercase tracking-wider text-mutedLight">Flujo original · 10 pasos</dd>
-              <dd className="mt-1 text-muted">{r.a}</dd>
-              <dd className="mt-3 font-mono text-[11px] uppercase tracking-wider text-signalInk">Propuesta · 8 pasos</dd>
-              <dd className="mt-1 text-muted">{r.b}</dd>
-            </dl>
-          ))}
-        </div>
-        <div className="not-prose hidden sm:block overflow-x-auto rounded-xl border border-line">
-          <table className="w-full min-w-[520px] text-sm text-left">
-            <thead className="bg-paperSoft font-mono text-xs text-ink">
-              <tr>
-                <th className="p-3 font-medium">Comparativa</th>
-                <th className="p-3 font-medium">Flujo original · 10 pasos</th>
-                <th className="p-3 font-medium">Propuesta · 8 pasos</th>
-              </tr>
-            </thead>
-            <tbody>
-              {SYNTH_COMPARE.map((r) => (
-                <tr key={r.k} className="border-t border-line align-top">
-                  <td className="p-3 text-ink font-medium">{r.k}</td>
-                  <td className="p-3 text-muted">{r.a}</td>
-                  <td className="p-3 text-muted">{r.b}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <SynthFlow />
         <p>
-          Lo que dijeron los usuarios sintéticos coincidió con lo que ya
-          mostraba la analítica (casi nadie pasaba del paso 4) y agregó el
-          porqué de cada abandono. Eso nos permitió descartar variantes en
-          horas, no en semanas, y llegar a las entrevistas con hipótesis
-          concretas. La decisión final se tomó con personas reales y con los
-          datos del funnel en producción.
+          Para este funnel generé 10 usuarios sintéticos y con ellos comparé
+          el flujo original con las versiones más cortas, como si fueran
+          personas que ven el producto por primera vez. Así descarté rápido
+          las ideas débiles antes de diseñarlas en alta fidelidad.
+        </p>
+        <p>
+          Hoy lo complemento con entrevistas moderadas: los usuarios
+          sintéticos me ayudan a llegar con mejores preguntas, y las personas
+          reales confirman o corrigen lo que encontré.
         </p>
       </CaseSection>
 
@@ -239,8 +257,8 @@ export default function FunnelCase() {
         <p>
           Los usuarios sintéticos fueron un acelerador, no un oráculo: son
           muy buenos para encontrar fricción obvia y comparar variantes
-          rápido, y débiles para predecir emociones o confianza. Por eso
-          siempre terminan en una conversación con una persona real.
+          rápido, y débiles para predecir emociones o confianza. Por eso hoy
+          los complemento con entrevistas moderadas a personas reales.
         </p>
       </CaseSection>
     </CaseLayout>
