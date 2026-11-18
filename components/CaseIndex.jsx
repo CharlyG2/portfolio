@@ -23,7 +23,7 @@ const cases = [
     title: "Un solo lenguaje para 10 equipos: el Design System de BICE VIDA",
     impactStat: "10", impactLabel: "células de producto lo consumen",
     secondaryStat: "~90% de lo que construyen se apoya en él",
-    tags: ["Design System", "Liderazgo de equipo", "Figma · Storybook"],
+    tags: ["Design System", "Liderazgo", "Listo para IA"],
     thumb: "/images/csi-landing.png",
     proof: "component-states",
   },

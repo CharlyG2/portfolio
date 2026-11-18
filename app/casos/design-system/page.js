@@ -7,7 +7,7 @@ import SystemGraph from "@/components/SystemGraph";
 export const metadata = pageMetadata({
   title: "El Design System de BICE VIDA — Charly Gourves",
   description:
-    "El primer Design System de BICE VIDA: tokens de color, componentes primitivos y compuestos que hoy consumen 10 células de producto en app y web.",
+    "El primer Design System de BICE VIDA y Vida Security: tokens primitivos y semánticos, componentes documentados para personas y para IA (Figma MCP) y reglas de gobernanza. Hoy lo consumen 10 células de producto en app y web.",
   path: "/casos/design-system",
 });
 
@@ -17,13 +17,13 @@ export default function DesignSystemCase() {
       <CaseHeader
         eyebrow="caso 01 · design system"
         title="Un solo lenguaje para 10 equipos: el primer Design System de BICE VIDA"
-        tldr="BICE VIDA nunca había tenido un lenguaje de diseño compartido entre equipos. Propuse la metodología (diseño atómico), definí las reglas de entrada y salida junto al equipo de desarrollo y lo construí desde la base: tokens de color, componentes primitivos y los componentes compuestos que se arman con ellos, en Figma y Storybook. Hoy lo consumen 10 células de producto, en app y web."
+        tldr="BICE VIDA nunca había tenido un lenguaje de diseño compartido entre equipos. Propuse la metodología (diseño atómico), definí las reglas de entrada y salida junto al equipo de desarrollo y lo construí desde la base: tokens de color, componentes primitivos y los componentes compuestos que se arman con ellos, en Figma y Storybook. Lo preparé para dos marcas (BICE VIDA y Vida Security) y para que lo pueda leer una IA, no solo una persona. Hoy lo consumen 10 células de producto, en app y web."
         stats={[
           { n: "10", l: "células de producto consumen el sistema" },
           { n: "~90%", l: "de lo que construyen se apoya en el DS" },
           { n: "2", l: "canales, app y web, con el mismo lenguaje" },
         ]}
-        meta="Rol: Product Designer, a cargo del Design System · Equipo: 10 células con desarrolladores, PO, agilistas y leads"
+        meta="Rol: Product Designer, lideré el Design System hasta la llegada de un líder UI · Equipo: 10 células con desarrolladores, PO, agilistas y leads"
       />
 
       <CaseSection tag="contexto" title="Varios productos, ningún idioma común">
@@ -53,7 +53,7 @@ export default function DesignSystemCase() {
         </p>
       </CaseSection>
 
-      <CaseSection tag="propuesta" title="Metodología atómica, propuesta y liderada de punta a punta">
+      <CaseSection tag="propuesta" title="Metodología atómica, propuesta y liderada desde cero">
         <p>
           Propuse trabajar con diseño atómico (átomos, moléculas,
           organismos, plantillas y páginas) como estructura para escalar
@@ -89,19 +89,31 @@ export default function DesignSystemCase() {
             </ul>
           </div>
         </div>
+        <p>
+          Estas reglas no quedaron en una conversación: las escribimos en el
+          equipo de UX, yo incluido, y quedaron como la gobernanza del
+          sistema. Cuando alguien proponía un componente nuevo, yo lo
+          aprobaba junto al equipo de UI antes de que entrara a la librería.
+        </p>
       </CaseSection>
 
-      <CaseSection tag="fundamentos" title="Tokens de color: el nombre dice para qué sirve">
+      <CaseSection tag="fundamentos" title="Tokens en dos capas: el nombre dice para qué sirve">
         <p>
-          Antes de los componentes vienen los fundamentos. Definí los tokens
-          de color de la compañía con nombres semánticos: en vez de usar
-          "blue-500" directo en un botón, el componente usa{" "}
+          Antes de los componentes vienen los fundamentos. Los tokens de
+          color tienen dos capas. Los primitivos son la paleta (por ejemplo,
+          "blue-500"). Los semánticos dicen para qué se usa cada color: en
+          vez de poner "blue-500" directo en un botón, el componente usa{" "}
           <code className="font-mono text-xs text-ink">
             color-bg-action-primary-default
           </code>
-          , y ese token apunta al color de la paleta. Si mañana cambia la
-          marca, se cambia el valor del token y todos los componentes se
-          actualizan solos.
+          , y ese token apunta al primitivo.
+        </p>
+        <p>
+          Esa separación es la que permite tener dos marcas en un mismo
+          sistema. BICE VIDA y Vida Security comparten los componentes y los
+          tokens semánticos; lo que cambia es a qué primitivo apunta cada
+          uno. Se cambia el valor y todos los componentes se actualizan
+          solos.
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 not-prose">
           {[
@@ -122,8 +134,7 @@ export default function DesignSystemCase() {
           decorative. Cada token de acción tiene sus estados (default,
           hover, pressed, disabled), así desarrollo no tiene que adivinar qué
           color va cuando el usuario pasa el mouse. La notación con slash (/)
-          coincide con las variables de Figma, para que diseño y código
-          hablen exactamente con las mismas palabras.
+          sigue la de las variables de Figma.
         </p>
         <Screenshot
           src="/images/ds/tokens-color-background.png"
@@ -196,6 +207,42 @@ export default function DesignSystemCase() {
           width={1240}
           height={1080}
         />
+      </CaseSection>
+
+      <CaseSection tag="listo para IA" title="Documentado para personas y para una IA">
+        <p>
+          Un componente bien documentado le sirve igual a una persona que a
+          una IA: las dos necesitan saber qué es, para qué sirve y cuándo
+          no usarlo. Por eso la documentación de cada componente tiene dos
+          lecturas: una para desarrollo y otra para quien diseña con el
+          sistema.
+        </p>
+        <div className="grid sm:grid-cols-3 gap-4 not-prose">
+          {[
+            {
+              k: "nombres",
+              t: "Tokens semánticos y componentes con nombres que explican su uso, no su color.",
+            },
+            {
+              k: "reglas",
+              t: "Cuándo usar y cuándo no, anatomía y estados escritos en cada componente.",
+            },
+            {
+              k: "figma mcp",
+              t: "Conecté el sistema a herramientas de IA con Figma MCP para que lean componentes y tokens desde el archivo.",
+            },
+          ].map((c) => (
+            <div key={c.k} className="rounded-xl border border-line p-5">
+              <p className="font-mono text-xs text-signalInk mb-3">{c.k}</p>
+              <p className="text-sm text-muted">{c.t}</p>
+            </div>
+          ))}
+        </div>
+        <p>
+          Lo que estábamos haciendo al final era alinear los nombres de Figma con los de código, para
+          que una IA o un desarrollador encuentre el mismo componente con el
+          mismo nombre en los dos lados.
+        </p>
       </CaseSection>
 
       <CaseSection tag="en producto" title="El mismo sistema, dos productos distintos">
