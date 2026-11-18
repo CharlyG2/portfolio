@@ -128,7 +128,19 @@ export default function FunnelCase() {
             </li>
           ))}
         </ol>
-        <div className="not-prose overflow-x-auto rounded-xl border border-line">
+        {/* en celular la tabla se lee como tarjetas: tres columnas no caben */}
+        <div className="not-prose sm:hidden space-y-3">
+          {SYNTH_COMPARE.map((r) => (
+            <dl key={r.k} className="rounded-xl border border-line p-4 text-sm">
+              <dt className="text-ink font-medium">{r.k}</dt>
+              <dd className="mt-3 font-mono text-[11px] uppercase tracking-wider text-mutedLight">Flujo original · 10 pasos</dd>
+              <dd className="mt-1 text-muted">{r.a}</dd>
+              <dd className="mt-3 font-mono text-[11px] uppercase tracking-wider text-signalInk">Propuesta · 8 pasos</dd>
+              <dd className="mt-1 text-muted">{r.b}</dd>
+            </dl>
+          ))}
+        </div>
+        <div className="not-prose hidden sm:block overflow-x-auto rounded-xl border border-line">
           <table className="w-full min-w-[520px] text-sm text-left">
             <thead className="bg-paperSoft font-mono text-xs text-ink">
               <tr>

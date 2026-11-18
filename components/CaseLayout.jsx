@@ -6,16 +6,16 @@ import { adjacentCases } from "@/lib/cases";
 
 export function CaseHeader({ eyebrow, title, tldr, stats, meta }) {
   return (
-    <header className="pt-40 pb-16 md:pt-48 md:pb-20 border-b border-line">
+    <header className="pt-24 pb-14 md:pt-48 md:pb-20 border-b border-line">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <Link
           href="/"
-          className="enter group inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-rust transition-colors"
+          className="enter group -ml-1 px-1 min-h-[44px] inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-rust transition-colors"
         >
           <span aria-hidden="true" className="inline-block transition-transform duration-base group-hover:-translate-x-1">←</span>
           volver al museo
         </Link>
-        <p className="enter eyebrow text-rust mt-8 mb-6" style={{ fontSize: "13px", "--d": "80ms" }}>
+        <p className="enter eyebrow text-rust mt-6 md:mt-8 mb-6" style={{ fontSize: "13px", "--d": "80ms" }}>
           <span className="tag-bracket">{eyebrow}</span>
         </p>
         <h1
