@@ -5,7 +5,7 @@ const steps = [
     bg: "bg-signal/5",
     border: "border-signal/20",
     title: "Definí la dirección con Claude",
-    text: "Le tiré referencias reales de portafolios que me gustaban y fuimos afinando el estilo juntos, a punta de feedback.",
+    text: "Le pasé referencias de portafolios que me gustaban y fuimos afinando el estilo juntos, a punta de feedback.",
   },
   {
     n: "02",
@@ -13,7 +13,7 @@ const steps = [
     bg: "bg-mint/5",
     border: "border-mint/20",
     title: "Probé todo en Cursor",
-    text: "Cada cambio lo veía corriendo en mi máquina antes de aprobarlo — nunca aprobé algo a ciegas.",
+    text: "Cada cambio lo veía funcionando en mi computador antes de aprobarlo. Nada se aprobó a ciegas.",
   },
   {
     n: "03",
@@ -21,15 +21,15 @@ const steps = [
     bg: "bg-amber/5",
     border: "border-amber/20",
     title: "Metí capturas reales, no mockups",
-    text: "Las pantallas de mis proyectos de verdad, subidas directo — nada inventado para que se viera mejor.",
+    text: "Las pantallas reales de mis proyectos, tal cual. Nada inventado para que se viera mejor.",
   },
   {
     n: "04",
     color: "text-roseInk",
     bg: "bg-rose/5",
     border: "border-rose/20",
-    title: "Cuando algo no funcionaba, lo dijimos",
-    text: "Hubo direcciones enteras que se descartaron porque no se sentían bien — y volvimos atrás sin drama.",
+    title: "Si algo no funcionaba, lo cambiábamos",
+    text: "Descartamos direcciones enteras que no se sentían bien y volvimos atrás sin drama.",
   },
   {
     n: "05",
@@ -37,7 +37,7 @@ const steps = [
     bg: "bg-rust/5",
     border: "border-rust/20",
     title: "Subí los cambios con GitHub Desktop",
-    text: "Sin tocar una línea de código a mano — solo revisar, escribir un resumen y hacer commit.",
+    text: "Sin tocar código a mano: solo revisar, escribir un resumen y hacer commit.",
   },
   {
     n: "06",

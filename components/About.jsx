@@ -24,23 +24,21 @@ export default function About() {
           </h2>
           <div className="space-y-5 text-base md:text-lg text-muted leading-relaxed">
             <p>
-              Empecé en diseño gráfico. Ese ojo por el detalle visual
-              sigue ahí — solo que ahora lo aplico a sistemas completos, no
-              a una pieza suelta.
+              Empecé en diseño gráfico. El ojo para el detalle visual sigue
+              ahí, solo que ahora lo aplico a productos y sistemas completos,
+              no a piezas sueltas.
             </p>
             <p>
               Me interesa el cruce entre negocio y experiencia: entender
-              por qué una empresa toma una decisión, y traducir eso en algo
-              que la gente pueda usar sin fricción. Los Design Systems son
-              donde más cómodo me siento — ahí es donde el criterio
-              individual se convierte en algo que un equipo entero puede
-              sostener.
+              por qué una empresa toma una decisión y traducirla en algo que
+              la gente use sin fricción. Donde más cómodo me siento es en los
+              Design Systems: ahí el criterio individual se convierte en algo
+              que todo un equipo puede sostener.
             </p>
             <p>
-              Trabajo mejor cuando puedo hablar tanto con quien define el
-              negocio como con quien escribe el código — el diseño que
-              importa vive en esa conversación, no en una pantalla
-              aislada.
+              Trabajo mejor cuando hablo tanto con quien define el negocio
+              como con quien escribe el código. El diseño que importa vive en
+              esa conversación, no en una pantalla aislada.
             </p>
           </div>
         </Reveal>

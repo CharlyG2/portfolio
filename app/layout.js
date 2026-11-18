@@ -36,7 +36,7 @@ const mono = IBM_Plex_Mono({
 
 const TITLE = "Charly Gourves — AI Product Designer";
 const DESCRIPTION =
-  "AI Product Designer y especialista en Design Systems, con más de 8 años en producto digital. Casos con métricas reales: Design System, chatbot con IA, usuarios sintéticos y funnels. Santiago, Chile.";
+  "AI Product Designer y especialista en Design Systems, con más de 8 años diseñando productos digitales. Casos con métricas reales: Design System, chatbot con IA, usuarios sintéticos y funnels. Santiago, Chile.";
 
 export const metadata = {
   metadataBase: new URL("https://charly-gourves.vercel.app"),

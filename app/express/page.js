@@ -12,7 +12,7 @@ import Footer from "@/components/Footer";
 export const metadata = pageMetadata({
   title: "Charly Gourves — AI Product Designer · Versión rápida",
   description:
-    "AI Product Designer con 8+ años: chatbots con IA, usuarios sintéticos y Design Systems, con casos y métricas reales. Versión rápida del portafolio, sin 3D.",
+    "AI Product Designer con más de 8 años de experiencia: chatbots con IA, usuarios sintéticos y Design Systems, con casos y métricas reales. Versión rápida del portafolio, sin 3D.",
   path: "/express",
 });
 

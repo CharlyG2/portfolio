@@ -5,7 +5,7 @@ import Screenshot from "@/components/Screenshot";
 export const metadata = pageMetadata({
   title: "Chatbot: un asistente que ayuda a elegir mejor — Charly Gourves",
   description:
-    "Diseño de un asistente virtual con IA para el Seguro Complementario de Salud de BICE VIDA: 1.058 conversaciones en su primer mes, el 90% resueltas por el bot.",
+    "Diseño de un asistente virtual con IA para BICE VIDA: 1.058 conversaciones en un mes, el 90% resueltas por el bot y 20% menos llamadas al call center.",
   path: "/casos/chatbot",
   image: "/images/museo/chatbot.jpg",
 });
@@ -22,13 +22,13 @@ export default function ChatbotCase() {
       <CaseHeader
         eyebrow="caso 05 · chatbot"
         title="Chatbot: un asistente virtual que ayuda a decidir según el producto"
-        tldr="Implementé un chatbot con IA que acompaña al usuario dentro de cada producto de BICE VIDA para que tome una mejor decisión. Lo alimentamos con la base de datos de los productos, los dolores de los usuarios y las preguntas frecuentes del call center."
+        tldr="Diseñé e implementé un chatbot con IA que acompaña al usuario dentro de cada producto de BICE VIDA para que tome una mejor decisión. Lo alimentamos con la base de datos de los productos, los dolores de los usuarios y las preguntas frecuentes del call center."
         stats={[
-          { n: "1.058", l: "conversaciones en un mes (sep 2026)" },
-          { n: "90%", l: "de las conversaciones resueltas por el bot, sin derivar a ejecutivo" },
-          { n: "69%", l: "de los contactos llegó a interés en planes" },
+          { n: "1.058", l: "conversaciones en un mes (sep. 2026)" },
+          { n: "90%", l: "resueltas por el bot, sin derivar a un ejecutivo" },
+          { n: "−20%", l: "llamadas al call center" },
         ]}
-        meta="Rol: Product Designer · implementación del asistente · Plataforma: Roma AI · Producto: Seguro Complementario de Salud, BICE VIDA"
+        meta="Rol: Product Designer, diseño e implementación del asistente · Plataforma: Roma AI · Producto: Seguro Complementario de Salud, BICE VIDA"
       />
 
       <CaseSection tag="contexto" title="Las mismas dudas, una y otra vez">
@@ -42,8 +42,8 @@ export default function ChatbotCase() {
 
       <CaseSection tag="propuesta" title="Un asistente que sabe en qué producto estás">
         <p>
-          No es un chat genérico. Sabe en qué producto se encuentra
-          el usuario y responde con ese contexto. Para eso lo alimentamos con
+          No es un chat genérico: sabe en qué producto está el usuario y
+          responde con ese contexto. Para eso lo alimentamos con
           tres fuentes:
         </p>
         <div className="grid sm:grid-cols-3 gap-4 not-prose">
@@ -67,7 +67,7 @@ export default function ChatbotCase() {
         <Screenshot
           src="/images/chatbot/chatbot-chat.jpg"
           alt="Landing del Seguro Complementario de Salud con el asistente virtual abierto"
-          caption="El asistente dentro de la landing CSI — ayuda a comparar, cotizar y contratar"
+          caption="El asistente dentro de la landing del seguro de salud: ayuda a comparar, cotizar y contratar"
           width={1600}
           height={883}
         />
@@ -82,7 +82,7 @@ export default function ChatbotCase() {
         <Screenshot
           src="/images/chatbot/chatbot-analiticas.jpg"
           alt="Panel de analíticas con conversaciones, mensajes y atención por bot versus ejecutivo"
-          caption="Panel de analíticas — septiembre 2026"
+          caption="Panel de analíticas, septiembre 2026"
           width={1600}
           height={917}
         />
@@ -112,6 +112,15 @@ export default function ChatbotCase() {
           width={1600}
           height={913}
         />
+      </CaseSection>
+
+      <CaseSection tag="impacto" title="Menos llamadas, menos preguntas repetidas">
+        <p>
+          En su primer mes, cerca de 23.580 personas abrieron el chat. Además
+          de bajar 20% las llamadas al call center, las preguntas repetitivas
+          cayeron 66%. Hoy el asistente está en 2 productos y se escalará a toda
+          la línea de BICE VIDA y Vida Security.
+        </p>
       </CaseSection>
 
       <CaseSection tag="aprendizajes" title="La IA es tan buena como lo que le das">

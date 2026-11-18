@@ -13,7 +13,7 @@ const TAGS = [
   "Design Systems",
   "UX Research",
   "UX Writing",
-  "Estrategia de Negocio",
+  "Estrategia de negocio",
 ];
 
 const HEADLINE_WORDS = "AI Product Designer y especialista en Design Systems.".split(" ");
@@ -41,7 +41,7 @@ export default function Hero() {
           className="mb-7 flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-[#E08A74] md:text-[13px]"
         >
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#5FE3D0]" aria-hidden="true" />
-          Portafolio · 8+ años en producto digital
+          Portafolio · 8+ años en productos digitales
         </motion.p>
 
         {/* Cada línea del nombre sube desde detrás de una máscara, como un

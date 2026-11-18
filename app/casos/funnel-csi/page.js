@@ -20,7 +20,7 @@ const SYNTH_STEPS = [
   {
     n: "02",
     t: "Recorrer el flujo paso a paso",
-    d: "El programa le muestra a cada perfil, con un modelo de lenguaje, el contenido de cada pantalla en orden. En cada paso el usuario sintético dice si sigue o abandona, qué duda le aparece y qué dato no entiende por qué se lo piden.",
+    d: "Con un modelo de lenguaje, el programa le muestra a cada perfil el contenido de cada pantalla, en orden. En cada paso el usuario sintético dice si sigue o abandona, qué duda le aparece y qué dato no entiende por qué se lo piden.",
   },
   {
     n: "03",
@@ -47,12 +47,12 @@ export default function FunnelCase() {
       <CaseHeader
         eyebrow="caso 03 · funnel csi"
         title="De 10 a 8 pasos: menos fricción, más contratación"
-        tldr="El flujo de contratación del Seguro Complementario de Salud tenía 10 pasos. Con analítica de abandono, entrevistas a unas 15 personas, un programa propio de usuarios sintéticos con IA para comparar variantes y dos leyes de UX como marco de decisión, lo reduje a 8 — eliminando un paso completo y reordenando otro. Un mes después de implementado: -12% en abandono, +2% en contratación."
+        tldr="El flujo de contratación del Seguro Complementario de Salud (CSI) tenía 10 pasos. Con analítica de abandono, entrevistas a unas 15 personas, un programa propio de usuarios sintéticos con IA para comparar variantes y dos leyes de UX como marco de decisión, lo reduje a 8: eliminé un paso, fusioné dos pantallas y reubiqué otra. Un mes después de implementado: −12% de abandono y +2% de contratación."
         stats={[
           { n: "10 → 8", l: "pasos en el flujo de contratación" },
           { n: "~15", l: "personas entrevistadas" },
           { n: "10", l: "usuarios sintéticos con IA para comparar variantes" },
-          { n: "-12%", l: "tasa de abandono (primer mes)" },
+          { n: "−12%", l: "tasa de abandono (primer mes)" },
           { n: "+2%", l: "contratación (relativo, primer mes)" },
         ]}
         meta="Rol: Product Designer, de discovery a implementación · Equipo: desarrolladores, PO, agilistas, leads y stakeholders de negocio · Herramientas: GA4, Pendo, Hotjar, Figma, y Claude + Cursor para el programa de usuarios sintéticos"
@@ -117,7 +117,7 @@ export default function FunnelCase() {
           desarrollo. Para no apostar a ciegas, construí con Claude y Cursor un
           programa que genera <strong className="text-ink font-medium">usuarios sintéticos</strong> con
           IA y los hace recorrer el funnel, para comparar el flujo original
-          con las versiones más cortas antes de diseñarlas en alta.
+          con las versiones más cortas antes de diseñarlas en alta fidelidad.
         </p>
         <ol className="not-prose grid sm:grid-cols-2 gap-4">
           {SYNTH_STEPS.map((s) => (
@@ -211,10 +211,9 @@ export default function FunnelCase() {
       <CaseSection tag="impacto" title="Medido un mes después de implementado">
         <p>
           Con el flujo de 8 pasos en producción, la tasa de abandono bajó un
-          12% y la tasa de contratación subió un 2% sobre la que había, en el
-          primer mes tras el
-          lanzamiento — medido comparando el mismo período de embudo antes y
-          después del cambio.
+          12% y la tasa de contratación subió 2% (relativo) en el primer mes
+          tras el lanzamiento. Lo medimos comparando el mismo período del
+          embudo antes y después del cambio.
         </p>
       </CaseSection>
 
@@ -222,7 +221,7 @@ export default function FunnelCase() {
         <p>
           El orden de los 10 pasos originales tenía sentido desde la lógica
           interna del proceso de contratación. Mirar la analítica real del
-          funnel —y no solo la lógica del proceso— fue lo que permitió
+          funnel, y no solo la lógica del proceso, fue lo que permitió
           encontrar dónde valía la pena simplificar primero.
         </p>
         <p>

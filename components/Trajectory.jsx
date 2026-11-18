@@ -21,19 +21,19 @@ const roles = [
     period: "abr. 2022 — may. 2023",
     role: "UX/UI Designer",
     place: "RedCapital",
-    blurb: "Interfaces para productos financieros.",
+    blurb: "Diseño de interfaces web para productos financieros.",
   },
   {
     period: "nov. 2021 — abr. 2022",
     role: "UX/UI Designer",
     place: "Grupo BIBA",
-    blurb: "Investigación y diseño de producto.",
+    blurb: "Investigación con usuarios y diseño de producto digital.",
   },
   {
     period: "feb. 2021 — oct. 2021",
     role: "UX/UI Designer",
     place: "Dartel",
-    blurb: "Diseño de interfaz para producto digital.",
+    blurb: "Diseño de interfaces para productos digitales.",
   },
   {
     period: "may. 2017 — feb. 2021",
@@ -64,13 +64,13 @@ export default function Trajectory() {
           <p className="text-sm md:text-base text-muted mt-4 leading-relaxed max-w-xl">
             Diseño Gráfico Publicitario, certificación Scrum y formación
             continua en UX/UI (IxDF). Ese recorrido me enseñó a mirar más
-            allá de la pantalla — cómo se comporta un usuario, qué mueve una
-            decisión de negocio, qué hace que un equipo adopte una
+            allá de la pantalla: cómo se comporta un usuario, qué mueve una
+            decisión de negocio y qué hace que un equipo adopte una
             herramienta.
           </p>
           <p className="text-sm md:text-base text-rust mt-4 leading-relaxed max-w-xl font-display">
-            Cada rol sumó una pieza distinta: visual, luego interfaz, luego
-            investigación — hasta llegar a sistemas completos.
+            Cada rol sumó una pieza: lo visual, la interfaz, la
+            investigación y, hoy, sistemas completos diseñados con IA.
           </p>
         </Reveal>
 

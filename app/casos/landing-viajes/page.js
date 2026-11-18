@@ -16,10 +16,10 @@ export default function ViajesCase() {
       <CaseHeader
         eyebrow="caso 02 · landing viajes"
         title="Unificar dos seguros de viaje en una sola experiencia"
-        tldr="BICE VIDA vendía Viajero Protegido (cobertura por viaje puntual) y Viajero Frecuente (cobertura anual) como productos separados. Rediseñé la landing para que el usuario compare ambos lado a lado desde una sola cotización, en vez de tener que saber de antemano cuál producto buscar."
+        tldr="BICE VIDA vendía Viajero Protegido (cobertura por viaje puntual) y Viajero Frecuente (cobertura anual) como productos separados. Rediseñé la landing para que el usuario compare ambos lado a lado desde una sola cotización, en vez de tener que saber de antemano qué producto buscar."
         stats={[
           { n: "2", l: "productos unificados en una sola landing" },
-          { n: "+16%", l: "más visitantes a la landing" },
+          { n: "+16%", l: "de visitas a la landing" },
           { n: "+2%", l: "en contratación (relativo, corto plazo)" },
         ]}
         meta="Rol: Product Designer · Equipo: desarrolladores, PO, agilistas y leads · Trabajo por sprints según el roadmap del PO"
@@ -38,7 +38,7 @@ export default function ViajesCase() {
       <CaseSection tag="problema" title="Obligar a elegir antes de entender">
         <p>
           Tener los dos productos en landings separadas exige que el usuario
-          ya sepa cuál necesita antes de cotizar — una decisión que en
+          ya sepa cuál necesita antes de cotizar. Esa decisión en
           realidad depende de cuánto viaja al año, algo que muchas personas
           no tienen claro de entrada.
         </p>
@@ -70,7 +70,7 @@ export default function ViajesCase() {
         <Screenshot
           src="/images/viaje-landing-unificada.png"
           alt="Landing unificada de seguro de viaje mostrando Viajero Protegido y Viajero Frecuente lado a lado"
-          caption="Landing unificada — cotizador único, comparación directa entre ambos productos"
+          caption="Landing unificada: un solo cotizador y comparación directa entre ambos productos"
           width={900}
           height={2200}
         />
@@ -79,23 +79,23 @@ export default function ViajesCase() {
       <CaseSection tag="detalle" title="El comparador de planes">
         <p>
           Una vez que el usuario cotiza, entra al comparador con filtros por
-          precio, compañía de asistencia y montos de cobertura — reutilizando
-          los mismos componentes de card y filtro del Design System.
+          precio, compañía de asistencia y montos de cobertura, con los
+          mismos componentes de card y filtro del Design System.
         </p>
         <Screenshot
           src="/images/viaje-comparador.jpg"
           alt="Comparador de planes de seguro de viaje con filtros por precio y cobertura"
-          caption="Comparador de planes — filtros y cards del sistema aplicados al flujo de viaje"
+          caption="Comparador de planes: filtros y cards del sistema aplicados al flujo de viaje"
         />
       </CaseSection>
 
       <CaseSection tag="impacto" title="Más visitas, más contratación">
         <p>
-          Tras el lanzamiento de la landing unificada, el tráfico aumentó un
-          16% y la tasa de contratación un 2% sobre la que había, en el
-          corto plazo. El feedback cualitativo
-          también fue positivo — los usuarios entendieron la comparación sin
-          necesitar ayuda adicional para elegir entre los dos productos.
+          Tras el lanzamiento de la landing unificada, las visitas subieron
+          16% y la tasa de contratación, 2% (relativo) en el corto plazo. El
+          feedback cualitativo también fue positivo: los usuarios entendieron
+          la comparación y eligieron entre los dos productos sin ayuda
+          adicional.
         </p>
       </CaseSection>
     </CaseLayout>
