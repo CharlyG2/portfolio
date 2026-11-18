@@ -419,53 +419,121 @@ function Plaque({ position, rotY = 0, title, number, stat, statLabel, note, colo
   );
 }
 
+// Cuadro del generador: arquetipos → programa propio → usuarios sintéticos,
+// y abajo el complemento con entrevistas moderadas. Solo etiquetas, sin párrafos.
+const ARCH_COLORS = ["#5FE3D0", "#8FA8FF", "#FFB020"];
+const BOARD_USERS = [0, 0, 0, 0, 1, 1, 1, 2, 2, 2];
+function drawAvatar(ctx, cx, cy, r, color) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(cx, cy - r * 0.55, r * 0.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(cx, cy + r * 0.95, r * 0.88, r * 0.82, 0, Math.PI, 0);
+  ctx.fill();
+}
+function drawArrow(ctx, x0, x1, y) {
+  ctx.strokeStyle = "#8a7f70";
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.moveTo(x0, y);
+  ctx.lineTo(x1 - 6, y);
+  ctx.stroke();
+  ctx.fillStyle = "#8a7f70";
+  ctx.beginPath();
+  ctx.moveTo(x1, y);
+  ctx.lineTo(x1 - 26, y - 18);
+  ctx.lineTo(x1 - 26, y + 18);
+  ctx.closePath();
+  ctx.fill();
+}
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
 function SyntheticBoard({ position, rotY = 0, lang, hovered, ...handlers }) {
+  const en = lang === "en";
   const tex = useTextTexture(
     (ctx, w, h, f) => {
       ctx.fillStyle = "#221D18";
       ctx.fillRect(0, 0, w, h);
+      // encabezado
       ctx.fillStyle = "#5FE3D0";
       ctx.font = `500 34px ${f.mono}`;
       if ("letterSpacing" in ctx) ctx.letterSpacing = "6px";
-      ctx.fillText(lang === "en" ? "AI RESEARCH LAB" : "LABORATORIO DE IA", 70, 100);
+      ctx.fillText(en ? "BUILT WITH CLAUDE + CURSOR" : "HECHO CON CLAUDE + CURSOR", 90, 110);
       if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
       ctx.fillStyle = "#F7F1E4";
-      ctx.font = `600 96px ${f.serif}`;
-      ctx.fillText(lang === "en" ? "10 synthetic users" : "10 usuarios sintéticos", 70, 210);
-      ctx.fillStyle = "#c9bfb0";
-      ctx.font = `500 34px ${f.mono}`;
-      ctx.fillText(
-        lang === "en" ? "Product archetypes × age ranges · built with Claude + Cursor" : "Arquetipos de producto × rangos de edad · Claude + Cursor",
-        70,
-        272
-      );
-      // grilla de 2 × 5 retratos
-      const cols = 5;
-      const cw = 300;
-      const chh = 360;
-      const gap = 40;
-      const x0 = (w - (cols * cw + (cols - 1) * gap)) / 2;
-      const y0 = 340;
-      for (let i = 0; i < 10; i++) {
-        const cx = x0 + (i % cols) * (cw + gap);
-        const cy = y0 + Math.floor(i / cols) * (chh + gap);
+      ctx.font = `600 92px ${f.serif}`;
+      ctx.fillText(en ? "Synthetic-user generator" : "Generador de usuarios sintéticos", 90, 225);
+
+      const mid = 640;
+      const label = (txt, x) => {
+        ctx.fillStyle = "#a99e8e";
+        ctx.font = `500 28px ${f.mono}`;
+        if ("letterSpacing" in ctx) ctx.letterSpacing = "4px";
+        ctx.fillText(txt, x, 400);
+        if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+      };
+
+      // 1 · arquetipos
+      label(en ? "ARCHETYPES" : "ARQUETIPOS", 90);
+      ["A", "B", "C"].forEach((k, i) => {
+        const y = 440 + i * 140;
         ctx.fillStyle = "#2f2822";
-        ctx.fillRect(cx, cy, cw, chh);
-        // silueta
-        const hue = ["#5FE3D0", "#8FE9DA", "#3fbfae"][i % 3];
-        ctx.fillStyle = hue;
-        ctx.beginPath();
-        ctx.arc(cx + cw / 2, cy + 120, 56, 0, Math.PI * 2);
+        roundRect(ctx, 90, y, 400, 110, 22);
         ctx.fill();
-        ctx.beginPath();
-        ctx.ellipse(cx + cw / 2, cy + 290, 100, 92, 0, Math.PI, 0);
-        ctx.fill();
+        drawAvatar(ctx, 160, y + 50, 36, ARCH_COLORS[i]);
         ctx.fillStyle = "#F7F1E4";
-        ctx.font = `500 30px ${f.mono}`;
-        ctx.textAlign = "center";
-        ctx.fillText(`IA · ${String(i + 1).padStart(2, "0")}`, cx + cw / 2, cy + 338);
-        ctx.textAlign = "left";
-      }
+        ctx.font = `500 38px ${f.mono}`;
+        ctx.fillText(`${en ? "Archetype" : "Arquetipo"} ${k}`, 220, y + 68);
+      });
+
+      drawArrow(ctx, 520, 640, mid);
+
+      // 2 · el programa
+      ctx.fillStyle = "#16120f";
+      roundRect(ctx, 670, 470, 400, 340, 28);
+      ctx.fill();
+      ctx.strokeStyle = "#5FE3D0";
+      ctx.lineWidth = 5;
+      ctx.stroke();
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#F7F1E4";
+      ctx.font = `600 66px ${f.serif}`;
+      ctx.fillText(en ? "Generator" : "Generador", 870, 625);
+      ctx.fillStyle = "#5FE3D0";
+      ctx.font = `500 32px ${f.mono}`;
+      ctx.fillText("Claude + Cursor", 870, 690);
+      ctx.textAlign = "left";
+
+      drawArrow(ctx, 1100, 1220, mid);
+
+      // 3 · usuarios sintéticos: varios por arquetipo
+      label(en ? "10 SYNTHETIC USERS" : "10 USUARIOS SINTÉTICOS", 1250);
+      BOARD_USERS.forEach((a, i) => {
+        const cx = 1300 + (i % 5) * 95;
+        const cy = 540 + Math.floor(i / 5) * 190;
+        drawAvatar(ctx, cx, cy, 40, ARCH_COLORS[a]);
+      });
+
+      // complemento: entrevistas moderadas
+      ctx.strokeStyle = "#3a322b";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(90, 930);
+      ctx.lineTo(w - 90, 930);
+      ctx.stroke();
+      drawAvatar(ctx, 130, 1030, 34, "#F7F1E4");
+      ctx.fillStyle = "#F7F1E4";
+      ctx.font = `500 40px ${f.mono}`;
+      ctx.fillText(en ? "+ moderated interviews with real people" : "+ entrevistas moderadas con personas reales", 200, 1052);
     },
     [lang],
     1800,
