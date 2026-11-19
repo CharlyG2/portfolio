@@ -54,14 +54,24 @@ export default function Footer() {
         </RevealGroup>
         <div className="mt-16 pt-6 border-t border-paper/10 flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-paper/60">
           <p>Santiago, Chile — {new Date().getFullYear()}</p>
-          <a
-            href="/files/charly-gourves-cv.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center min-h-[44px] hover:text-paper underline underline-offset-4"
-          >
-            Descargar CV (PDF)
-          </a>
+          <div className="flex flex-wrap items-center gap-x-6">
+            <a
+              href="/files/charly-gourves-cv-diseno.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center min-h-[44px] hover:text-paper underline underline-offset-4"
+            >
+              CV con diseño (PDF)
+            </a>
+            <a
+              href="/files/charly-gourves-cv.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center min-h-[44px] hover:text-paper underline underline-offset-4"
+            >
+              CV resumido (PDF)
+            </a>
+          </div>
         </div>
       </div>
     </footer>

@@ -10,7 +10,7 @@ import Scene from "./Scene";
 import { OVERVIEW, OVERVIEW_MOBILE, STATIONS, UI } from "@/lib/museum";
 import { PROFILE } from "@/lib/profile";
 
-const CV_HREF = "/files/charly-gourves-cv.pdf";
+const CV_HREF = "/files/charly-gourves-cv-diseno.pdf";
 
 function Loader({ text, fastLabel, onDone }) {
   const { progress, active } = useProgress();
