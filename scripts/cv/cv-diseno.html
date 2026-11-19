@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Charly Gourves — AI Product Designer · CV</title>
+<meta name="author" content="Charly Gourves">
+<style>
+  @font-face { font-family: "Jakarta"; font-weight: 400; src: url(assets/plus-jakarta-sans-latin-400-normal.woff2); }
+  @font-face { font-family: "Jakarta"; font-weight: 500; src: url(assets/plus-jakarta-sans-latin-500-normal.woff2); }
+  @font-face { font-family: "Jakarta"; font-weight: 600; src: url(assets/plus-jakarta-sans-latin-600-normal.woff2); }
+  @font-face { font-family: "Jakarta"; font-weight: 700; src: url(assets/plus-jakarta-sans-latin-700-normal.woff2); }
+  @font-face { font-family: "Jakarta"; font-weight: 800; src: url(assets/plus-jakarta-sans-latin-800-normal.woff2); }
+  @font-face { font-family: "Jakarta"; font-weight: 400; src: url(assets/plus-jakarta-sans-latin-ext-400-normal.woff2); unicode-range: U+0100-024F, U+2000-22FF; }
+  @font-face { font-family: "Jakarta"; font-weight: 600; src: url(assets/plus-jakarta-sans-latin-ext-600-normal.woff2); unicode-range: U+0100-024F, U+2000-22FF; }
+  @font-face { font-family: "Jakarta"; font-weight: 700; src: url(assets/plus-jakarta-sans-latin-ext-700-normal.woff2); unicode-range: U+0100-024F, U+2000-22FF; }
+
+  :root {
+    --ink: #17152B; --text: #45435A; --muted: #7A7890; --line: #E6E3F2;
+    --accent: #6A4CF0; --accent-soft: #F1EEFE; --chip: #ECE8FD; --chip-ink: #5B3FE0;
+    --side: #F7F6FC;
+  }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; width: 210mm; height: 297mm; overflow: hidden; font-family: "Jakarta", sans-serif; color: var(--text); font-size: 7.6pt; line-height: 1.42; }
+  b, strong { color: var(--ink); font-weight: 700; }
+  p { margin: 0; }
+  img { display: block; }
+  a { color: inherit; text-decoration: none; }
+
+  .page { display: grid; grid-template-columns: 62mm 1fr; height: 297mm; }
+
+  /* Sidebar */
+  aside { background: linear-gradient(180deg, #F3F1FC 0%, #F8F7FC 55%, #F6F5FB 100%); border-right: 0.8pt solid var(--line); padding: 10mm 7mm 8mm 9mm; position: relative; }
+  .photo { width: 25mm; height: 25mm; border-radius: 50%; border: 1.6pt solid #fff; box-shadow: 0 1pt 6pt rgba(40,30,90,.14); object-fit: cover; }
+  h1 { font-size: 21pt; line-height: 1.02; color: var(--ink); font-weight: 700; margin: 5mm 0 1.6mm; letter-spacing: -0.02em; }
+  .title { font-size: 11.2pt; color: var(--accent); font-weight: 700; margin-bottom: 1mm; letter-spacing: -0.01em; }
+  .subtitle { font-size: 7.6pt; color: var(--muted); }
+  .tagline { margin: 5mm 0 5mm; padding-left: 3.2mm; border-left: 1.4pt solid var(--accent); font-size: 9.6pt; line-height: 1.3; color: var(--ink); font-weight: 500; }
+  .qr { display: flex; gap: 3mm; align-items: center; background: #fff; border: 0.8pt solid var(--line); border-radius: 3mm; padding: 2.6mm; }
+  .qr img { width: 17mm; height: 17mm; flex: none; }
+  .qr .k { color: var(--accent); font-weight: 700; font-size: 8pt; }
+  .qr .s { font-size: 6.6pt; color: var(--muted); margin-top: .6mm; line-height: 1.3; }
+  .qr .u { font-size: 6.6pt; color: var(--ink); font-weight: 600; margin-top: .8mm; }
+  .side-h { font-size: 6.6pt; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 6mm 0 2.6mm; }
+  .side-sep { border-top: 0.8pt solid var(--line); margin-top: 5mm; }
+  .contact { display: flex; align-items: center; gap: 2.4mm; margin-bottom: 2.2mm; }
+  .ico { width: 6.4mm; height: 6.4mm; border-radius: 50%; background: #ECEAF4; display: grid; place-items: center; flex: none; }
+  .ico svg { width: 3.2mm; height: 3.2mm; stroke: #6B6880; fill: none; stroke-width: 1.8; }
+  .contact .l { font-size: 6.2pt; color: var(--muted); line-height: 1.2; }
+  .contact .v { font-size: 7.8pt; color: var(--ink); font-weight: 500; line-height: 1.25; }
+  .edu { display: flex; gap: 2.6mm; margin-bottom: 2.8mm; }
+  .edu .logo { width: 8mm; height: 8mm; border-radius: 1.6mm; background: #fff; border: 0.6pt solid var(--line); display: grid; place-items: center; flex: none; overflow: hidden; }
+  .edu .logo img { max-width: 6.6mm; max-height: 6.6mm; }
+  .edu .t { color: var(--ink); font-weight: 600; font-size: 7.8pt; line-height: 1.25; }
+  .edu .d { color: var(--muted); font-size: 6.8pt; line-height: 1.3; }
+  .lang { margin-bottom: 2.6mm; }
+  .lang .row { display: flex; justify-content: space-between; font-size: 7.8pt; color: var(--ink); font-weight: 600; }
+  .lang .row span { color: var(--muted); font-weight: 400; font-size: 6.8pt; }
+  .bar { height: 1.1mm; border-radius: 1mm; background: #E4E1F0; margin-top: 1mm; }
+  .bar i { display: block; height: 100%; border-radius: 1mm; background: linear-gradient(90deg, #8B6CFF, #6A4CF0); }
+
+  /* Main */
+  main { padding: 9mm 9mm 6mm 9mm; position: relative; }
+  h2 { font-size: 12pt; color: var(--ink); font-weight: 700; margin: 0 0 2.2mm; letter-spacing: -0.01em; position: relative; }
+  h2::before { content: ""; position: absolute; left: -10.6mm; top: 50%; width: 3.2mm; height: 3.2mm; margin-top: -1.6mm; border-radius: 50%; background: #fff; border: 0.8pt solid var(--line); box-shadow: inset 0 0 0 0.95mm #fff, inset 0 0 0 2mm #B9B5CB; }
+  h2.on::before { box-shadow: inset 0 0 0 0.95mm #fff, inset 0 0 0 2mm var(--accent); }
+  section { margin-bottom: 3.6mm; }
+  .profile { font-size: 7.9pt; line-height: 1.5; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.2mm; margin-top: 3mm; }
+  .stat { background: var(--accent-soft); border-radius: 2.6mm; padding: 2mm 2.6mm 2.2mm; }
+  .stat .n { font-size: 14pt; font-weight: 700; color: var(--accent); line-height: 1.1; letter-spacing: -0.01em; }
+  .stat .l { font-size: 6.5pt; color: var(--text); line-height: 1.32; margin-top: 1mm; }
+
+  .job { display: grid; grid-template-columns: 9.6mm 1fr; gap: 3mm; border: 0.8pt solid #EEECF6; background: #FAFAFD; border-radius: 3mm; padding: 2.8mm 3.2mm; margin-bottom: 1.8mm; }
+  .job.main { background: var(--accent-soft); border-color: transparent; }
+  .job .logo { width: 9.6mm; height: 9.6mm; border-radius: 2mm; background: #fff; border: 0.6pt solid var(--line); display: grid; place-items: center; overflow: hidden; }
+  .job .logo img { max-width: 7.4mm; max-height: 7.4mm; }
+  .jh { display: flex; justify-content: space-between; align-items: flex-start; gap: 3mm; }
+  .jt { font-size: 9pt; color: var(--ink); font-weight: 700; line-height: 1.25; }
+  .jt span { color: var(--muted); font-weight: 500; }
+  .jt .r2 { display: block; font-size: 7.6pt; font-weight: 600; color: var(--text); margin-top: .4mm; }
+  .jt .r2 em { font-style: normal; color: var(--muted); font-weight: 400; }
+  .jd { text-align: right; font-size: 6.6pt; color: var(--muted); line-height: 1.35; white-space: nowrap; }
+  .pill { display: inline-block; border: 0.8pt solid #C9BEFB; color: var(--accent); background: #fff; border-radius: 3mm; padding: .2mm 2mm; font-weight: 600; font-size: 6.6pt; margin-bottom: .6mm; }
+  .job ul { margin: 1.6mm 0 0; padding: 0; list-style: none; }
+  .job li { position: relative; padding-left: 3mm; margin-bottom: .9mm; font-size: 7.4pt; line-height: 1.4; }
+  .job li::before { content: ""; position: absolute; left: .4mm; top: 1.55mm; width: 1.1mm; height: 1.1mm; border-radius: 50%; background: var(--accent); }
+  .job .desc { margin-top: 1mm; font-size: 7.5pt; }
+  .job.small { padding: 1.8mm 3.2mm; grid-template-columns: 8mm 1fr; align-items: center; }
+  .job.small .logo { width: 8mm; height: 8mm; }
+  .job.small .logo img { max-width: 6.2mm; max-height: 6.2mm; }
+  .job.small .desc { margin-top: .2mm; }
+  .job.small .jh { align-items: baseline; }
+  .job.small .jt { font-size: 8.4pt; }
+
+  .skills { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3mm; }
+  .sk-h { font-size: 7.4pt; color: var(--ink); font-weight: 700; margin-bottom: 1.6mm; }
+  .chips { display: flex; flex-wrap: wrap; gap: 1.2mm; }
+  .chip { background: var(--chip); color: var(--chip-ink); border-radius: 3mm; padding: .5mm 2mm; font-size: 6.6pt; font-weight: 500; }
+
+  .tools { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2mm; }
+  .tool { border: 0.8pt solid #EEECF6; background: #FAFAFD; border-radius: 2.6mm; padding: 2.2mm 1mm 2mm; text-align: center; }
+  .tool img, .tool .ia { width: 6.2mm; height: 6.2mm; margin: 0 auto 1mm; border-radius: 1.4mm; }
+  .tool .ia { background: linear-gradient(135deg, #8B6CFF, #6A4CF0); color: #fff; font-weight: 700; font-size: 6.4pt; display: grid; place-items: center; }
+  .tool .n { font-size: 7.4pt; color: var(--ink); font-weight: 600; line-height: 1.2; }
+  .tool .d { font-size: 6.2pt; color: var(--muted); }
+  .also { display: flex; align-items: center; gap: 1.4mm; margin-top: 2.2mm; font-size: 7pt; color: var(--ink); font-weight: 700; }
+  .also .chip { font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<aside>
+  <img class="photo" src="assets/foto.png" alt="Foto de Charly Gourves">
+  <h1>Charly<br>Gourves</h1>
+  <p class="title">AI Product Designer</p>
+  <p class="subtitle">Design Systems · UX Research · IA</p>
+
+  <p class="tagline">Convierto procesos de negocio en productos que la gente entiende.</p>
+
+  <a class="qr" href="https://charly-gourves.vercel.app">
+    <img src="assets/qr.png" alt="QR al portafolio">
+    <div>
+      <p class="k" style="white-space:nowrap">Ver portafolio →</p>
+      <p class="s">Casos con métricas reales y un museo 3D interactivo</p>
+      <p class="u">charly-gourves<br>.vercel.app</p>
+    </div>
+  </a>
+
+  <p class="side-h">Contacto</p>
+  <div class="contact"><span class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><div><p class="l">Email</p><p class="v">gourvestoro@gmail.com</p></div></div>
+  <div class="contact"><span class="ico"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span><div><p class="l">Teléfono</p><p class="v">+56 9 4853 0754</p></div></div>
+  <div class="contact"><span class="ico"><svg viewBox="0 0 24 24"><path d="M7 10v7M7 7v.01M11 17v-4a3 3 0 0 1 6 0v4M11 10v7"/></svg></span><div><p class="l">LinkedIn</p><p class="v">in/charlygourves</p></div></div>
+  <div class="contact"><span class="ico"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><div><p class="l">Behance</p><p class="v">behance.net/elnido</p></div></div>
+  <div class="contact"><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><div><p class="l">Ubicación</p><p class="v">Santiago, Chile</p><p class="l" style="margin-top:.4mm">Presencial, híbrido o remoto</p></div></div>
+
+  <div class="side-sep"></div>
+  <p class="side-h">Educación</p>
+  <div class="edu"><span class="logo"><img src="assets/leones.png" alt=""></span><div><p class="t">Diseño Gráfico Publicitario</p><p class="d">Instituto Los Leones<br>2011 – 2015</p></div></div>
+  <div class="edu"><span class="logo"><img src="assets/ixdf.png" alt=""></span><div><p class="t">Más de 5 cursos de UX/UI</p><p class="d">Interaction Design Foundation<br>2024</p></div></div>
+  <div class="edu"><span class="logo"><img src="assets/certiprof.png" alt=""></span><div><p class="t">Certificación Scrum</p><p class="d">CertiProf · 2022</p></div></div>
+
+  <div class="side-sep"></div>
+  <p class="side-h">Idiomas</p>
+  <div class="lang"><p class="row">Español <span>Nativo</span></p><div class="bar"><i style="width:100%"></i></div></div>
+  <div class="lang"><p class="row">Inglés <span>Intermedio</span></p><div class="bar"><i style="width:58%"></i></div></div>
+</aside>
+
+<main>
+  <section>
+    <h2 class="on">Perfil</h2>
+    <p class="profile">AI Product Designer con <b>más de 8 años</b> diseñando productos digitales <b>end-to-end para web y app</b> en insurtech, fintech y salud. Uso IA en todo el proceso: implementé un <b>chatbot con IA</b> que resuelve el 90% de las conversaciones, creé <b>usuarios sintéticos con IA</b> para probar flujos antes de construirlos y prototipo con Claude y Cursor. Lidero desde el <b>discovery hasta la implementación</b>, con UX research, <b>Design Systems</b> y métricas de negocio y CX.</p>
+    <div class="stats">
+      <div class="stat"><p class="n">90%</p><p class="l">de las conversaciones resueltas por el chatbot con IA</p></div>
+      <div class="stat"><p class="n">−20%</p><p class="l">llamadas al call center gracias al chatbot</p></div>
+      <div class="stat"><p class="n">10</p><p class="l">células de producto construyen sobre el Design System</p></div>
+      <div class="stat"><p class="n">−12%</p><p class="l">abandono en el funnel de contratación CSI</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Experiencia</h2>
+    <div class="job main">
+      <span class="logo"><img src="assets/bice.png" alt=""></span>
+      <div>
+        <div class="jh">
+          <p class="jt">Product Designer <span>· BICE VIDA</span>
+            <span class="r2">UX/UI Designer <em>2023 – 2026</em> &nbsp;·&nbsp; Product Designer <em>2026</em></span></p>
+          <div class="jd"><span class="pill">2023 – oct. 2026</span><br>Providencia, Santiago · Híbrido</div>
+        </div>
+        <ul>
+          <li><b>Chatbot con IA (Roma AI):</b> lo diseñé e implementé dentro del flujo de contratación; mapeé con las ejecutivas del call center las preguntas y los flujos posibles. <b>~23.580 personas lo abrieron el primer mes</b>, resuelve el <b>90% sin derivar</b>, con <b>−20% de llamadas</b> y <b>−66% de preguntas repetitivas</b>.</li>
+          <li><b>Usuarios sintéticos con IA:</b> programé con Claude y Cursor un generador de usuarios según arquetipos de cada producto y rangos de edad; lo complemento con entrevistas moderadas.</li>
+          <li>Lideré el primer <b>Design System multimarca</b> (BICE VIDA y Vida Security): tokens primitivos y semánticos, componentes en Figma y Storybook, gobernanza y componentes listos para IA (Figma MCP). Lo usan <b>10 células</b> y el <b>~90%</b> de lo que construyen se apoya en él.</li>
+          <li>Rediseñé el funnel CSI con <b>~15 entrevistas</b>, GA4, Pendo, Hotjar y usuarios sintéticos: de 10 a 8 pasos, <b>−12% de abandono</b> y <b>+2% de contratación</b>.</li>
+          <li>Unifiqué dos seguros de viaje en una landing a partir de un <b>benchmark</b>: <b>+16% de visitas</b> y <b>+2% de contratación</b>. Design Sprint de la app <b>Beliv</b>.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="job small">
+      <span class="logo"><img src="assets/redcapital.png" alt=""></span>
+      <div><div class="jh"><p class="jt">UX/UI Designer <span>· RedCapital</span></p><p class="jd">abr. 2022 – may. 2023 · Las Condes, Santiago</p></div>
+      <p class="desc">Diseño de interfaces para productos financieros (fintech).</p></div>
+    </div>
+    <div class="job small">
+      <span class="logo"><img src="assets/biba.png" alt=""></span>
+      <div><div class="jh"><p class="jt">UX/UI Designer <span>· Grupo BIBA</span></p><p class="jd">nov. 2021 – abr. 2022 · Recoleta, Santiago</p></div>
+      <p class="desc">Investigación con usuarios y diseño de producto digital.</p></div>
+    </div>
+    <div class="job small">
+      <span class="logo"><img src="assets/dartel.png" alt=""></span>
+      <div><div class="jh"><p class="jt">UX/UI Designer <span>· Dartel</span></p><p class="jd">feb. 2021 – oct. 2021 · San Joaquín, Santiago</p></div>
+      <p class="desc">Diseño de interfaces para productos digitales.</p></div>
+    </div>
+    <div class="job small">
+      <span class="logo"><img src="assets/bd.png" alt=""></span>
+      <div><div class="jh"><p class="jt">CX Designer <span>· Becton Dickinson</span></p><p class="jd">may. 2017 – feb. 2021 · Providencia, Santiago</p></div>
+      <p class="desc">Diseño visual y experiencia de cliente.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Habilidades</h2>
+    <div class="skills">
+      <div><p class="sk-h">IA aplicada</p><div class="chips"><span class="chip">Chatbots con IA</span><span class="chip">Flujos conversacionales</span><span class="chip">Usuarios sintéticos</span><span class="chip">Prototipado con IA</span><span class="chip">Figma MCP</span></div></div>
+      <div><p class="sk-h">Producto y UX</p><div class="chips"><span class="chip">Product Discovery</span><span class="chip">User Research</span><span class="chip">Usability Testing</span><span class="chip">Benchmarking</span><span class="chip">Workshops</span><span class="chip">Métricas CX: NPS, ISN, CES</span></div></div>
+      <div><p class="sk-h">UI y sistemas</p><div class="chips"><span class="chip">Design Systems</span><span class="chip">Diseño web y mobile</span><span class="chip">Flujos y wireframes</span><span class="chip">Prototipado</span><span class="chip">Accesibilidad</span><span class="chip">Design Sprints</span></div></div>
+    </div>
+  </section>
+
+  <section style="margin-bottom:0">
+    <h2>Herramientas</h2>
+    <div class="tools">
+      <div class="tool"><img src="assets/figma.png" alt=""><p class="n">Figma</p><p class="d">UI · prototipado</p></div>
+      <div class="tool"><img src="assets/storybook.png" alt=""><p class="n">Storybook</p><p class="d">Design System</p></div>
+      <div class="tool"><img src="assets/maze.png" alt=""><p class="n">Maze</p><p class="d">Investigación</p></div>
+      <div class="tool"><img src="assets/jira.png" alt=""><p class="n">Jira</p><p class="d">Gestión ágil</p></div>
+      <div class="tool"><span class="ia">IA</span><p class="n">Claude · Cursor</p><p class="d">Prototipos con IA</p></div>
+    </div>
+    <p class="also">También: <span class="chip">GA4</span><span class="chip">Pendo</span><span class="chip">Hotjar</span><span class="chip">Lyssna</span><span class="chip">Confluence</span><span class="chip">Airtable</span></p>
+  </section>
+</main>
+
+</div>
+</body>
+</html>

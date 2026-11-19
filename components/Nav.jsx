@@ -24,7 +24,7 @@ export default function Nav() {
             </Link>
           ))}
           <a
-            href="/files/charly-gourves-cv.pdf"
+            href="/files/charly-gourves-cv-diseno.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:inline hover:text-rust transition-colors"
