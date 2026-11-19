@@ -40,6 +40,51 @@ export default function ChatbotCase() {
         </p>
       </CaseSection>
 
+      <CaseSection tag="ideación" title="Ayudar sin obligar a llamar ni a recorrer toda la web">
+        <p>
+          La idea nació de un dolor concreto: para resolver una duda, el
+          usuario tenía que llamar al call center o revisar la web completa
+          hasta encontrar lo que buscaba. La pregunta fue cómo ayudarlo justo
+          donde estaba, sin mandarlo a otro lado.
+        </p>
+        <p>
+          Revisamos las alternativas de siempre: preguntas frecuentes, foros,
+          más contenido en la página. Ya existían y no estaban funcionando;
+          servían más para posicionamiento que para resolver dudas. Una
+          conversación era la forma más directa de comunicarnos con el
+          usuario, así que la apuesta fue un asistente con IA dentro de cada
+          producto.
+        </p>
+        <p>
+          Antes de comprometernos con una plataforma, quisimos probar con
+          Roma AI: pedimos una prueba y, después de usarla, llegamos al
+          contrato.
+        </p>
+      </CaseSection>
+
+      <CaseSection tag="proceso" title="Del call center al mapa de caminos">
+        <p>
+          El asistente responde bien porque antes entendimos qué le iban a
+          preguntar. Así lo armé:
+        </p>
+        <ol className="not-prose grid sm:grid-cols-3 gap-4">
+          {[
+            { t: "01 · preguntas", d: "Junto a las ejecutivas del call center levanté las preguntas que realmente llegaban, producto por producto." },
+            { t: "02 · flujos", d: "Para cada pregunta mapeé todos los flujos posibles que podía tomar la conversación." },
+            { t: "03 · caminos", d: "Estructuré esos flujos en un mapa de caminos, para que cada conversación llegue al lugar correcto." },
+          ].map((s) => (
+            <li key={s.t} className="rounded-xl border border-line p-5">
+              <p className="font-mono text-xs text-signalInk mb-3">{s.t}</p>
+              <p className="text-sm text-muted">{s.d}</p>
+            </li>
+          ))}
+        </ol>
+        <p>
+          Lo trabajé en conjunto con desarrollo, negocio, marketing y
+          analítica.
+        </p>
+      </CaseSection>
+
       <CaseSection tag="propuesta" title="Un asistente que sabe en qué producto estás">
         <p>
           No es un chat genérico: sabe en qué producto está el usuario y
@@ -129,6 +174,11 @@ export default function ChatbotCase() {
           qué lo alimentamos. Los dolores de los usuarios y las preguntas del
           call center fueron lo que hizo que el asistente respondiera como
           alguien que conoce el producto, y no como un buscador.
+        </p>
+        <p>
+          Y un chatbot nunca está terminado: siempre aparecen flujos nuevos o
+          detalles por ajustar. Eso no es un problema, es el trabajo: medir,
+          iterar y mejorar cada versión.
         </p>
       </CaseSection>
     </CaseLayout>
